@@ -23,12 +23,12 @@ app.use(express.static(join(__dirname, "..", "client", "dist")));
 
 //Server
 app.listen(PORT, () => {
-  console.log(`Listening on port: ${PORT}`);
+	console.log(`Listening on port: ${PORT}`);
 });
 
 // Error handling middleware
 // Will improve as we grow project
 app.use((err: Error, req: Request, res: Response) => {
-  console.error(err.stack);
-  res.status(500).send("Something broke!");
+	console.error(err.stack);
+	res.status(500).send("Something broke!");
 });
