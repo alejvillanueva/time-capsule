@@ -6,6 +6,6 @@ export interface Memory {
 	createdOn: Date;
 	id: number;
 	medium: Medium;
-	message: string;
-	url: string;
+	message?: string | null;
+	url?: string | null;
 }
