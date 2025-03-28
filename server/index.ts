@@ -4,6 +4,8 @@ import { Request, Response } from "express";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 
+import router from "./api/routes/index";
+
 // Resolve the directory name
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -20,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(join(__dirname, "..", "client", "dist")));
 
 //Router
+app.use("/api", router);
 
 //Server
 app.listen(PORT, () => {
