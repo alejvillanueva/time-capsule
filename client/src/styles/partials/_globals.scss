@@ -1,0 +1,39 @@
+@use "./typography";
+@use "./mixins" as *;
+@use "./variables" as *;
+
+// RESETS
+* {
+	box-sizing: border-box;
+}
+
+a,
+body,
+button,
+div,
+figure,
+footer,
+form,
+h1,
+h2,
+h3,
+h4,
+header,
+html,
+img,
+input,
+li,
+p,
+section,
+span,
+textarea,
+ul {
+	margin: 0;
+	padding: 0;
+}
+
+// GLOBAL GENERAL
+
+body {
+	font-family: "Nohemi", Arial, sans-serif;
+}
