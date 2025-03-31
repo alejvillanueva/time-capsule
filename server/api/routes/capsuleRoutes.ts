@@ -4,16 +4,16 @@ const router = Router();
 import { CapsuleController } from "../contollers/index";
 
 // GET
-router.get("/all");
-router.get("/:id");
-
-// PUT
-router.put("/:id");
+router.get("/all", CapsuleController.getAllCapsules);
+router.get("/:id", CapsuleController.getSingleCapsule);
 
 // POST
-router.post("/");
+router.post("/", CapsuleController.createCapsule);
+
+// PUT
+router.put("/:id", CapsuleController.updateCapsule);
 
 // DELETE
-router.delete("/:id");
+router.delete("/:id", CapsuleController.deleteCapsule);
 
 export default router;

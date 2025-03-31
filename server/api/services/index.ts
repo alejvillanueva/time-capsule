@@ -1,4 +1,4 @@
-import { CapsuleServices } from "./capsuleServices";
-import { MemoryServices } from "./memoryServices";
+import { CapsuleService } from "./capsuleService";
+import { MemoryService } from "./memoryService";
 
-export { CapsuleServices, MemoryServices };
+export { CapsuleService, MemoryService };

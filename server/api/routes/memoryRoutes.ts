@@ -3,18 +3,16 @@ const router = Router();
 
 import { MemoryController } from "../contollers/index";
 
-// /api/memories
 // GET
-router.get("/all");
-router.get("/:id");
-
-// PUT
-router.put("/:id");
+router.get("/:id", MemoryController.getMemory);
 
 // POST
-router.post("/");
+router.post("/", MemoryController.createMemory);
+
+// PUT
+router.put("/:id", MemoryController.updateMemory);
 
 // DELETE
-router.delete("/:id");
+router.delete("/:id", MemoryController.deleteMemory);
 
 export default router;
