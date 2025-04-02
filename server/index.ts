@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 
-import router from "./api/routes/index";
+import router from "./api/routes/index.js";
 
 // Resolve the directory name
 const __filename = fileURLToPath(import.meta.url);

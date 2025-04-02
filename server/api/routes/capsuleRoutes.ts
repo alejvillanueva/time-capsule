@@ -1,11 +1,11 @@
 import { Router } from "express";
 const router = Router();
 
-import { CapsuleController } from "../contollers/index";
+import { CapsuleController } from "../contollers/index.js";
 
 // GET
 router.get("/all", CapsuleController.getAllCapsules);
-router.get("/:id", CapsuleController.getSingleCapsule);
+router.get("/:id", CapsuleController.getCapsule);
 
 // POST
 router.post("/", CapsuleController.createCapsule);

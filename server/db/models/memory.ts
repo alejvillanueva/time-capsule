@@ -2,9 +2,9 @@ export type Medium = "image" | "text" | "video";
 
 export interface Memory {
 	author: string;
-	capsuleID: number;
-	createdOn: Date;
-	id: number;
+	capsle_id: number;
+	added_on: Date;
+	id?: number;
 	medium: Medium;
 	message?: string | null;
 	url?: string | null;

@@ -1,8 +1,8 @@
 import { Router } from "express";
 const router = Router();
 
-import memoryRoutes from "./memoryRoutes";
-import capsuleRoutes from "./capsuleRoutes";
+import memoryRoutes from "./memoryRoutes.js";
+import capsuleRoutes from "./capsuleRoutes.js";
 
 router.use("/memories", memoryRoutes);
 router.use("/capsules", capsuleRoutes);

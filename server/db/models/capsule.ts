@@ -1,11 +1,11 @@
 export interface Capsule {
 	author: string;
-	coverArt: string;
-	createdOn: Date;
-	editBy: Date;
-	id: number;
-	openDate: Date;
+	cover_art: string;
+	created_on: Date;
+	edit_by: Date;
+	id?: number;
+	open_date: Date;
 	password: string;
 	title: string;
-	updatedOn: Date;
+	updated_on: Date;
 }

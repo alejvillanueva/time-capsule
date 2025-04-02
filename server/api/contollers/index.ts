@@ -1,4 +1,4 @@
-import { CapsuleController } from "./capsuleController";
-import { MemoryController } from "./memoryController";
+import { CapsuleController } from "./capsuleController.js";
+import { MemoryController } from "./memoryController.js";
 
 export { CapsuleController, MemoryController };
