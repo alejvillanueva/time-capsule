@@ -1,0 +1,28 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.header {
+	margin: map-get($spacings, xl) auto;
+	position: relative;
+	width: 100%;
+
+	&__link {
+		&--back {
+			position: absolute;
+			@include flexbox(row, unset, center);
+		}
+	}
+
+	&__text {
+		color: $black;
+		font-size: $font-size-xl;
+		font-weight: $font-weight-bold;
+		text-align: center;
+		text-transform: uppercase;
+		@include spacing(letter-spacing, xs);
+
+		@include tablet {
+			font-size: $font-size-dt-lg;
+		}
+	}
+}

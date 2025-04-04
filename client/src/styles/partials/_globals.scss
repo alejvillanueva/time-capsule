@@ -36,6 +36,18 @@ ul {
 
 body {
 	font-family: "Nohemi", Arial, sans-serif;
+	color: $black;
+}
+
+a {
+	text-decoration: none;
+}
+
+#root {
+	@include desktop {
+		max-width: 1008px;
+		margin: 0 auto;
+	}
 }
 
 .text-header {
@@ -59,17 +71,6 @@ body {
 }
 
 .text-link {
+	text-transform: uppercase;
 	@include font-body($grey-dark);
-}
-
-.text-logo {
-	color: $black;
-	font-size: $font-size-xl;
-	font-weight: $font-weight-bold;
-	line-height: 2rem;
-
-	@include tablet {
-		font-size: $font-size-dt-lg;
-		line-height: 2.75rem;
-	}
 }

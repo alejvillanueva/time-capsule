@@ -17,7 +17,7 @@
 // group multiple properties per size
 @mixin spacing($props, $size) {
 	@each $prop in $props {
-		#{prop}: map-get($spacings, $size);
+		#{$prop}: map-get($spacings, $size);
 	}
 }
 
