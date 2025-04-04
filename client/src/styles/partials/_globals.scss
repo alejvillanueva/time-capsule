@@ -37,3 +37,39 @@ ul {
 body {
 	font-family: "Nohemi", Arial, sans-serif;
 }
+
+.text-header {
+	@include font-header;
+}
+
+.text-header-bold {
+	@include font-header($black, $font-weight-extra-bold, 15%);
+}
+
+.text-subheader {
+	@include font-subheader;
+}
+
+.text-body {
+	@include font-body;
+}
+
+.text-label {
+	@include font-label;
+}
+
+.text-link {
+	@include font-body($grey-dark);
+}
+
+.text-logo {
+	color: $black;
+	font-size: $font-size-xl;
+	font-weight: $font-weight-bold;
+	line-height: 2rem;
+
+	@include tablet {
+		font-size: $font-size-dt-lg;
+		line-height: 2.75rem;
+	}
+}
