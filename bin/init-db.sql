@@ -8,7 +8,7 @@ CREATE TABLE memories (
 	url TEXT, 
 	added_on TIMESTAMPTZ,
 	capsule_id INT,
-	FOREIGN KEY (capsule_id) REFERENCES capsules(id)
+	FOREIGN KEY (capsule_id) REFERENCES capsules(id) ON DELETE CASCADE
 );
 
 CREATE TABLE capsules (

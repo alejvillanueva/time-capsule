@@ -29,6 +29,6 @@ export const buildInsertQuery = (
 		.join(", ");
 
 	const query = `INSERT INTO ${table} (${keys}) VALUES (${valuesString}) RETURNING *`;
-	console.log(query);
+
 	return { query, values };
 };

@@ -14,7 +14,8 @@ export class MemoryController {
 	) => {
 		try {
 			const { id } = req.params;
-			const memory = await MemoryService.getMemory(Number(id));
+			const results = await MemoryService.getMemory(Number(id));
+			const memory = results.rows;
 			res.status(200).send(memory);
 		} catch (error) {
 			next(error);
@@ -28,7 +29,8 @@ export class MemoryController {
 	) => {
 		try {
 			const memory = req.body;
-			const newMemory = await MemoryService.createMemory(memory);
+			const results = await MemoryService.createMemory(memory);
+			const newMemory = results.rows;
 			res.status(200).send(newMemory);
 		} catch (error) {
 			next(error);
@@ -42,7 +44,8 @@ export class MemoryController {
 	) => {
 		try {
 			const memory = req.body;
-			const updatedMemory = await MemoryService.updateMemory(memory);
+			const results = await MemoryService.updateMemory(memory);
+			const updatedMemory = results.rows;
 			res.status(200).send(updatedMemory);
 		} catch (error) {
 			next(error);
@@ -56,8 +59,9 @@ export class MemoryController {
 	) => {
 		try {
 			const { id } = req.params;
-			const memoryID = await MemoryService.deleteMemory(Number(id));
-			res.status(200).send(memoryID);
+			const results = await MemoryService.deleteMemory(Number(id));
+			const deletedMemory = results.rows;
+			res.status(200).send(deletedMemory);
 		} catch (error) {
 			next(error);
 		}
