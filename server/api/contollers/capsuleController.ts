@@ -13,7 +13,8 @@ export class CapsuleController {
 		next: NextFunction,
 	) => {
 		try {
-			const capsules = await CapsuleService.getAllCapsules();
+			const results = await CapsuleService.getAllCapsules();
+			const capsules = results.rows;
 			res.status(200).send(capsules);
 		} catch (error) {
 			next(error);
@@ -27,7 +28,8 @@ export class CapsuleController {
 	) => {
 		try {
 			const { id } = req.params;
-			const capsule = await CapsuleService.getCapsule(Number(id));
+			const results = await CapsuleService.getCapsule(Number(id));
+			const capsule = results.rows;
 			res.status(200).send(capsule);
 		} catch (error) {
 			next(error);
@@ -41,7 +43,8 @@ export class CapsuleController {
 	) => {
 		try {
 			const capsule = req.body;
-			const newCapsule = await CapsuleService.createCapsule(capsule);
+			const results = await CapsuleService.createCapsule(capsule);
+			const newCapsule = results.rows;
 			res.status(200).send(newCapsule);
 		} catch (error) {
 			next(error);
@@ -55,7 +58,8 @@ export class CapsuleController {
 	) => {
 		try {
 			const capsule = req.body;
-			const updatedCapsule = await CapsuleService.updateCapsule(capsule);
+			const results = await CapsuleService.updateCapsule(capsule);
+			const updatedCapsule = results.rows;
 			res.status(200).send(updatedCapsule);
 		} catch (error) {
 			next(error);
@@ -69,8 +73,9 @@ export class CapsuleController {
 	) => {
 		try {
 			const { id } = req.params;
-			const capsuleID = await CapsuleService.deleteCapsule(Number(id));
-			res.status(200).send(capsuleID);
+			const results = await CapsuleService.deleteCapsule(Number(id));
+			const deletedCapsule = results.rows;
+			res.status(200).send(deletedCapsule);
 		} catch (error) {
 			next(error);
 		}

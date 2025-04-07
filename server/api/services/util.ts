@@ -13,8 +13,7 @@ export const buildUpdateQuery = (
 		.map((key, index) => `${key} = $${String(index + 1)}`)
 		.join(", ");
 
-	const query = `UPDATE ${table} SET ${setClause} WHERE ${condition} RETURNING *`;
-
+	const query = `UPDATE ${table} SET ${setClause} ${condition} RETURNING *`;
 	return { query, values };
 };
 
@@ -30,6 +29,6 @@ export const buildInsertQuery = (
 		.join(", ");
 
 	const query = `INSERT INTO ${table} (${keys}) VALUES (${valuesString}) RETURNING *`;
-
+	console.log(query);
 	return { query, values };
 };

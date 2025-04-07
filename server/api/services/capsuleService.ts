@@ -16,7 +16,7 @@ export class CapsuleService {
 	public static getCapsule = async (id: number) => {
 		try {
 			const results = await pool.query(
-				`SELECT * 
+				`SELECT c.*,
 					ARRAY_AGG(
 						JSONB_BUILD_OBJECT(
 							'id', m.id,

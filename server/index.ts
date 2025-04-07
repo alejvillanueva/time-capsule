@@ -1,6 +1,6 @@
 import cors from "cors";
 import express from "express";
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 
@@ -21,6 +21,10 @@ app.use(express.urlencoded({ extended: true }));
 //Static files
 app.use(express.static(join(__dirname, "..", "client", "dist")));
 
+app.get("/", (req: Request, res: Response) => {
+	res.sendFile(join(__dirname, "..", "client", "index.html"));
+});
+
 //Router
 app.use("/api", router);
 
@@ -31,7 +35,7 @@ app.listen(PORT, () => {
 
 // Error handling middleware
 // Will improve as we grow project
-app.use((err: Error, req: Request, res: Response) => {
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 	console.error(err.stack);
-	res.status(500).send("Something broke!");
+	res.status(500).send(`Something broke!`);
 });
