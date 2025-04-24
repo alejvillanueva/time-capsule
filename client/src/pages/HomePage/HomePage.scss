@@ -1,0 +1,23 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.home {
+	margin: 7.2813rem 0 7.375rem;
+
+	&__button-container {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background: $white;
+		gap: map-get($spacings, xl);
+		padding: map-get($spacings, xl) 0;
+		@include flexbox(row, center, center);
+	}
+
+	&__list {
+		display: grid;
+		grid-template-columns: 13.5rem 13.5rem 13.5rem 13.5rem;
+		gap: map-get($spacings, xl);
+	}
+}

@@ -1,0 +1,66 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.capsule-card {
+	border-bottom: 1px solid $black;
+	overflow: hidden;
+	width: 13.5rem;
+
+	&--add {
+		border-bottom-color: $primary;
+	}
+
+	&__author {
+		font-weight: $font-weight-regular;
+		font-size: 0.625rem;
+		text-transform: none;
+	}
+
+	&__container {
+		@include flexbox(column, unset, unset);
+	}
+
+	&__date {
+		font-weight: $font-weight-regular;
+		margin: 0.25rem 0;
+	}
+
+	&__icon {
+		height: 1.75rem;
+		width: 1.75rem;
+	}
+
+	&__icon-container {
+		height: 9.1875rem;
+		@include flexbox(row, center, center);
+	}
+
+	&__image {
+		height: 9.1875rem;
+	}
+
+	&__link {
+		cursor: pointer;
+
+		&--add {
+			height: 100%;
+			@include flexbox(column, space-between, unset);
+		}
+	}
+
+	&__title {
+		margin: 0.4375rem 0;
+		color: $black;
+		font-size: $font-size-dt-lg;
+		font-weight: $font-weight-medium;
+		text-transform: uppercase;
+
+		&--add {
+			margin: 0.4375rem 0;
+			color: $primary;
+			font-size: $font-size-dt-lg;
+			font-weight: $font-weight-medium;
+			text-transform: uppercase;
+		}
+	}
+}

@@ -30,9 +30,15 @@ function Header() {
 					Back
 				</Link>
 			)}
-			<Link className="header__link" to="/">
-				<h1 className="header__text text-logo">Memora</h1>
-			</Link>
+			{pathname === "/" ? (
+				<Link className="header__link" to="/">
+					<h1 className="header__text text-logo">Memora</h1>
+				</Link>
+			) : (
+				<Link className="header__link" to="/">
+					<div className="header__text text-logo">Memora</div>
+				</Link>
+			)}
 		</header>
 	);
 }
