@@ -2,7 +2,7 @@
 @use "../../styles/partials/mixins" as *;
 
 .home {
-	margin: 7.2813rem 0 7.375rem;
+	margin: 7.2813rem 0 4.875rem;
 
 	&__button-container {
 		position: fixed;
@@ -10,14 +10,14 @@
 		left: 0;
 		right: 0;
 		background: $white;
-		gap: map-get($spacings, xl);
-		padding: map-get($spacings, xl) 0;
+		gap: map-get($spacings, xxl);
+		padding: map-get($spacings, xlg) 0;
 		@include flexbox(row, center, center);
 	}
 
 	&__list {
 		display: grid;
 		grid-template-columns: 13.5rem 13.5rem 13.5rem 13.5rem;
-		gap: map-get($spacings, xl);
+		gap: map-get($spacings, xxl);
 	}
 }

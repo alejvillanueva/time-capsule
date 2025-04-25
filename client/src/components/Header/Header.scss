@@ -3,7 +3,7 @@
 
 .header {
 	background: $white;
-	padding: map-get($spacings, xl) 0;
+	padding: map-get($spacings, xxl);
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -20,7 +20,7 @@
 	&__text {
 		color: $black;
 		font-size: $font-size-xl;
-		font-weight: $font-weight-bold;
+		font-weight: $font-weight-extra-bold;
 		text-align: center;
 		text-transform: uppercase;
 		@include spacing(letter-spacing, xs);

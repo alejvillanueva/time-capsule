@@ -2,22 +2,21 @@ import { createContext, useState, ReactNode } from "react";
 
 // define shape of context
 interface AppContextType {
-	state: any;
-	setState: (value: any) => void;
+	coverArt: string | null;
+	setCoverArt: (value: string | null) => void;
 }
 
 // create intially empty context
 // undefined helps prevent errors before context is set
 export const AppContext = createContext<AppContextType | undefined>(undefined);
 
-// TEMPORARY VALUES USED - please delete this comment once updated
 // create provider component
 // ReactNode -> can be any valid React component (allows anything valid in JSX (e.g. components, text, fragments, arrays, etc.))
 const AppProvider = ({ children }: { children: ReactNode }) => {
-	const [state, setState] = useState<string | null>(null);
+	const [coverArt, setCoverArt] = useState<string | null>(null);
 
 	return (
-		<AppContext.Provider value={{ state, setState }}>
+		<AppContext.Provider value={{ coverArt, setCoverArt }}>
 			{children}
 		</AppContext.Provider>
 	);

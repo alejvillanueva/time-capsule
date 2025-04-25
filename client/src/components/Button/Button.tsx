@@ -1,13 +1,13 @@
 import "./Button.scss";
 
-interface ButtonProp {
+interface ButtonProps {
 	buttonType?: string;
 	buttonText: string;
 }
 
-function Button({ buttonType, buttonText }: ButtonProp) {
+function Button({ buttonType, buttonText }: ButtonProps) {
 	return (
-		<button className="button text-body" type="button">
+		<button className="button text-label" type="button">
 			{buttonText}
 		</button>
 	);

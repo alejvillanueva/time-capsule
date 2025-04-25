@@ -54,16 +54,16 @@ a {
 	}
 }
 
-.text-header {
-	@include font-header;
+.text-heading {
+	@include font-heading;
 }
 
-.text-header-bold {
-	@include font-header($black, $font-weight-extra-bold, 15%);
+.text-heading-bold {
+	@include font-heading($black, $font-weight-extra-bold, 15%);
 }
 
-.text-subheader {
-	@include font-subheader;
+.text-subheading {
+	@include font-subheading;
 }
 
 .text-body {
