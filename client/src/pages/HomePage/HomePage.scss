@@ -11,7 +11,7 @@
 		right: 0;
 		background: $white;
 		gap: map-get($spacings, xxl);
-		padding: map-get($spacings, xlg) 0;
+		padding: map-get($spacings, xl) 0;
 		@include flexbox(row, center, center);
 	}
 

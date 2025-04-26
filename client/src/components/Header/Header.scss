@@ -3,12 +3,17 @@
 
 .header {
 	background: $white;
-	padding: map-get($spacings, xxl);
+	margin: 0 auto;
 	position: fixed;
 	top: 0;
 	left: 0;
 	right: 0;
 	width: 100%;
+
+	@include desktop {
+		max-width: 63rem;
+		padding: map-get($spacings, xxl) 0;
+	}
 
 	&__link {
 		&--back {

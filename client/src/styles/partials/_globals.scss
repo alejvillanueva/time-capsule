@@ -3,6 +3,7 @@
 @use "./variables" as *;
 
 // RESETS
+
 * {
 	box-sizing: border-box;
 }
@@ -53,6 +54,24 @@ a {
 		margin: 0 auto;
 	}
 }
+
+// FORM INPUTS
+
+::placeholder {
+	font-family: "Nohemi", Arial, sans-serif;
+	color: $grey-dark;
+	font-weight: $font-weight-light;
+	size: $font-size-dt-md;
+	text-transform: uppercase;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+	display: none;
+	-webkit-appearance: none;
+	appearance: none;
+}
+
+// FONT STYLING
 
 .text-heading {
 	@include font-heading;
