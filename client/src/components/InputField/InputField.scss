@@ -21,6 +21,11 @@
 			font-weight: $font-weight-medium;
 		}
 
+		&:disabled {
+			background-color: initial;
+			color: $black;
+		}
+
 		&--select {
 			border-bottom: 1px solid $black;
 		}

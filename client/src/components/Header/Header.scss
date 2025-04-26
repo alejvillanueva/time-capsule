@@ -18,6 +18,7 @@
 	&__link {
 		&--back {
 			position: absolute;
+			gap: map-get($spacings, sm);
 			@include flexbox(row, unset, center);
 		}
 	}

@@ -2,10 +2,14 @@ import "./AddCapsulePage.scss";
 import InputField from "../../components/InputField/InputField";
 import MainHeading from "../../components/MainHeading/MainHeading";
 import UploadField from "../../components/UploadField/UploadField";
-// import useAppContext from "../../context/useAppContext";
+import MemoryCard from "../../components/MemoryCard/MemoryCard";
+import useAppContext from "../../context/useAppContext";
 
 function AddCapsulePage() {
-	// const { coverArt, setCoverArt } = useAppContext();
+	const { coverArt, setCoverArt, setIsEditable } = useAppContext();
+
+	// always allow form editing on this page
+	setIsEditable(true);
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -64,6 +68,9 @@ function AddCapsulePage() {
 			</form>
 			<MainHeading headingType="default" title="Create Time Capsule" />
 			<h2 className="add-capsule__subtitle text-subheading">Memories</h2>
+			<ul className="add-capsule__list">
+				<MemoryCard cardType="add" />
+			</ul>
 		</main>
 	);
 }

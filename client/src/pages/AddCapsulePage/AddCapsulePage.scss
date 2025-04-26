@@ -2,9 +2,20 @@
 @use "../../styles/partials/mixins" as *;
 
 .add-capsule {
-	margin: 7.2813rem 0 0;
+	margin: 7.2813rem 0 4.875rem;
 	@include flexbox(column, unset, unset);
 	gap: map-get($spacings, lg);
+
+	&__button-container {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background: $white;
+		gap: map-get($spacings, xxl);
+		padding: map-get($spacings, xl) 0;
+		@include flexbox(row, center, center);
+	}
 
 	&__form-container {
 		width: 100%;
@@ -13,6 +24,12 @@
 
 	&__form {
 		@include flexbox(row, unset, unset);
+		gap: map-get($spacings, xxl);
+	}
+
+	&__list {
+		display: grid;
+		grid-template-columns: 13.5rem 13.5rem 13.5rem 13.5rem;
 		gap: map-get($spacings, xxl);
 	}
 }

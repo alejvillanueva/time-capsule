@@ -4,6 +4,8 @@ import { createContext, useState, ReactNode } from "react";
 interface AppContextType {
 	coverArt: string | null;
 	setCoverArt: (value: string | null) => void;
+	isEditable: boolean;
+	setIsEditable: (value: boolean) => void;
 }
 
 // create intially empty context
@@ -14,9 +16,12 @@ export const AppContext = createContext<AppContextType | undefined>(undefined);
 // ReactNode -> can be any valid React component (allows anything valid in JSX (e.g. components, text, fragments, arrays, etc.))
 const AppProvider = ({ children }: { children: ReactNode }) => {
 	const [coverArt, setCoverArt] = useState<string | null>(null);
+	const [isEditable, setIsEditable] = useState<boolean>(false);
 
 	return (
-		<AppContext.Provider value={{ coverArt, setCoverArt }}>
+		<AppContext.Provider
+			value={{ coverArt, setCoverArt, isEditable, setIsEditable }}
+		>
 			{children}
 		</AppContext.Provider>
 	);

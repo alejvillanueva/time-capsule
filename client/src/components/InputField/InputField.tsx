@@ -1,4 +1,5 @@
 import "./InputField.scss";
+import useAppContext from "../../context/useAppContext";
 
 interface InputFieldProps {
 	inputLabel: string;
@@ -15,6 +16,8 @@ function InputField({
 	inputName,
 	placeholder,
 }: InputFieldProps) {
+	const { isEditable } = useAppContext();
+
 	return (
 		<>
 			{inputType !== "select" && inputType !== "textArea" && (
@@ -28,6 +31,7 @@ function InputField({
 						name={inputName}
 						id={inputId}
 						placeholder={placeholder}
+						disabled={!isEditable}
 					/>
 				</>
 			)}
@@ -40,6 +44,7 @@ function InputField({
 						className="input-field__input input-field__input--select"
 						name={inputName}
 						id={inputId}
+						disabled={!isEditable}
 					>
 						<option value="">Select a Memory Type</option>
 						<option value="image">Image</option>
@@ -58,6 +63,7 @@ function InputField({
 						name={inputName}
 						id={inputId}
 						placeholder={placeholder}
+						disabled={!isEditable}
 					></textarea>
 				</>
 			)}
