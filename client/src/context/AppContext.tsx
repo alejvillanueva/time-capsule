@@ -6,6 +6,8 @@ interface AppContextType {
 	setCoverArt: (value: string | null) => void;
 	isEditable: boolean;
 	setIsEditable: (value: boolean) => void;
+	isOpen: boolean;
+	setIsOpen: (value: boolean) => void;
 }
 
 // create intially empty context
@@ -17,10 +19,18 @@ export const AppContext = createContext<AppContextType | undefined>(undefined);
 const AppProvider = ({ children }: { children: ReactNode }) => {
 	const [coverArt, setCoverArt] = useState<string | null>(null);
 	const [isEditable, setIsEditable] = useState<boolean>(false);
+	const [isOpen, setIsOpen] = useState<boolean>(false);
 
 	return (
 		<AppContext.Provider
-			value={{ coverArt, setCoverArt, isEditable, setIsEditable }}
+			value={{
+				coverArt,
+				setCoverArt,
+				isEditable,
+				setIsEditable,
+				isOpen,
+				setIsOpen,
+			}}
 		>
 			{children}
 		</AppContext.Provider>

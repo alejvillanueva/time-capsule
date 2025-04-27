@@ -3,14 +3,23 @@ import "./MainHeading.scss";
 interface MainHeadingProps {
 	headingType: "default" | "custom" | "custom-editable";
 	title: string;
+	h2?: boolean;
 }
 
-function MainHeading({ headingType, title }: MainHeadingProps) {
+function MainHeading({ headingType, title, h2 }: MainHeadingProps) {
 	return (
 		<>
 			{headingType === "default" && (
 				<div className="main-heading">
-					<h1 className="main-heading__title text-heading">{title}</h1>
+					{h2 ? (
+						<h2 className="main-heading__title text-heading" id="modal-heading">
+							{title}
+						</h2>
+					) : (
+						<h1 className="main-heading__title text-heading" id="modal-heading">
+							{title}
+						</h1>
+					)}
 					<div className="main-heading__icon-container">
 						<svg
 							className="main-heading__icon"
@@ -42,7 +51,21 @@ function MainHeading({ headingType, title }: MainHeadingProps) {
 			)}
 			{headingType === "custom" && (
 				<div className="main-heading">
-					<h1 className="main-heading__title text-heading-bold">{title}</h1>
+					{h2 ? (
+						<h2
+							className="main-heading__title text-heading-bold"
+							id="modal-heading"
+						>
+							{title}
+						</h2>
+					) : (
+						<h1
+							className="main-heading__title text-heading-bold"
+							id="modal-heading"
+						>
+							{title}
+						</h1>
+					)}
 					<div className="main-heading__icon-container">
 						<svg
 							className="main-heading__icon"
@@ -80,7 +103,21 @@ function MainHeading({ headingType, title }: MainHeadingProps) {
 			)}
 			{headingType === "custom-editable" && (
 				<div className="main-heading">
-					<h1 className="main-heading__title text-heading-bold">{title}</h1>
+					{h2 ? (
+						<h2
+							className="main-heading__title text-heading-bold"
+							id="modal-heading"
+						>
+							{title}
+						</h2>
+					) : (
+						<h1
+							className="main-heading__title text-heading-bold"
+							id="modal-heading"
+						>
+							{title}
+						</h1>
+					)}
 					<div className="main-heading__icon-container">
 						<svg
 							className="main-heading__icon"

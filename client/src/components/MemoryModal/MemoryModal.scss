@@ -1,0 +1,10 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.memory-modal {
+	background: $white;
+	height: calc(100vh - 7.2813rem - 4.875rem);
+	margin-top: 7.2813rem;
+	padding: 6rem;
+	width: 63rem;
+}

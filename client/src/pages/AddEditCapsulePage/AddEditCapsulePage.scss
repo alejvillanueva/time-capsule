@@ -1,12 +1,13 @@
 @use "../../styles/partials/variables" as *;
 @use "../../styles/partials/mixins" as *;
 
-.edit-capsule {
+.add-edit-capsule {
 	margin: 7.2813rem 0 4.875rem;
 	@include flexbox(column, unset, unset);
 	gap: map-get($spacings, lg);
 
 	&__button-container {
+		height: 4.875rem;
 		position: fixed;
 		bottom: 0;
 		left: 0;
