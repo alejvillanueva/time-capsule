@@ -1,0 +1,19 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.locked {
+	@include flexbox(column, center, unset);
+
+	gap: map-get($spacings, lg);
+	height: calc(100vh - 7.2813rem - 4.875rem);
+	margin: 7.2813rem 0 4.875rem;
+
+	&__countdown-container {
+		font-size: $font-size-dt-xxl;
+	}
+
+	&__title {
+		padding-bottom: map-get($spacings, sm);
+		border-bottom: 1px solid $primary;
+	}
+}

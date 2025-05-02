@@ -40,8 +40,8 @@ html {
 }
 
 body {
-	font-family: "Nohemi", Arial, sans-serif;
 	color: $black;
+	font-family: Nohemi, Arial, sans-serif;
 }
 
 a {
@@ -58,16 +58,16 @@ a {
 // FORM INPUTS
 
 ::placeholder {
-	font-family: "Nohemi", Arial, sans-serif;
 	color: $grey-dark;
 	font-weight: $font-weight-light;
-	size: $font-size-dt-md;
 	text-transform: uppercase;
+	font-family: Nohemi, Arial, sans-serif;
+	size: $font-size-dt-md;
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
 	display: none;
-	-webkit-appearance: none;
+	appearance: none;
 	appearance: none;
 }
 
@@ -79,6 +79,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .text-heading-bold {
 	@include font-heading($black, $font-weight-extra-bold, 15%);
+}
+
+.text-heading-orange-bold {
+	@include font-heading($primary, $font-weight-extra-bold, 15%);
 }
 
 .text-subheading {
@@ -94,6 +98,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .text-link {
-	text-transform: uppercase;
 	@include font-body($grey-dark);
+
+	text-transform: uppercase;
 }

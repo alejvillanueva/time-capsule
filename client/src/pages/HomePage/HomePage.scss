@@ -5,19 +5,20 @@
 	margin: 7.2813rem 0 4.875rem;
 
 	&__button-container {
+		@include flexbox(row, center, center);
+
 		position: fixed;
+		right: 0;
 		bottom: 0;
 		left: 0;
-		right: 0;
-		background: $white;
 		gap: map-get($spacings, xxl);
 		padding: map-get($spacings, xl) 0;
-		@include flexbox(row, center, center);
+		background: $white;
 	}
 
 	&__list {
 		display: grid;
-		grid-template-columns: 13.5rem 13.5rem 13.5rem 13.5rem;
 		gap: map-get($spacings, xxl);
+		grid-template-columns: 13.5rem 13.5rem 13.5rem 13.5rem;
 	}
 }

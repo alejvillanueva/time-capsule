@@ -16,7 +16,7 @@ function InputField({
 	inputName,
 	placeholder,
 }: InputFieldProps) {
-	const { isEditable } = useAppContext();
+	// const { isCapsuleEditable, isMemoryEditable } = useAppContext();
 
 	return (
 		<>
@@ -31,7 +31,7 @@ function InputField({
 						name={inputName}
 						id={inputId}
 						placeholder={placeholder}
-						disabled={!isEditable}
+						// disabled={!isCapsuleEditable}
 					/>
 				</>
 			)}
@@ -44,7 +44,7 @@ function InputField({
 						className="input-field__input input-field__input--select"
 						name={inputName}
 						id={inputId}
-						disabled={!isEditable}
+						// disabled={!isCapsuleEditable}
 					>
 						<option value="">Select a Memory Type</option>
 						<option value="image">Image</option>
@@ -63,7 +63,7 @@ function InputField({
 						name={inputName}
 						id={inputId}
 						placeholder={placeholder}
-						disabled={!isEditable}
+						// disabled={!isCapsuleEditable}
 					></textarea>
 				</>
 			)}

@@ -10,8 +10,14 @@ import { useEffect } from "react";
 import MemoryModal from "../../components/MemoryModal/MemoryModal";
 
 function AddEditCapsulePage() {
-	const { coverArt, setCoverArt, isEditable, setIsEditable, setIsOpen } =
-		useAppContext();
+	const {
+		coverArt,
+		setCoverArt,
+		isCapsuleEditable,
+		setIsCapsuleEditable,
+		setIsOpen,
+		setMemoryModal,
+	} = useAppContext();
 	const { pathname } = useLocation();
 
 	const addMatch = matchPath("/capsule/add", pathname);
@@ -19,10 +25,14 @@ function AddEditCapsulePage() {
 
 	useEffect(() => {
 		// always allow form editing on add capsule path
-		if (addMatch) setIsEditable(true);
+		if (addMatch) setIsCapsuleEditable(true);
 	}, [pathname]);
 
-	const handleModalClick = () => {
+	const handleModalClick = (/* e */) => {
+		// e.currentTarget.dataset.type === "add"
+		// 	? setMemoryModal("default")
+		// 	: setMemoryModal("custom");
+
 		setIsOpen(true);
 	};
 
@@ -90,25 +100,50 @@ function AddEditCapsulePage() {
 			</form>
 			{addMatch ? (
 				<MainHeading headingType="default" title="Create Time Capsule" />
-			) : editMatch && isEditable ? (
+			) : editMatch && isCapsuleEditable ? (
 				<MainHeading headingType="custom-editable" title="Lorem Ipsum" />
 			) : (
 				<MainHeading headingType="custom" title="Lorem Ipsum" />
 			)}
-			<h2 className="add-edit-capsule__subtitle text-subheading">Memories</h2>
-			<ul className="add-edit-capsule__list">
-				<MemoryCard cardType="add" handleModalClick={handleModalClick} />
-				{editMatch && (
-					<>
-						<MemoryCard cardType="memory" handleModalClick={handleModalClick} />
-						<MemoryCard cardType="memory" handleModalClick={handleModalClick} />
-						<MemoryCard cardType="memory" handleModalClick={handleModalClick} />
-						<MemoryCard cardType="memory" handleModalClick={handleModalClick} />
-						<MemoryCard cardType="memory" handleModalClick={handleModalClick} />
-						<MemoryCard cardType="memory" handleModalClick={handleModalClick} />
-					</>
-				)}
-			</ul>
+			{editMatch && (
+				<>
+					<h2 className="add-edit-capsule__subtitle text-subheading">
+						Memories
+					</h2>
+					<ul className="add-edit-capsule__list">
+						<MemoryCard cardType="add" handleModalClick={handleModalClick} />
+						{editMatch && (
+							// pass prop with name, if name doesnt exist, show add
+							<>
+								<MemoryCard
+									cardType="memory"
+									handleModalClick={handleModalClick}
+								/>
+								<MemoryCard
+									cardType="memory"
+									handleModalClick={handleModalClick}
+								/>
+								<MemoryCard
+									cardType="memory"
+									handleModalClick={handleModalClick}
+								/>
+								<MemoryCard
+									cardType="memory"
+									handleModalClick={handleModalClick}
+								/>
+								<MemoryCard
+									cardType="memory"
+									handleModalClick={handleModalClick}
+								/>
+								<MemoryCard
+									cardType="memory"
+									handleModalClick={handleModalClick}
+								/>
+							</>
+						)}
+					</ul>
+				</>
+			)}
 			<div className="add-edit-capsule__button-container">
 				{/* add conditional to show buttons below if memory card (with cardType="memory") map length is greater than 0 and editMatch is true */}
 				{editMatch && (
@@ -118,7 +153,7 @@ function AddEditCapsulePage() {
 					</>
 				)}
 			</div>
-			<MemoryModal />
+			<MemoryModal memoryTitle={`Lorem Ipsum Test`} />
 		</main>
 	);
 }

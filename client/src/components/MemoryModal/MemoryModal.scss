@@ -2,9 +2,32 @@
 @use "../../styles/partials/mixins" as *;
 
 .memory-modal {
-	background: $white;
+	position: relative;
+	width: 63rem;
 	height: calc(100vh - 7.2813rem - 4.875rem);
 	margin-top: 7.2813rem;
 	padding: 6rem;
-	width: 63rem;
+	background: $white;
+
+	&__container {
+		@include flexbox(column, unset, unset);
+
+		width: 100%;
+		overflow: auto;
+	}
+
+	&__form {
+		@include flexbox(row, unset, unset);
+
+		gap: map-get($spacings, xxl);
+		margin-bottom: map-get($spacings, xxl);
+	}
+
+	&__icon {
+		position: absolute;
+		top: 1.5rem;
+		right: 1.5rem;
+		width: 1.5rem;
+		cursor: pointer;
+	}
 }

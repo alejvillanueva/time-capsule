@@ -9,7 +9,11 @@ function MemoryCard({ cardType, handleModalClick }: MemoryCardProps) {
 	return (
 		<>
 			{cardType === "add" && (
-				<li className="memory-card memory-card--add" onClick={handleModalClick}>
+				<li
+					className="memory-card memory-card--add"
+					data-type="add"
+					onClick={handleModalClick}
+				>
 					<div className="memory-card__container memory-card__container--add">
 						<div className="memory-card__icon-container">
 							<svg
@@ -33,7 +37,11 @@ function MemoryCard({ cardType, handleModalClick }: MemoryCardProps) {
 				</li>
 			)}
 			{cardType === "memory" && (
-				<li className="memory-card" onClick={handleModalClick}>
+				<li
+					className="memory-card"
+					data-type="memory"
+					onClick={handleModalClick}
+				>
 					<div className="memory-card__container">
 						<div className="memory-card__card-container">
 							{/* add conditional for each media type to show */}

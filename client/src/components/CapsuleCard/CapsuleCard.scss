@@ -2,17 +2,17 @@
 @use "../../styles/partials/mixins" as *;
 
 .capsule-card {
-	border-bottom: 1px solid $black;
-	overflow: hidden;
 	width: 13.5rem;
+	overflow: hidden;
+	border-bottom: 1px solid $black;
 
 	&--add {
 		border-bottom-color: $primary;
 	}
 
 	&__author {
-		font-weight: $font-weight-regular;
 		font-size: 0.625rem;
+		font-weight: $font-weight-regular;
 		text-transform: none;
 	}
 
@@ -21,18 +21,19 @@
 	}
 
 	&__date {
-		font-weight: $font-weight-regular;
 		margin: 0.25rem 0;
+		font-weight: $font-weight-regular;
 	}
 
 	&__icon {
-		height: 1.75rem;
 		width: 1.75rem;
+		height: 1.75rem;
 	}
 
 	&__icon-container {
-		height: 9.1875rem;
 		@include flexbox(row, center, center);
+
+		height: 9.1875rem;
 	}
 
 	&__image {
@@ -43,19 +44,21 @@
 		cursor: pointer;
 
 		&--add {
-			height: 100%;
 			@include flexbox(column, space-between, unset);
+
+			height: 100%;
 		}
 	}
 
 	&__title {
+		@include flexbox(unset, unset, flex-end);
+
+		height: 2.5625rem;
 		margin: 0.4375rem 0;
 		color: $black;
 		font-size: $font-size-dt-lg;
 		font-weight: $font-weight-medium;
-		height: 2.5625rem;
 		text-transform: uppercase;
-		@include flexbox(unset, unset, flex-end);
 
 		&--add {
 			margin: 0.4375rem 0;
