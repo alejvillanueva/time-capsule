@@ -4,7 +4,7 @@
 .header {
 	@include desktop {
 		max-width: 63rem;
-		padding: map-get($spacings, xxl) 0;
+		padding: $spacing-xxl 0;
 	}
 
 	position: fixed;
@@ -20,13 +20,11 @@
 			@include flexbox(row, unset, center);
 
 			position: absolute;
-			gap: map-get($spacings, sm);
+			gap: $spacing-sm;
 		}
 	}
 
 	&__text {
-		@include spacing(letter-spacing, xs);
-
 		@include tablet {
 			font-size: $font-size-dt-lg;
 		}
@@ -34,6 +32,7 @@
 		color: $black;
 		font-size: $font-size-xl;
 		font-weight: $font-weight-extra-bold;
+		letter-spacing: $spacing-xs;
 		text-align: center;
 		text-transform: uppercase;
 	}

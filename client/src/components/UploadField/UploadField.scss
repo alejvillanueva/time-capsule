@@ -31,10 +31,10 @@
 
 	&__icon {
 		height: 4rem;
-		margin: map-get($spacings, xl);
+		margin: $spacing-xl;
 	}
 
 	&__label {
-		margin-bottom: map-get($spacings, sm);
+		margin-bottom: $spacing-sm;
 	}
 }

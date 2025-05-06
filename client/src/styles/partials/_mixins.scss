@@ -13,14 +13,6 @@
 	}
 }
 
-// SPACING
-// group multiple properties per size
-@mixin spacing($props, $size) {
-	@each $prop in $props {
-		#{$prop}: map-get($spacings, $size);
-	}
-}
-
 // FLEXBOX
 @mixin flexbox($direction, $justify-content, $align-items) {
 	display: flex;

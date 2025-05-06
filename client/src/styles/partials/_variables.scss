@@ -1,3 +1,7 @@
+// IMPORT BUILT-IN FUNCTIONS
+// per deprecation warnings
+@use "sass:map";
+
 // BREAKPOINTS
 $breakpoint-min-tablet: 768px;
 $breakpoint-min-desktop: 1280px;
@@ -14,6 +18,13 @@ $spacings: (
 	"xl": $spacing-unit * 2,
 	"xxl": $spacing-unit * 3,
 );
+
+$spacing-xs: map.get($spacings, "xs");
+$spacing-sm: map.get($spacings, "sm");
+$spacing-md: map.get($spacings, "md");
+$spacing-lg: map.get($spacings, "lg");
+$spacing-xl: map.get($spacings, "xl");
+$spacing-xxl: map.get($spacings, "xxl");
 
 // COLORS
 $primary: #d14200;
