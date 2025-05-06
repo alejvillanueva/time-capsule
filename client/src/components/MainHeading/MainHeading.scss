@@ -1,0 +1,21 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.main-heading {
+	@include flexbox(row, space-between, center);
+
+	padding-bottom: map-get($spacings, sm);
+	border-bottom: 1px solid $black;
+
+	&__icon {
+		height: 1.5rem;
+		margin-left: map-get($spacings, lg);
+		cursor: pointer;
+	}
+
+	// &__icon-container {
+	// }
+
+	// &__title {
+	// }
+}

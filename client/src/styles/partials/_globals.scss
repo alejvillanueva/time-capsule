@@ -3,6 +3,7 @@
 @use "./variables" as *;
 
 // RESETS
+
 * {
 	box-sizing: border-box;
 }
@@ -34,6 +35,70 @@ ul {
 
 // GLOBAL GENERAL
 
+html {
+	background: $white;
+}
+
 body {
-	font-family: "Nohemi", Arial, sans-serif;
+	color: $black;
+	font-family: Nohemi, Arial, sans-serif;
+}
+
+a {
+	text-decoration: none;
+}
+
+#root {
+	@include desktop {
+		max-width: 63rem;
+		margin: 0 auto;
+	}
+}
+
+// FORM INPUTS
+
+::placeholder {
+	color: $grey-dark;
+	font-weight: $font-weight-light;
+	text-transform: uppercase;
+	font-family: Nohemi, Arial, sans-serif;
+	size: $font-size-dt-md;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+	display: none;
+	appearance: none;
+	appearance: none;
+}
+
+// FONT STYLING
+
+.text-heading {
+	@include font-heading;
+}
+
+.text-heading-bold {
+	@include font-heading($black, $font-weight-extra-bold, 15%);
+}
+
+.text-heading-orange-bold {
+	@include font-heading($primary, $font-weight-extra-bold, 15%);
+}
+
+.text-subheading {
+	@include font-subheading;
+}
+
+.text-body {
+	@include font-body;
+}
+
+.text-label {
+	@include font-label;
+}
+
+.text-link {
+	@include font-body($grey-dark);
+
+	text-transform: uppercase;
 }

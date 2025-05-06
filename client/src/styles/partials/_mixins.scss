@@ -1,0 +1,81 @@
+@use "./variables" as *;
+
+// BREAKPOINTS
+@mixin tablet {
+	@media (min-width: ($breakpoint-min-tablet)) {
+		@content;
+	}
+}
+
+@mixin desktop {
+	@media (min-width: ($breakpoint-min-desktop)) {
+		@content;
+	}
+}
+
+// SPACING
+// group multiple properties per size
+@mixin spacing($props, $size) {
+	@each $prop in $props {
+		#{$prop}: map-get($spacings, $size);
+	}
+}
+
+// FLEXBOX
+@mixin flexbox($direction, $justify-content, $align-items) {
+	display: flex;
+	justify-content: $justify-content;
+	align-items: $align-items;
+	flex-direction: $direction;
+}
+
+// FONT STYLES
+@mixin font-heading(
+	$color: $black,
+	$font-weight: $font-weight-medium,
+	$letter-spacing: normal
+) {
+	@include tablet {
+		font-size: $font-size-dt-lg;
+	}
+
+	color: $color;
+	font-size: $font-size-lg;
+	font-weight: $font-weight;
+	text-transform: uppercase;
+	letter-spacing: $letter-spacing;
+}
+
+@mixin font-subheading($color: $grey-dark, $font-weight: $font-weight-medium) {
+	@include tablet {
+		font-size: $font-size-dt-sm;
+	}
+
+	color: $color;
+	font-size: $font-size-sm;
+	font-weight: $font-weight;
+	text-transform: uppercase;
+}
+
+@mixin font-body($color: $black, $font-weight: $font-weight-regular) {
+	@include tablet {
+		font-size: $font-size-dt-md;
+		line-height: 1.375rem;
+	}
+
+	color: $color;
+	font-size: $font-size-md;
+	font-weight: $font-weight;
+	line-height: 1.125rem;
+}
+
+@mixin font-label($color: $grey-dark, $font-weight: $font-weight-medium) {
+	@include tablet {
+		font-size: $font-size-dt-sm;
+	}
+
+	color: $color;
+	font-size: $font-size-sm;
+	font-weight: $font-weight;
+	text-transform: uppercase;
+}

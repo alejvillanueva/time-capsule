@@ -1,0 +1,55 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.input-field {
+	&__input {
+		margin-bottom: map-get($spacings, xl);
+		padding-bottom: map-get($spacings, sm);
+		border: none;
+		font-weight: $font-weight-regular;
+		text-transform: uppercase;
+		font-family: Nohemi, Arial, sans-serif;
+		outline: none;
+
+		&::-webkit-datetime-edit {
+			color: $grey-dark;
+			font-weight: $font-weight-light;
+		}
+
+		&:focus {
+			font-weight: $font-weight-medium;
+			border-bottom: 1px solid $primary;
+		}
+
+		&:disabled {
+			background-color: initial;
+			color: $black;
+		}
+
+		&--select {
+			border-bottom: 1px solid $black;
+		}
+
+		&--textarea {
+			height: 100%;
+			line-height: 1.125rem;
+			resize: none;
+		}
+	}
+
+	&__label {
+		margin-bottom: map-get($spacings, sm);
+	}
+}
+
+textarea::-webkit-scrollbar {
+	width: 0.25rem;
+}
+
+textarea::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 6px $grey-light;
+}
+
+textarea::-webkit-scrollbar-thumb {
+	background-color: $grey-dark;
+}

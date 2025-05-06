@@ -1,0 +1,12 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.button {
+	border: none;
+	background: none;
+	cursor: pointer;
+
+	&:hover {
+		color: $primary;
+	}
+}

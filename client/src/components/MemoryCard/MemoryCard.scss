@@ -1,0 +1,60 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.memory-card {
+	width: 13.5rem;
+	overflow: hidden;
+	border-bottom: 1px solid $black;
+
+	&--add {
+		border-bottom-color: $primary;
+	}
+
+	&__card-container {
+		@include flexbox(column, unset, unset);
+	}
+
+	&__container {
+		cursor: pointer;
+
+		&--add {
+			@include flexbox(column, unset, unset);
+
+			height: 100%;
+		}
+	}
+
+	&__icon {
+		width: 1.75rem;
+		height: 1.75rem;
+	}
+
+	&__icon-container {
+		@include flexbox(row, center, center);
+
+		height: 9.1875rem;
+	}
+
+	&__image {
+		height: 9.1875rem;
+	}
+
+	&__title {
+		@include flexbox(unset, unset, flex-end);
+
+		height: 2.5625rem;
+		margin: 0.4375rem 0;
+		color: $black;
+		font-size: $font-size-dt-lg;
+		font-weight: $font-weight-medium;
+		text-transform: uppercase;
+
+		&--add {
+			margin: 0.4375rem 0;
+			color: $primary;
+			font-size: $font-size-dt-lg;
+			font-weight: $font-weight-medium;
+			text-transform: uppercase;
+		}
+	}
+}
