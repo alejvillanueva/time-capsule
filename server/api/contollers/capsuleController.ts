@@ -75,7 +75,7 @@ export class CapsuleController {
 			const { id } = req.params;
 			const results = await CapsuleService.deleteCapsule(Number(id));
 			const deletedCapsule = results.rows;
-			res.status(200).send(deletedCapsule);
+			res.status(204).send(deletedCapsule);
 		} catch (error) {
 			next(error);
 		}
