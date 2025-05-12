@@ -3,8 +3,8 @@
 
 .input-field {
 	&__input {
-		margin-bottom: map-get($spacings, xl);
-		padding-bottom: map-get($spacings, sm);
+		margin-bottom: $spacing-xl;
+		padding-bottom: $spacing-sm;
 		border: none;
 		font-weight: $font-weight-regular;
 		text-transform: uppercase;
@@ -38,7 +38,7 @@
 	}
 
 	&__label {
-		margin-bottom: map-get($spacings, sm);
+		margin-bottom: $spacing-sm;
 	}
 }
 

@@ -19,8 +19,8 @@
 	&__form {
 		@include flexbox(row, unset, unset);
 
-		gap: map-get($spacings, xxl);
-		margin-bottom: map-get($spacings, xxl);
+		gap: $spacing-xxl;
+		margin-bottom: $spacing-xxl;
 	}
 
 	&__icon {

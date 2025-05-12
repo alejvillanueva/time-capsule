@@ -4,7 +4,7 @@
 .add-edit-capsule {
 	@include flexbox(column, unset, unset);
 
-	gap: map-get($spacings, lg);
+	gap: $spacing-lg;
 	margin: 7.2813rem 0 4.875rem;
 
 	&__button-container {
@@ -14,9 +14,9 @@
 		right: 0;
 		bottom: 0;
 		left: 0;
-		gap: map-get($spacings, xxl);
+		gap: $spacing-xxl;
 		height: 4.875rem;
-		padding: map-get($spacings, xl) 0;
+		padding: $spacing-xl 0;
 		background: $white;
 	}
 
@@ -35,12 +35,12 @@
 	&__form {
 		@include flexbox(row, unset, unset);
 
-		gap: map-get($spacings, xxl);
+		gap: $spacing-xxl;
 	}
 
 	&__list {
 		display: grid;
-		gap: map-get($spacings, xxl);
+		gap: $spacing-xxl;
 		grid-template-columns: 13.5rem 13.5rem 13.5rem 13.5rem;
 	}
 }

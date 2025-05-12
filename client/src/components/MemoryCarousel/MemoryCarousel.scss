@@ -1,0 +1,40 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.memory-carousel {
+	@include flexbox(row, unset, center);
+
+	gap: $spacing-xs;
+	height: calc(100% - $spacing-xl);
+	margin: 0 auto;
+
+	// &__buttons {
+	// }
+
+	&__img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+	}
+
+	&__slide {
+		flex: 0 0 100%;
+		min-width: 0;
+		padding: 0 $spacing-xs;
+		transform: translate3d(0, 0, 0);
+	}
+
+	&__slide-container {
+		display: flex;
+		height: 100%;
+		margin-left: -$spacing-xs;
+		touch-action: pan-y pinch-zoom;
+	}
+
+	&__viewport {
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+	}
+}

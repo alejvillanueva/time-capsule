@@ -4,37 +4,40 @@
 .header {
 	@include desktop {
 		max-width: 63rem;
-		padding: map-get($spacings, xxl) 0;
+		padding: $spacing-xxl 0;
 	}
 
-	position: fixed;
-	top: 0;
-	right: 0;
-	left: 0;
-	width: 100%;
-	margin: 0 auto;
-	background: $white;
+	& {
+		position: fixed;
+		top: 0;
+		right: 0;
+		left: 0;
+		width: 100%;
+		margin: 0 auto;
+		background: $white;
+	}
 
 	&__link {
 		&--back {
 			@include flexbox(row, unset, center);
 
 			position: absolute;
-			gap: map-get($spacings, sm);
+			gap: $spacing-sm;
 		}
 	}
 
 	&__text {
-		@include spacing(letter-spacing, xs);
-
 		@include tablet {
 			font-size: $font-size-dt-lg;
 		}
 
-		color: $black;
-		font-size: $font-size-xl;
-		font-weight: $font-weight-extra-bold;
-		text-align: center;
-		text-transform: uppercase;
+		& {
+			color: $black;
+			font-size: $font-size-xl;
+			font-weight: $font-weight-extra-bold;
+			text-align: center;
+			text-transform: uppercase;
+			letter-spacing: $spacing-xs;
+		}
 	}
 }

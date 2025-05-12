@@ -4,17 +4,20 @@
 .main-heading {
 	@include flexbox(row, space-between, center);
 
-	padding-bottom: map-get($spacings, sm);
+	padding-bottom: $spacing-sm;
 	border-bottom: 1px solid $black;
 
 	&__icon {
 		height: 1.5rem;
-		margin-left: map-get($spacings, lg);
+		margin-left: $spacing-lg;
 		cursor: pointer;
 	}
 
-	// &__icon-container {
-	// }
+	&__icon-container {
+		&--carousel {
+			@include flexbox(row, unset, center);
+		}
+	}
 
 	// &__title {
 	// }

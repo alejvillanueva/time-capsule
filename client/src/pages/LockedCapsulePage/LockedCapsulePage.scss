@@ -4,16 +4,17 @@
 .locked {
 	@include flexbox(column, center, unset);
 
-	gap: map-get($spacings, lg);
+	gap: $spacing-lg;
 	height: calc(100vh - 7.2813rem - 4.875rem);
 	margin: 7.2813rem 0 4.875rem;
 
 	&__countdown-container {
 		font-size: $font-size-dt-xxl;
+		letter-spacing: 1.75rem;
 	}
 
 	&__title {
-		padding-bottom: map-get($spacings, sm);
+		padding-bottom: $spacing-sm;
 		border-bottom: 1px solid $primary;
 	}
 }
