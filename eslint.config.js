@@ -5,7 +5,7 @@ import tseslint from "typescript-eslint";
 
 export default tseslint.config(
 	{
-		ignores: ["**/*.js"],
+		ignores: ["**/*.js", "client"],
 	},
 	eslint.configs.recommended,
 	tseslint.configs.strictTypeChecked,

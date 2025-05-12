@@ -61,7 +61,7 @@ export class MemoryController {
 			const { id } = req.params;
 			const results = await MemoryService.deleteMemory(Number(id));
 			const deletedMemory = results.rows;
-			res.status(200).send(deletedMemory);
+			res.status(204).send(deletedMemory);
 		} catch (error) {
 			next(error);
 		}
