@@ -1,0 +1,44 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.carousel-functions {
+	-webkit-tap-highlight-color: rgba(230, 230, 230, 0.5);
+	-webkit-appearance: none;
+	appearance: none;
+	background-color: transparent;
+	touch-action: manipulation;
+	display: inline-flex;
+	text-decoration: none;
+	cursor: pointer;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	width: 3rem;
+	height: 3rem;
+	@include flexbox(unset, center, center);
+
+	&:disabled {
+		color: $grey-light;
+	}
+
+	&:hover {
+		border-radius: 50%;
+		background-color: $grey-light;
+	}
+
+	// &--prev {
+	// }
+
+	// &--next {
+	// }
+
+	&__icon {
+		width: 35%;
+		height: 35%;
+	}
+
+	&__selected-snap-display {
+		height: 100%;
+		margin-right: $spacing-lg;
+	}
+}

@@ -1,0 +1,24 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.unlocked {
+	margin: 7.2813rem 0 4.875rem;
+	height: calc(100vh - 7.2813rem - 4.875rem);
+	max-height: 100%;
+
+	// &__container {
+	// }
+
+	// &__text {
+	// }
+
+	&__title-container {
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+		max-width: 63rem;
+		height: 4.875rem;
+		z-index: 3;
+		background-color: $white;
+	}
+}

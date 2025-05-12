@@ -13,8 +13,11 @@
 		cursor: pointer;
 	}
 
-	// &__icon-container {
-	// }
+	&__icon-container {
+		&--carousel {
+			@include flexbox(row, unset, center);
+		}
+	}
 
 	// &__title {
 	// }

@@ -3,12 +3,14 @@ export default {
 		"dist/**/*",
 		"node_modules/**/*",
 		"src/styles/partials/_variables.scss",
+		"stylelint-declaration-block-no-nested",
 	],
 	extends: [
 		"stylelint-config-standard", // Base rules
 	],
 	plugins: ["stylelint-scss", "stylelint-order"],
 	rules: {
+		"plugin/declaration-block-no-nested": true,
 		// Optional cleanups
 		"no-empty-source": null,
 		"scss/at-rule-no-unknown": true,
