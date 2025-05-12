@@ -2,9 +2,9 @@
 @use "../../styles/partials/mixins" as *;
 
 .unlocked {
-	margin: 7.2813rem 0 4.875rem;
 	height: calc(100vh - 7.2813rem - 4.875rem);
 	max-height: 100%;
+	margin: 7.2813rem 0 4.875rem;
 
 	// &__container {
 	// }
@@ -15,10 +15,10 @@
 	&__title-container {
 		position: absolute;
 		bottom: 0;
+		z-index: 3;
 		width: 100%;
 		max-width: 63rem;
 		height: 4.875rem;
-		z-index: 3;
 		background-color: $white;
 	}
 }
