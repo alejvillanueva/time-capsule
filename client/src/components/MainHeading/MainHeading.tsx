@@ -5,9 +5,10 @@ interface MainHeadingProps {
 	headingType: "default" | "custom" | "custom-editable" | "custom-carousel";
 	title: string;
 	h2?: boolean;
+	showIcons?: boolean;
 }
 
-function MainHeading({ headingType, title, h2 }: MainHeadingProps) {
+function MainHeading({ headingType, title, h2, showIcons }: MainHeadingProps) {
 	return (
 		<>
 			{headingType === "default" && (
@@ -21,33 +22,35 @@ function MainHeading({ headingType, title, h2 }: MainHeadingProps) {
 							{title}
 						</h1>
 					)}
-					<div className="main-heading__icon-container">
-						<svg
-							className="main-heading__icon"
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="#757575"
-							strokeWidth="2"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-						>
-							<path d="M18 6 6 18" />
-							<path d="m6 6 12 12" />
-						</svg>
-						<svg
-							className="main-heading__icon"
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="#757575"
-							strokeWidth="2"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-						>
-							<path d="M20 6 9 17l-5-5" />
-						</svg>
-					</div>
+					{showIcons && (
+						<div className="main-heading__icon-container">
+							<svg
+								className="main-heading__icon"
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="#757575"
+								strokeWidth="2"
+								strokeLinecap="round"
+								strokeLinejoin="round"
+							>
+								<path d="M18 6 6 18" />
+								<path d="m6 6 12 12" />
+							</svg>
+							<svg
+								className="main-heading__icon"
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="#757575"
+								strokeWidth="2"
+								strokeLinecap="round"
+								strokeLinejoin="round"
+							>
+								<path d="M20 6 9 17l-5-5" />
+							</svg>
+						</div>
+					)}
 				</div>
 			)}
 			{headingType === "custom" && (
@@ -67,6 +70,7 @@ function MainHeading({ headingType, title, h2 }: MainHeadingProps) {
 							{title}
 						</h1>
 					)}
+
 					<div className="main-heading__icon-container">
 						<svg
 							className="main-heading__icon"
@@ -119,6 +123,7 @@ function MainHeading({ headingType, title, h2 }: MainHeadingProps) {
 							{title}
 						</h1>
 					)}
+
 					<div className="main-heading__icon-container">
 						<svg
 							className="main-heading__icon"
@@ -165,6 +170,7 @@ function MainHeading({ headingType, title, h2 }: MainHeadingProps) {
 							{title}
 						</h1>
 					)}
+
 					<div className="main-heading__icon-container main-heading__icon-container--carousel">
 						<SelectedSnapDisplay selectedSnap={1} snapCount={5} />
 						<svg

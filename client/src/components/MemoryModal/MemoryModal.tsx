@@ -89,7 +89,12 @@ function MemoryModal({ memoryTitle }: MemoryModalProps) {
 			{memoryTitle ? (
 				<MainHeading headingType="custom" title={memoryTitle} h2={true} />
 			) : (
-				<MainHeading headingType="default" title="Add Memory" h2={true} />
+				<MainHeading
+					headingType="default"
+					title="Add Memory"
+					h2={true}
+					showIcons={true}
+				/>
 			)}
 		</ReactModal>
 	);
