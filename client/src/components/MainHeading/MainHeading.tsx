@@ -1,14 +1,21 @@
-import { SelectedSnapDisplay } from "../MemoryCarouselFunctions/MemoryCarouselFunctions";
 import "./MainHeading.scss";
+import { SelectedSnapDisplay } from "../MemoryCarouselFunctions/MemoryCarouselFunctions";
 
 interface MainHeadingProps {
 	headingType: "default" | "custom" | "custom-editable" | "custom-carousel";
 	title: string;
 	h2?: boolean;
 	showIcons?: boolean;
+	handleModalClick?: () => void;
 }
 
-function MainHeading({ headingType, title, h2, showIcons }: MainHeadingProps) {
+function MainHeading({
+	headingType,
+	title,
+	h2,
+	showIcons,
+	handleModalClick,
+}: MainHeadingProps) {
 	return (
 		<>
 			{headingType === "default" && (
@@ -182,6 +189,7 @@ function MainHeading({ headingType, title, h2, showIcons }: MainHeadingProps) {
 							strokeWidth="2"
 							strokeLinecap="round"
 							strokeLinejoin="round"
+							onClick={handleModalClick}
 						>
 							<circle cx="18" cy="5" r="3" />
 							<circle cx="6" cy="12" r="3" />
