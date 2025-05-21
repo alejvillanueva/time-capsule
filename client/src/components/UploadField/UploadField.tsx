@@ -1,5 +1,6 @@
 import "./UploadField.scss";
 import { useDropzone } from "react-dropzone";
+import { useRef } from "react";
 
 interface UploadFieldProps {
 	uploadLabel: string;
@@ -8,6 +9,7 @@ interface UploadFieldProps {
 	acceptedTypes?: {
 		[key: string]: string[];
 	};
+	onFileChange: (files: File[]) => void;
 }
 
 function UploadField({
@@ -15,17 +17,28 @@ function UploadField({
 	uploadName,
 	uploadId,
 	acceptedTypes,
+	onFileChange,
 }: UploadFieldProps) {
-	const { getRootProps, getInputProps } = useDropzone({
+	const hiddenInputRef = useRef<HTMLInputElement | null>(null);
+	const { getRootProps, getInputProps, acceptedFiles } = useDropzone({
 		accept: acceptedTypes || {
 			"image/png": [".png"],
 			"image/jpeg": [".jpg", ".jpeg"],
 			"image/webp": [".webp"],
 		},
+		onDrop: (incomingFile) => {
+			const dataTransfer = new DataTransfer();
+			incomingFile.forEach((file) => dataTransfer.items.add(file));
+
+			if (hiddenInputRef.current) {
+				hiddenInputRef.current.files = dataTransfer.files;
+			}
+			onFileChange(incomingFile);
+		},
 	});
 
 	return (
-		<div className="upload-field__container">
+		<div className="upload-field">
 			<label className="upload-field__label text-label" htmlFor={uploadId}>
 				{uploadLabel}
 			</label>
@@ -72,8 +85,10 @@ function UploadField({
 					type="file"
 					name={uploadName}
 					id={uploadId}
-					{...getInputProps()}
+					style={{ opacity: 0 }}
+					ref={hiddenInputRef}
 				/>
+				<input {...getInputProps()} />
 			</div>
 		</div>
 	);

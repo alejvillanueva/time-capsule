@@ -2,6 +2,24 @@
 @use "../../styles/partials/mixins" as *;
 
 .input-field {
+	&__error-container {
+		@include flexbox(row, unset, center);
+		margin-bottom: $spacing-sm;
+
+		& + .input-field__input {
+			border-bottom: 2px solid $error;
+		}
+	}
+
+	&__error-text {
+		font-size: $font-size-dt-sm;
+		color: $error;
+	}
+
+	&__icon {
+		height: 1rem;
+	}
+
 	&__input {
 		margin-bottom: $spacing-xl;
 		padding-bottom: $spacing-sm;
@@ -47,7 +65,7 @@ textarea::-webkit-scrollbar {
 }
 
 textarea::-webkit-scrollbar-track {
-	box-shadow: inset 0 0 6px $grey-light;
+	box-shadow: inset 0 0 6px $grey-med;
 }
 
 textarea::-webkit-scrollbar-thumb {

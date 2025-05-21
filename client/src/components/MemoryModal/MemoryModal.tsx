@@ -37,6 +37,7 @@ function MemoryModal({ memoryTitle }: MemoryModalProps) {
 					alignItems: "flex-start",
 					background: "rgba(230, 230, 230, 0.8)",
 					outline: "none",
+					zIndex: 100,
 				},
 			}}
 		>
@@ -87,9 +88,19 @@ function MemoryModal({ memoryTitle }: MemoryModalProps) {
 			</form>
 
 			{memoryTitle ? (
-				<MainHeading headingType="custom" title={memoryTitle} h2={true} />
+				<MainHeading
+					headingType="custom"
+					title={memoryTitle}
+					h2={true}
+					resourceType="memory"
+				/>
 			) : (
-				<MainHeading headingType="default" title="Add Memory" h2={true} />
+				<MainHeading
+					headingType="default"
+					title="Add Memory"
+					h2={true}
+					resourceType="memory"
+				/>
 			)}
 		</ReactModal>
 	);

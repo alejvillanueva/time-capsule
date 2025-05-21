@@ -19,7 +19,11 @@ function UnlockedCapsulePage() {
 				</p>
 			</div> */}
 			<div className="unlocked__title-container">
-				<MainHeading headingType="custom-carousel" title="Lorem Ipsum" />
+				<MainHeading
+					headingType="custom-carousel"
+					title="Lorem Ipsum"
+					resourceType="capsule"
+				/>
 			</div>
 		</main>
 	);

@@ -8,6 +8,7 @@
 	margin-top: 7.2813rem;
 	padding: 6rem;
 	background: $white;
+	z-index: 100;
 
 	&__container {
 		@include flexbox(column, unset, unset);

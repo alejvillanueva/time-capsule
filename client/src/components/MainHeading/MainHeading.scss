@@ -6,17 +6,23 @@
 
 	padding-bottom: $spacing-sm;
 	border-bottom: 1px solid $black;
+	width: 100%;
+
+	&__button {
+		cursor: pointer;
+		margin-left: $spacing-lg;
+		appearance: none;
+		outline: none;
+		background: none;
+		border: none;
+	}
+
+	&__button-container {
+		@include flexbox(row, unset, center);
+	}
 
 	&__icon {
 		height: 1.5rem;
-		margin-left: $spacing-lg;
-		cursor: pointer;
-	}
-
-	&__icon-container {
-		&--carousel {
-			@include flexbox(row, unset, center);
-		}
 	}
 
 	// &__title {

@@ -6,6 +6,10 @@
 	overflow: hidden;
 	border-bottom: 1px solid $black;
 
+	&:hover .capsule-card__image {
+		filter: none;
+	}
+
 	&--add {
 		border-bottom-color: $primary;
 	}
@@ -37,6 +41,7 @@
 	}
 
 	&__image {
+		filter: grayscale(1);
 		height: 9.1875rem;
 	}
 
