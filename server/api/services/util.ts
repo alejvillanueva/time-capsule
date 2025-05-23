@@ -3,7 +3,7 @@ import { Memory } from "../../db/models/memory.js";
 
 export const buildUpdateQuery = (
 	table: string,
-	updateData: Memory | Capsule,
+	updateData: Partial<Memory> | Partial<Capsule>,
 	condition: string,
 ) => {
 	const keys = Object.keys(updateData);
