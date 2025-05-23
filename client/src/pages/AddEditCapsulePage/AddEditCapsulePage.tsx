@@ -99,7 +99,11 @@ function AddEditCapsulePage() {
 				</div>
 			</form>
 			{addMatch ? (
-				<MainHeading headingType="default" title="Create Time Capsule" />
+				<MainHeading
+					headingType="default"
+					title="Create Time Capsule"
+					showIcons={true}
+				/>
 			) : editMatch && isCapsuleEditable ? (
 				<MainHeading headingType="custom-editable" title="Lorem Ipsum" />
 			) : (

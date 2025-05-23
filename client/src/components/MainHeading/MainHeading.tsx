@@ -1,13 +1,21 @@
-import { SelectedSnapDisplay } from "../MemoryCarouselFunctions/MemoryCarouselFunctions";
 import "./MainHeading.scss";
+import { SelectedSnapDisplay } from "../MemoryCarouselFunctions/MemoryCarouselFunctions";
 
 interface MainHeadingProps {
 	headingType: "default" | "custom" | "custom-editable" | "custom-carousel";
 	title: string;
 	h2?: boolean;
+	showIcons?: boolean;
+	handleModalClick?: () => void;
 }
 
-function MainHeading({ headingType, title, h2 }: MainHeadingProps) {
+function MainHeading({
+	headingType,
+	title,
+	h2,
+	showIcons,
+	handleModalClick,
+}: MainHeadingProps) {
 	return (
 		<>
 			{headingType === "default" && (
@@ -21,33 +29,35 @@ function MainHeading({ headingType, title, h2 }: MainHeadingProps) {
 							{title}
 						</h1>
 					)}
-					<div className="main-heading__icon-container">
-						<svg
-							className="main-heading__icon"
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="#757575"
-							strokeWidth="2"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-						>
-							<path d="M18 6 6 18" />
-							<path d="m6 6 12 12" />
-						</svg>
-						<svg
-							className="main-heading__icon"
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="#757575"
-							strokeWidth="2"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-						>
-							<path d="M20 6 9 17l-5-5" />
-						</svg>
-					</div>
+					{showIcons && (
+						<div className="main-heading__icon-container">
+							<svg
+								className="main-heading__icon"
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="#757575"
+								strokeWidth="2"
+								strokeLinecap="round"
+								strokeLinejoin="round"
+							>
+								<path d="M18 6 6 18" />
+								<path d="m6 6 12 12" />
+							</svg>
+							<svg
+								className="main-heading__icon"
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="#757575"
+								strokeWidth="2"
+								strokeLinecap="round"
+								strokeLinejoin="round"
+							>
+								<path d="M20 6 9 17l-5-5" />
+							</svg>
+						</div>
+					)}
 				</div>
 			)}
 			{headingType === "custom" && (
@@ -67,6 +77,7 @@ function MainHeading({ headingType, title, h2 }: MainHeadingProps) {
 							{title}
 						</h1>
 					)}
+
 					<div className="main-heading__icon-container">
 						<svg
 							className="main-heading__icon"
@@ -119,6 +130,7 @@ function MainHeading({ headingType, title, h2 }: MainHeadingProps) {
 							{title}
 						</h1>
 					)}
+
 					<div className="main-heading__icon-container">
 						<svg
 							className="main-heading__icon"
@@ -165,6 +177,7 @@ function MainHeading({ headingType, title, h2 }: MainHeadingProps) {
 							{title}
 						</h1>
 					)}
+
 					<div className="main-heading__icon-container main-heading__icon-container--carousel">
 						<SelectedSnapDisplay selectedSnap={1} snapCount={5} />
 						<svg
@@ -176,6 +189,7 @@ function MainHeading({ headingType, title, h2 }: MainHeadingProps) {
 							strokeWidth="2"
 							strokeLinecap="round"
 							strokeLinejoin="round"
+							onClick={handleModalClick}
 						>
 							<circle cx="18" cy="5" r="3" />
 							<circle cx="6" cy="12" r="3" />
