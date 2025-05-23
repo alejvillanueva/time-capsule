@@ -4,14 +4,46 @@ import "./MemoryModal.scss";
 import ReactModal from "react-modal";
 import useAppContext from "../../context/useAppContext";
 import UploadField from "../UploadField/UploadField";
+import { useState } from "react";
 
 interface MemoryModalProps {
 	memoryTitle?: string;
 }
 
-function MemoryModal({ memoryTitle }: MemoryModalProps) {
-	const { isOpen, setIsOpen } = useAppContext();
+interface MemoryErrors {
+	author: boolean;
+	message: boolean;
+	url: boolean;
+}
 
+function MemoryModal({ memoryTitle }: MemoryModalProps) {
+	const {
+		isOpen,
+		setIsOpen,
+		memoryFormData,
+		setMemoryFormData,
+		uploadedFile,
+		setUploadedFile,
+	} = useAppContext();
+	const [memoryErrors, setMemoryErrors] = useState<MemoryErrors>({
+		author: false,
+		message: false,
+		url: false,
+	});
+
+	const { author, capsule_id, added_on, medium, message, url } = memoryFormData;
+
+	const handleMemoryChange = (
+		e: React.ChangeEvent<
+			HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+		>,
+	) => {
+		const { name, value } = e.target;
+
+		setMemoryFormData({ ...memoryFormData, [name]: value });
+	};
+
+	// Attach modal to root element
 	const rootElement = document.getElementById("root");
 
 	if (rootElement) {
@@ -19,6 +51,70 @@ function MemoryModal({ memoryTitle }: MemoryModalProps) {
 	} else {
 		console.error("Root element not found!");
 	}
+
+	const handleMemorySubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+
+		if (!validateMemoryForm()) return;
+
+		if (!uploadedFile) {
+			console.log("No file uploaded");
+			return;
+		}
+		console.log("Uploaded file:", uploadedFile[0]);
+
+		try {
+			// Update - replace line below with http request function
+			console.log(memoryFormData);
+
+			setIsOpen(false);
+		} catch (error) {
+			console.error("Error creating/updating capsule:", error);
+		}
+	};
+
+	const validateMemoryForm = () => {
+		const errorStates = {
+			author: false,
+			message: false,
+			url: false,
+		};
+		const urlPattern =
+			/^https?:\/\/[^\s/$.?#].[^\s]*\.(jpg|jpeg|png|gif|webp|svg)$/;
+
+		// Update - author should be title
+		// Title field
+		if (!author) {
+			console.error("Missing title field");
+			errorStates.author = true;
+		} else if (author.length < 5) {
+			console.error("Title must contain min. 5 characters");
+			errorStates.author = true;
+		}
+
+		// URL field
+		if (!url) {
+			console.error("Missing url field");
+			errorStates.url = true;
+		} else if (urlPattern.test(url)) {
+			console.error("Invalid url");
+			errorStates.url = true;
+		}
+
+		// Optional data
+		if (message && message.length < 3) {
+			console.error("Caption must contain min. 3 characters");
+			errorStates.message = true;
+		}
+
+		setMemoryErrors(errorStates);
+
+		if (Object.values(memoryErrors).includes(true)) {
+			return false;
+		}
+
+		return true;
+	};
 
 	return (
 		<ReactModal
@@ -57,33 +153,41 @@ function MemoryModal({ memoryTitle }: MemoryModalProps) {
 				<path d="M18 6 6 18" />
 				<path d="m6 6 12 12" />
 			</svg>
-			<form className="memory-modal__form">
+			<form className="memory-modal__form" onSubmit={handleMemorySubmit}>
 				<div className="memory-modal__container">
 					<InputField
-						inputLabel="Memory Type"
+						inputLabel="Memory Medium"
 						inputType="select"
-						inputId="memory_type"
-						inputName="memory_type"
+						inputId="medium"
+						inputName="medium"
+						handleChange={handleMemoryChange}
+						validation={{ required: false }}
 					/>
+					{/* Update - don't need author field in memory, title instead */}
 					<InputField
 						inputLabel="Title"
 						inputType="text"
 						inputId="memory_title"
 						inputName="memory_title"
 						placeholder="Type the Memory Title"
+						handleChange={handleMemoryChange}
+						validation={{ required: true, isInvalid: memoryErrors.author }}
 					/>
 					<InputField
 						inputLabel="Caption"
 						inputType="textArea"
-						inputId="memory_caption"
-						inputName="memory_caption"
+						inputId="message"
+						inputName="message"
 						placeholder="Type the Caption"
+						handleChange={handleMemoryChange}
+						validation={{ required: false, isInvalid: memoryErrors.message }}
 					/>
 				</div>
 				<UploadField
 					uploadLabel="Image"
 					uploadId="memory_image"
 					uploadName="memory_image"
+					onFileChange={setUploadedFile}
 				/>
 			</form>
 

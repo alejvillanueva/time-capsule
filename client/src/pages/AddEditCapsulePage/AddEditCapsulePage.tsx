@@ -9,7 +9,7 @@ import { useLocation, matchPath, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import MemoryModal from "../../components/MemoryModal/MemoryModal";
 
-interface Errors {
+interface CapsuleErrors {
 	author: boolean;
 	cover_art?: boolean;
 	created_on?: boolean;
@@ -31,10 +31,12 @@ function AddEditCapsulePage() {
 		setMemoryModal,
 		capsuleFormData,
 		setCapsuleFormData,
+		memoryFormData,
+		setMemoryFormData,
 		uploadedFile,
 		setUploadedFile,
 	} = useAppContext();
-	const [errors, setErrors] = useState<Errors>({
+	const [capsuleErrors, setCapsuleErrors] = useState<CapsuleErrors>({
 		author: false,
 		cover_art: false,
 		created_on: false,
@@ -70,7 +72,7 @@ function AddEditCapsulePage() {
 		setIsOpen(true);
 	};
 
-	const handleChange = (
+	const handleCapsuleChange = (
 		e: React.ChangeEvent<
 			HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
 		>,
@@ -80,10 +82,10 @@ function AddEditCapsulePage() {
 		setCapsuleFormData({ ...capsuleFormData, [name]: value });
 	};
 
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleCapsuleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		if (!validateForm()) return;
+		if (!validateCapsuleForm()) return;
 
 		if (!uploadedFile) {
 			console.log("No file uploaded");
@@ -102,7 +104,7 @@ function AddEditCapsulePage() {
 		}
 	};
 
-	const validateForm = () => {
+	const validateCapsuleForm = () => {
 		const errorStates = {
 			author: false,
 			cover_art: false,
@@ -160,9 +162,9 @@ function AddEditCapsulePage() {
 			errorStates.password = true;
 		}
 
-		setErrors(errorStates);
+		setCapsuleErrors(errorStates);
 
-		if (Object.values(errors).includes(true)) {
+		if (Object.values(capsuleErrors).includes(true)) {
 			return false;
 		}
 
@@ -171,7 +173,7 @@ function AddEditCapsulePage() {
 
 	return (
 		<main className="add-edit-capsule">
-			<form className="add-edit-capsule__form" onSubmit={handleSubmit}>
+			<form className="add-edit-capsule__form" onSubmit={handleCapsuleSubmit}>
 				<div className="add-edit-capsule__form-container">
 					{addMatch && (
 						<UploadField
@@ -205,8 +207,8 @@ function AddEditCapsulePage() {
 							inputId="capsule
 					_title"
 							placeholder="Type the capsule title"
-							handleChange={handleChange}
-							validation={{ required: true, isInvalid: errors.title }}
+							handleChange={handleCapsuleChange}
+							validation={{ required: true, isInvalid: capsuleErrors.title }}
 						/>
 						<InputField
 							inputType="text"
@@ -215,8 +217,8 @@ function AddEditCapsulePage() {
 							inputId="capsule
 					_author"
 							placeholder="Type your name"
-							handleChange={handleChange}
-							validation={{ required: true, isInvalid: errors.author }}
+							handleChange={handleCapsuleChange}
+							validation={{ required: true, isInvalid: capsuleErrors.author }}
 						/>
 						<InputField
 							inputType="date"
@@ -224,8 +226,11 @@ function AddEditCapsulePage() {
 							inputName="open_date"
 							inputId="capsule
 					_open_date"
-							handleChange={handleChange}
-							validation={{ required: true, isInvalid: errors.open_date }}
+							handleChange={handleCapsuleChange}
+							validation={{
+								required: true,
+								isInvalid: capsuleErrors.open_date,
+							}}
 						/>
 						<InputField
 							inputType="password"
@@ -234,7 +239,7 @@ function AddEditCapsulePage() {
 							inputId="capsule
 					_password"
 							placeholder="Type the password to edit capsule"
-							handleChange={handleChange}
+							handleChange={handleCapsuleChange}
 							validation={{ required: false }}
 						/>
 						<InputField
@@ -243,8 +248,8 @@ function AddEditCapsulePage() {
 							inputName="edit_by"
 							inputId="capsule
 					_edit_by"
-							handleChange={handleChange}
-							validation={{ required: true, isInvalid: errors.edit_by }}
+							handleChange={handleCapsuleChange}
+							validation={{ required: true, isInvalid: capsuleErrors.edit_by }}
 						/>
 					</div>
 				</div>
