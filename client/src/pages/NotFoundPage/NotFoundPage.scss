@@ -1,0 +1,39 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.not-found {
+	@include flexbox(column, unset, unset);
+
+	gap: $spacing-xl;
+	margin: 7.2813rem 0 0;
+
+	& .main-heading {
+		width: 100%;
+	}
+
+	&__animation {
+		position: relative;
+		top: -1rem;
+		height: 16rem;
+	}
+
+	&__link {
+		color: $primary;
+		text-decoration: none;
+
+		&:hover {
+			font-weight: $font-weight-bold;
+		}
+	}
+
+	&__status {
+		@include flexbox(row, center, center);
+
+		font-size: 11rem;
+	}
+
+	&__text {
+		color: $grey-dark;
+		text-transform: uppercase;
+	}
+}

@@ -1,11 +1,13 @@
-import { SelectedSnapDisplay } from "../MemoryCarouselFunctions/MemoryCarouselFunctions";
 import "./MainHeading.scss";
+import { SelectedSnapDisplay } from "../MemoryCarouselFunctions/MemoryCarouselFunctions";
 
 interface MainHeadingProps {
 	headingType: "default" | "custom" | "custom-editable" | "custom-carousel";
 	title: string;
 	h2?: boolean;
 	resourceType: "capsule" | "memory";
+	showIcons?: boolean;
+	handleModalClick?: () => void;
 }
 
 function MainHeading({
@@ -13,6 +15,8 @@ function MainHeading({
 	title,
 	h2,
 	resourceType,
+	showIcons,
+	handleModalClick,
 }: MainHeadingProps) {
 	return (
 		<>

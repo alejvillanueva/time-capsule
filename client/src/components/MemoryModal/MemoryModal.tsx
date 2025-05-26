@@ -1,6 +1,6 @@
+import "./MemoryModal.scss";
 import InputField from "../InputField/InputField";
 import MainHeading from "../MainHeading/MainHeading";
-import "./MemoryModal.scss";
 import ReactModal from "react-modal";
 import useAppContext from "../../context/useAppContext";
 import UploadField from "../UploadField/UploadField";
@@ -204,6 +204,7 @@ function MemoryModal({ memoryTitle }: MemoryModalProps) {
 					title="Add Memory"
 					h2={true}
 					resourceType="memory"
+					showIcons={true}
 				/>
 			)}
 		</ReactModal>

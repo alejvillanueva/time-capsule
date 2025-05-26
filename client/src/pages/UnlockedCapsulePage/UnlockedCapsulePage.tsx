@@ -1,8 +1,16 @@
 import "./UnlockedCapsulePage.scss";
 import MainHeading from "../../components/MainHeading/MainHeading";
 import MemoryCarousel from "../../components/MemoryCarousel/MemoryCarousel";
+import ShareModal from "../../components/ShareModal/ShareModal";
+import useAppContext from "../../context/useAppContext";
 
 function UnlockedCapsulePage() {
+	const { setIsOpen } = useAppContext();
+
+	const handleModalClick = () => {
+		setIsOpen(true);
+	};
+
 	return (
 		<main className="unlocked">
 			<MemoryCarousel slides={[0, 1, 2, 3, 4]} options={{ loop: true }} />
@@ -23,8 +31,10 @@ function UnlockedCapsulePage() {
 					headingType="custom-carousel"
 					title="Lorem Ipsum"
 					resourceType="capsule"
+					handleModalClick={handleModalClick}
 				/>
 			</div>
+			<ShareModal />
 		</main>
 	);
 }
