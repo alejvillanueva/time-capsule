@@ -52,7 +52,7 @@ export class CapsuleController {
 	};
 
 	public static updateCapsule = async (
-		req: Request<{}, {}, Capsule>,
+		req: Request<{}, {}, Partial<Capsule>>,
 		res: Response,
 		next: NextFunction,
 	) => {

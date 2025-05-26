@@ -55,7 +55,7 @@ export class CapsuleService {
 			throw new Error(`Error creating capsule - ${message}}`);
 		}
 	};
-	public static updateCapsule = async (c: Capsule) => {
+	public static updateCapsule = async (c: Partial<Capsule>) => {
 		try {
 			const { id } = c;
 			if (!id) throw new Error("No ID found");

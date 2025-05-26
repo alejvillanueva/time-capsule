@@ -28,7 +28,7 @@ export class MemoryService {
 		}
 	};
 
-	public static updateMemory = async (m: Memory) => {
+	public static updateMemory = async (m: Partial<Memory>) => {
 		try {
 			const { id } = m;
 			if (!id) throw new Error("No ID found");
