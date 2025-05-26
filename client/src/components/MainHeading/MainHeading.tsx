@@ -31,46 +31,48 @@ function MainHeading({
 							{title}
 						</h1>
 					)}
-					<div className="main-heading__button-container">
-						<button
-							className="main-heading__button"
-							type="button"
-							aria-label={`Cancel ${resourceType} form creation`}
-							title="Cancel"
-						>
-							<svg
-								className="main-heading__icon"
-								xmlns="http://www.w3.org/2000/svg"
-								viewBox="0 0 24 24"
-								fill="none"
-								stroke="#757575"
-								strokeWidth="2"
-								strokeLinecap="round"
-								strokeLinejoin="round"
+					{showIcons && (
+						<div className="main-heading__button-container">
+							<button
+								className="main-heading__button"
+								type="button"
+								aria-label={`Cancel ${resourceType} form creation`}
+								title="Cancel"
 							>
-								<path d="M18 6 6 18" />
-								<path d="m6 6 12 12" />
-							</svg>
-						</button>
-						<button
-							className="main-heading__button"
-							aria-label={`Submit ${resourceType} form`}
-							title="Submit"
-						>
-							<svg
-								className="main-heading__icon"
-								xmlns="http://www.w3.org/2000/svg"
-								viewBox="0 0 24 24"
-								fill="none"
-								stroke="#757575"
-								strokeWidth="2"
-								strokeLinecap="round"
-								strokeLinejoin="round"
+								<svg
+									className="main-heading__icon"
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="#757575"
+									strokeWidth="2"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+								>
+									<path d="M18 6 6 18" />
+									<path d="m6 6 12 12" />
+								</svg>
+							</button>
+							<button
+								className="main-heading__button"
+								aria-label={`Submit ${resourceType} form`}
+								title="Submit"
 							>
-								<path d="M20 6 9 17l-5-5" />
-							</svg>
-						</button>
-					</div>
+								<svg
+									className="main-heading__icon"
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="#757575"
+									strokeWidth="2"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+								>
+									<path d="M20 6 9 17l-5-5" />
+								</svg>
+							</button>
+						</div>
+					)}
 				</div>
 			)}
 			{headingType === "custom" && (
@@ -231,6 +233,7 @@ function MainHeading({
 								strokeWidth="2"
 								strokeLinecap="round"
 								strokeLinejoin="round"
+								onClick={handleModalClick}
 							>
 								<circle cx="18" cy="5" r="3" />
 								<circle cx="6" cy="12" r="3" />

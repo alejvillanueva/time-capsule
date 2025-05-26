@@ -259,42 +259,26 @@ function AddEditCapsulePage() {
 							headingType="default"
 							title="Create Time Capsule"
 							resourceType="capsule"
+							showIcons={true}
 						/>
 					) : editMatch && isCapsuleEditable ? (
 						<MainHeading
 							headingType="custom-editable"
 							title="Lorem Ipsum"
 							resourceType="capsule"
+							showIcons={true}
 						/>
 					) : (
 						<MainHeading
 							headingType="custom"
 							title="Lorem Ipsum"
 							resourceType="capsule"
+							showIcons={true}
 						/>
 					)}
 				</div>
 			</form>
-			{addMatch ? (
-				<MainHeading
-					headingType="default"
-					title="Create Time Capsule"
-					showIcons={true}
-					resourceType="capsule"
-				/>
-			) : editMatch && isCapsuleEditable ? (
-				<MainHeading
-					headingType="custom-editable"
-					title="Lorem Ipsum"
-					resourceType="capsule"
-				/>
-			) : (
-				<MainHeading
-					headingType="custom"
-					title="Lorem Ipsum"
-					resourceType="capsule"
-				/>
-			)}
+
 			{editMatch && (
 				<>
 					<h2 className="add-edit-capsule__subtitle text-subheading">

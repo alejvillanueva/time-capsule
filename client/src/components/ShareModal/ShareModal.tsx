@@ -31,6 +31,7 @@ function ShareModal() {
 					alignItems: "center",
 					background: "rgba(230, 230, 230, 0.8)",
 					outline: "none",
+					zIndex: 100,
 				},
 			}}
 		>

@@ -4,6 +4,7 @@
 .input-field {
 	&__error-container {
 		@include flexbox(row, unset, center);
+
 		margin-bottom: $spacing-sm;
 
 		& + .input-field__input {
@@ -12,8 +13,8 @@
 	}
 
 	&__error-text {
-		font-size: $font-size-dt-sm;
 		color: $error;
+		font-size: $font-size-dt-sm;
 	}
 
 	&__icon {
