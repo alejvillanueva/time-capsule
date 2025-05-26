@@ -38,7 +38,7 @@ export class MemoryController {
 	};
 
 	public static updateMemory = async (
-		req: Request<{}, {}, Memory>,
+		req: Request<{}, {}, Partial<Memory>>,
 		res: Response,
 		next: NextFunction,
 	) => {
