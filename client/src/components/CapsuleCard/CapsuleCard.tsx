@@ -1,11 +1,69 @@
 import "./CapsuleCard.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Capsule } from "../../interfaces/index";
+import React, { useEffect, useRef, useState } from "react";
 
 interface CapsuleCardProps {
 	cardType: "add" | "capsule";
+	data?: Capsule;
 }
 
-function CapsuleCard({ cardType }: CapsuleCardProps) {
+function CapsuleCard({ cardType, data }: CapsuleCardProps) {
+	const navigate = useNavigate();
+	const optionRef = useRef<HTMLDivElement | null>(null);
+	const [isOptionsVisible, setIsOptionsVisible] = useState<boolean>(false);
+	let formattedDate;
+	if (data) {
+		formattedDate = new Date(data.open_date).toLocaleDateString("en-GB", {
+			day: "2-digit",
+			month: "short",
+			year: "2-digit",
+		});
+	}
+
+	useEffect(() => {
+		function handleClickOutside(e: MouseEvent) {
+			console.log("option ref:", optionRef.current);
+			console.log("event target:", e.target);
+			if (
+				optionRef.current &&
+				e.target instanceof Node &&
+				!optionRef.current.contains(e.target)
+			) {
+				setIsOptionsVisible(false);
+			}
+		}
+
+		document.addEventListener("mousedown", handleClickOutside);
+
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, [optionRef]);
+
+	const handleOptionsClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault();
+		e.stopPropagation();
+		setIsOptionsVisible(!isOptionsVisible);
+	};
+
+	const handleEditClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault();
+		e.stopPropagation();
+		navigate(`/capsule/${data?.id}/edit`);
+	};
+
+	const handleShareClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault();
+		e.stopPropagation();
+		// UPDATE: uncomment below and edit share link, add notification that it has been successfully copied
+		// try {
+		// 	navigator.clipboard.writeText(`/capsule/${data?.id}/unlocked`);
+		// } catch (error) {
+		// 	console.error("Failed to copy share link:", error);
+		// }
+	};
+
 	return (
 		<>
 			{cardType === "add" && (
@@ -16,7 +74,7 @@ function CapsuleCard({ cardType }: CapsuleCardProps) {
 					>
 						<div className="capsule-card__icon-container">
 							<svg
-								className="capsule-card__icon"
+								className="capsule-card__icon capsule-card__icon--plus"
 								xmlns="http://www.w3.org/2000/svg"
 								viewBox="0 0 24 24"
 								fill="none"
@@ -35,13 +93,24 @@ function CapsuleCard({ cardType }: CapsuleCardProps) {
 					</Link>
 				</li>
 			)}
-			{cardType === "capsule" && (
+			{cardType === "capsule" && data && (
 				<li className="capsule-card">
-					<Link className="capsule-card__link" to={``}>
+					<Link
+						className="capsule-card__link"
+						to={
+							new Date() < new Date(data.open_date)
+								? `/capsule/${data.id}/locked`
+								: `/capsule/${data.id}/unlocked`
+						}
+					>
 						<div className="capsule-card__container">
 							<img
 								className="capsule-card__image"
-								src="https://blog.adobe.com/en/topics/media_1b0bc6f8d7d4e93986294e9b25e41afd86c6c4822.jpeg?width=750&format=jpeg&optimize=medium"
+								src={
+									data.cover_art
+										? data.cover_art
+										: "https://images.pexels.com/photos/1293120/pexels-photo-1293120.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+								}
 								alt=""
 							/>
 						</div>
@@ -50,14 +119,52 @@ function CapsuleCard({ cardType }: CapsuleCardProps) {
 								className="capsule-card__date text-label"
 								dateTime="2025-06-06"
 							>
-								06 Jun 25
+								{formattedDate}
 							</time>
 							<small className="capsule-card__author text-label">
-								Jane Doe
+								{data.author}
 							</small>
-							<h2 className="capsule-card__title ">
-								Lorem ipsum dolor sit amet
-							</h2>
+							<div className="capsule-card__title-container">
+								<h2 className="capsule-card__title ">{data.title}</h2>
+								<button
+									className="capsule-card__button capsule-card__button--ellipsis"
+									type="button"
+									onClick={handleOptionsClick}
+								>
+									<svg
+										className="capsule-card__icon"
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="#1b2021"
+										strokeWidth="2"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+									>
+										<circle cx="12" cy="12" r="1" />
+										<circle cx="12" cy="5" r="1" />
+										<circle cx="12" cy="19" r="1" />
+									</svg>
+								</button>
+								{isOptionsVisible && (
+									<div className="capsule-card__options" ref={optionRef}>
+										<button
+											className="capsule-card__button capsule-card__button--option text-label"
+											type="button"
+											onClick={handleEditClick}
+										>
+											Edit
+										</button>
+										<button
+											className="capsule-card__button capsule-card__button--option text-label"
+											type="button"
+											onClick={handleShareClick}
+										>
+											Share
+										</button>
+									</div>
+								)}
+							</div>
 						</div>
 					</Link>
 				</li>

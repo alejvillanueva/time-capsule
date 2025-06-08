@@ -1,29 +1,37 @@
 import "./HomePage.scss";
 import CapsuleCard from "../../components/CapsuleCard/CapsuleCard";
 import Button from "../../components/Button/Button";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { getAllCapsules } from "../../services/index";
+import { Capsule } from "../../interfaces/index";
 
 function HomePage() {
-	//This is just for testing but this is being called twice.
+	const [capsules, setCapsules] = useState<Capsule[]>([]);
+
 	useEffect(() => {
-		console.log("This is being called twice.");
+		const fetchCapsules = async () => {
+			try {
+				const data = await getAllCapsules();
+				setCapsules(data);
+			} catch (error) {
+				console.error("Error fetching home page capsules:", error);
+			}
+		};
+
+		fetchCapsules();
 	}, []);
+
+	if (capsules && capsules.length === 0) {
+		return <div>Loading home page...</div>;
+	}
+
 	return (
 		<main className="home">
 			<ul className="home__list">
 				<CapsuleCard cardType="add" />
-				<CapsuleCard cardType="capsule" />
-				<CapsuleCard cardType="capsule" />
-				<CapsuleCard cardType="capsule" />
-				<CapsuleCard cardType="capsule" />
-				<CapsuleCard cardType="capsule" />
-				<CapsuleCard cardType="capsule" />
-				<CapsuleCard cardType="capsule" />
-				<CapsuleCard cardType="capsule" />
-				<CapsuleCard cardType="capsule" />
-				<CapsuleCard cardType="capsule" />
-				<CapsuleCard cardType="capsule" />
-				<CapsuleCard cardType="capsule" />
+				{capsules?.map((capsule, i) => (
+					<CapsuleCard key={i} cardType="capsule" data={capsule} />
+				))}
 			</ul>
 			<div className="home__button-container">
 				<Button buttonText="Sort" />

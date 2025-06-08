@@ -2,12 +2,17 @@
 @use "../../styles/partials/mixins" as *;
 
 .capsule-card {
+	position: relative;
 	width: 13.5rem;
 	overflow: hidden;
 	border-bottom: 1px solid $black;
 
-	&:hover .capsule-card__image {
-		filter: none;
+	&:hover {
+		transform: scale(1.02);
+
+		& .capsule-card__image {
+			filter: none;
+		}
 	}
 
 	&--add {
@@ -16,8 +21,36 @@
 
 	&__author {
 		font-size: 0.625rem;
-		font-weight: $font-weight-regular;
-		text-transform: none;
+		font-weight: $font-weight-light;
+		text-transform: uppercase;
+	}
+
+	&__button {
+		padding: $spacing-xs;
+		border: none;
+		background: none;
+		color: $black;
+		text-align: left;
+		cursor: pointer;
+		appearance: none;
+
+		&:hover {
+			border-radius: 3px;
+			background: $grey-light;
+		}
+
+		&--ellipsis {
+			@include flexbox(unset, center, center);
+
+			width: 1.25rem;
+			min-width: 1.25rem;
+			height: 1.25rem;
+			margin-right: $spacing-xs;
+		}
+
+		&--option {
+			width: 100%;
+		}
 	}
 
 	&__container {
@@ -26,12 +59,17 @@
 
 	&__date {
 		margin: 0.25rem 0;
-		font-weight: $font-weight-regular;
+		font-weight: $font-weight-medium;
 	}
 
 	&__icon {
-		width: 1.75rem;
-		height: 1.75rem;
+		width: 100%;
+		height: 100%;
+
+		&--plus {
+			width: 1.75rem;
+			height: 1.75rem;
+		}
 	}
 
 	&__icon-container {
@@ -55,11 +93,21 @@
 		}
 	}
 
+	&__options {
+		@include flexbox(column, unset, unset);
+
+		position: absolute;
+		right: $spacing-xs;
+		bottom: $spacing-xl;
+		padding: $spacing-sm;
+		box-shadow: 0 3px 12px 0 rgb(0 0 0 / 20%);
+		background: $white;
+	}
+
 	&__title {
 		@include flexbox(unset, unset, flex-end);
 
 		height: 2.5625rem;
-		margin: 0.4375rem 0;
 		color: $black;
 		font-size: $font-size-dt-lg;
 		font-weight: $font-weight-medium;
@@ -72,5 +120,11 @@
 			font-weight: $font-weight-medium;
 			text-transform: uppercase;
 		}
+	}
+
+	&__title-container {
+		@include flexbox(row, space-between, flex-end);
+
+		margin: 0.4375rem 0;
 	}
 }

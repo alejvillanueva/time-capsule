@@ -96,8 +96,8 @@ function MainHeading({
 						<button
 							className="main-heading__button"
 							type="button"
-							aria-label={`Modify ${resourceType} form`}
-							title="Modify"
+							aria-label={`Edit ${resourceType} form`}
+							title="Edit"
 						>
 							<svg
 								className="main-heading__icon"
@@ -221,6 +221,7 @@ function MainHeading({
 						<SelectedSnapDisplay selectedSnap={1} snapCount={5} />
 						<button
 							className="main-heading__button"
+							type="button"
 							aria-label={`Share ${resourceType}`}
 							title="Share"
 						>
