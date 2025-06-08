@@ -23,8 +23,6 @@ function CapsuleCard({ cardType, data }: CapsuleCardProps) {
 
 	useEffect(() => {
 		function handleClickOutside(e: MouseEvent) {
-			console.log("option ref:", optionRef.current);
-			console.log("event target:", e.target);
 			if (
 				optionRef.current &&
 				e.target instanceof Node &&
