@@ -13,6 +13,7 @@ function UnlockedCapsulePage() {
 	const { setIsOpen } = useAppContext();
 	const [memories, setMemories] = useState<Memory[]>([]);
 	const [capsuleTitle, setCapsuleTitle] = useState("");
+	const [currentSlide, setCurrentSlide] = useState(0);
 
 	useEffect(() => {
 		const fetchMemories = async () => {
@@ -37,7 +38,12 @@ function UnlockedCapsulePage() {
 	}
 	return (
 		<main className="unlocked">
-			<MemoryCarousel memories={memories} options={{ loop: true }} />
+			<MemoryCarousel
+				memories={memories}
+				options={{ loop: true }}
+				currentSlide={currentSlide}
+				setCurrentSlide={setCurrentSlide}
+			/>
 			<div className="unlocked__author-container">
 				<MainHeading
 					headingType="custom-carousel"
@@ -45,6 +51,7 @@ function UnlockedCapsulePage() {
 					resourceType="capsule"
 					handleModalClick={handleModalClick}
 					memoryCount={memories.length}
+					currentSlide={currentSlide}
 				/>
 			</div>
 			<ShareModal />

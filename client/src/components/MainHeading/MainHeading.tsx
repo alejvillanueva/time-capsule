@@ -9,6 +9,7 @@ interface MainHeadingProps {
 	showIcons?: boolean;
 	handleModalClick?: () => void;
 	memoryCount?: number;
+	currentSlide?: number;
 }
 
 function MainHeading({
@@ -19,6 +20,7 @@ function MainHeading({
 	showIcons,
 	handleModalClick,
 	memoryCount,
+	currentSlide = 0,
 }: MainHeadingProps) {
 	return (
 		<>
@@ -220,7 +222,10 @@ function MainHeading({
 						</h1>
 					)}
 					<div className="main-heading__button-container">
-						<SelectedSnapDisplay selectedSnap={1} snapCount={memoryCount} />
+						<SelectedSnapDisplay
+							selectedSnap={currentSlide}
+							snapCount={memoryCount}
+						/>
 						<button
 							className="main-heading__button"
 							type="button"

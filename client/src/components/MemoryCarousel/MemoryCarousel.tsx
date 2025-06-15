@@ -14,23 +14,36 @@ import { EmblaCarouselType } from "embla-carousel";
 interface CarouselProps {
 	memories: Memory[];
 	options?: EmblaOptionsType;
+	currentSlide: number;
+	setCurrentSlide: (value: number) => void;
 }
 
-function MemoryCarousel({ memories, options }: CarouselProps) {
+function MemoryCarousel({
+	memories,
+	options,
+	currentSlide,
+	setCurrentSlide,
+}: CarouselProps) {
 	const [emblaRef, emblaApi] = useEmblaCarousel(options, [Fade()]);
 	const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
 	const [isHovered, setIsHovered] = useState<boolean>(false);
-	const [currentSlide, setCurrentSlide] = useState<number>(0);
 	const [overlayWidth, setOverlayWidth] = useState<number>(0);
 	const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
 	const overlayRef = useRef<HTMLDivElement | null>(null);
+
+	const handleSlideChange = useCallback(
+		(newSlide: number) => {
+			setCurrentSlide(newSlide);
+		},
+		[setCurrentSlide],
+	);
 
 	const {
 		prevBtnDisabled,
 		nextBtnDisabled,
 		onPrevButtonClick,
 		onNextButtonClick,
-	} = useMemoryCarouselArrows(emblaApi);
+	} = useMemoryCarouselArrows(emblaApi, { onSlideChange: handleSlideChange });
 
 	const handleOverlayKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
 		if (e.key === "Enter" || e.key === " ") {
@@ -60,17 +73,41 @@ function MemoryCarousel({ memories, options }: CarouselProps) {
 	}, [isOverlayOpen]);
 
 	// Returns an array of the current slide index
-	const emblaCurrentSlide = useCallback((emblaApi: EmblaCarouselType) => {
-		const currentIndexArr = emblaApi.slidesInView();
-		const [slide] = currentIndexArr;
-		setCurrentSlide(slide);
-	}, []);
+	const emblaCurrentSlide = useCallback(
+		(emblaApi: EmblaCarouselType) => {
+			const currentIndex = emblaApi.selectedScrollSnap();
+			// Only update if different from current state
+			if (currentIndex !== currentSlide) {
+				setCurrentSlide(currentIndex);
+			}
+		},
+		[currentSlide, setCurrentSlide],
+	);
 
 	useEffect(() => {
 		if (emblaApi) {
-			emblaApi.on("slidesInView", emblaCurrentSlide);
+			emblaApi.on("select", emblaCurrentSlide);
+
+			// Set initial slide immediately when emblaApi is ready
+			const initialSlide = emblaApi.selectedScrollSnap();
+			if (initialSlide !== currentSlide) {
+				setCurrentSlide(initialSlide);
+			}
 		}
-	}, [emblaApi, emblaCurrentSlide]);
+
+		return () => {
+			if (emblaApi) {
+				emblaApi.off("select", emblaCurrentSlide);
+			}
+		};
+	}, [emblaApi, emblaCurrentSlide, currentSlide, setCurrentSlide]);
+
+	// Sync embla carousel with external currentSlide prop changes
+	useEffect(() => {
+		if (emblaApi && emblaApi.selectedScrollSnap() !== currentSlide) {
+			emblaApi.scrollTo(currentSlide);
+		}
+	}, [emblaApi, currentSlide]);
 
 	const getImageWidth = (slideIndex: number): number => {
 		const slideRef = slideRefs.current[slideIndex];
@@ -88,13 +125,15 @@ function MemoryCarousel({ memories, options }: CarouselProps) {
 
 	// Removes download option from video controls
 	// Limited browser availibity - Safari + Edge
-	const videoEls = document.querySelectorAll("video");
+	useEffect(() => {
+		const videoEls = document.querySelectorAll("video");
 
-	videoEls.forEach((videoEl) => {
-		(
-			videoEl as HTMLVideoElement & { controlsList?: DOMTokenList }
-		).controlsList?.add("nodownload");
-	});
+		videoEls.forEach((videoEl) => {
+			(
+				videoEl as HTMLVideoElement & { controlsList?: DOMTokenList }
+			).controlsList?.add("nodownload");
+		});
+	}, [memories]);
 
 	return (
 		<section className="memory-carousel">
