@@ -6,13 +6,7 @@
 	max-height: 100%;
 	margin: 7.2813rem 0 4.875rem;
 
-	// &__container {
-	// }
-
-	// &__text {
-	// }
-
-	&__title-container {
+	&__author-container {
 		position: absolute;
 		bottom: 0;
 		z-index: 3;
@@ -21,4 +15,10 @@
 		height: 4.875rem;
 		background-color: $white;
 	}
+
+	// &__container {
+	// }
+
+	// &__text {
+	// }
 }

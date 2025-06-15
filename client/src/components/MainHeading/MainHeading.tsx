@@ -3,11 +3,12 @@ import { SelectedSnapDisplay } from "../MemoryCarouselFunctions/MemoryCarouselFu
 
 interface MainHeadingProps {
 	headingType: "default" | "custom" | "custom-editable" | "custom-carousel";
-	title: string;
+	title: string | string[];
 	h2?: boolean;
 	resourceType: "capsule" | "memory";
 	showIcons?: boolean;
 	handleModalClick?: () => void;
+	memoryCount?: number;
 }
 
 function MainHeading({
@@ -17,6 +18,7 @@ function MainHeading({
 	resourceType,
 	showIcons,
 	handleModalClick,
+	memoryCount,
 }: MainHeadingProps) {
 	return (
 		<>
@@ -200,7 +202,7 @@ function MainHeading({
 					</div>
 				</div>
 			)}
-			{headingType === "custom-carousel" && (
+			{headingType === "custom-carousel" && memoryCount && (
 				<div className="main-heading">
 					{h2 ? (
 						<h2
@@ -218,7 +220,7 @@ function MainHeading({
 						</h1>
 					)}
 					<div className="main-heading__button-container">
-						<SelectedSnapDisplay selectedSnap={1} snapCount={5} />
+						<SelectedSnapDisplay selectedSnap={1} snapCount={memoryCount} />
 						<button
 							className="main-heading__button"
 							type="button"

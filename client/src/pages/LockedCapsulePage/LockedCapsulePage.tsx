@@ -33,7 +33,7 @@ function LockedCapsulePage() {
 		};
 
 		fetchCapsule();
-	}, []);
+	}, [capsuleId]);
 
 	useEffect(() => {
 		if (openDate) {

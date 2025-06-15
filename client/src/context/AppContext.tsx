@@ -41,6 +41,7 @@ interface CapsuleMemory {
 	author: string;
 	capsule_id: number;
 	added_on: Date | null;
+	id: number;
 	medium: "image" | "text" | "video" | null;
 	message?: string | null;
 	url?: string | null;
@@ -77,6 +78,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
 		author: "",
 		capsule_id: 0,
 		added_on: null,
+		id: 0,
 		medium: null,
 		message: "",
 		url: "",
