@@ -4,7 +4,7 @@ import useAppContext from "../../context/useAppContext";
 import MainHeading from "../MainHeading/MainHeading";
 
 function ShareModal() {
-	const { isOpen, setIsOpen } = useAppContext();
+	const { isModalOpen, setIsModalOpen } = useAppContext();
 
 	const rootElement = document.getElementById("root");
 
@@ -17,10 +17,10 @@ function ShareModal() {
 	return (
 		<ReactModal
 			className="share-modal"
-			isOpen={isOpen}
+			isOpen={isModalOpen}
 			shouldCloseOnEsc={true}
 			onRequestClose={() => {
-				setIsOpen(false);
+				setIsModalOpen(false);
 			}}
 			role={"dialog"}
 			aria-labelledby="modal-heading"
@@ -45,7 +45,7 @@ function ShareModal() {
 				strokeLinecap="round"
 				strokeLinejoin="round"
 				onClick={() => {
-					setIsOpen(false);
+					setIsModalOpen(false);
 				}}
 			>
 				<path d="M18 6 6 18" />

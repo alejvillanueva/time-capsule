@@ -7,8 +7,8 @@ interface AppContextType {
 	setCoverArt: (value: string | null) => void;
 	isCapsuleEditable: boolean;
 	setIsCapsuleEditable: (value: boolean) => void;
-	isOpen: boolean;
-	setIsOpen: (value: boolean) => void;
+	isModalOpen: boolean;
+	setIsModalOpen: (value: boolean) => void;
 	memoryModal: "default" | "custom" | "custom-editable" | null;
 	setMemoryModal: (
 		value: "default" | "custom" | "custom-editable" | null,
@@ -19,8 +19,6 @@ interface AppContextType {
 	setOpenDate: (value: Date | null) => void;
 	timeRemaining: number;
 	setTimeRemaining: (value: number) => void;
-	capsuleFormData: Capsule;
-	setCapsuleFormData: (value: Capsule) => void;
 	uploadedFile: File[] | null;
 	setUploadedFile: (value: File[] | null) => void;
 	memoryFormData: Memory;
@@ -38,23 +36,13 @@ export const AppContext = createContext<AppContextType | undefined>(undefined);
 const AppProvider = ({ children }: { children: ReactNode }) => {
 	const [coverArt, setCoverArt] = useState<string | null>(null);
 	const [isCapsuleEditable, setIsCapsuleEditable] = useState<boolean>(false);
-	const [isOpen, setIsOpen] = useState<boolean>(false);
+	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 	const [memoryModal, setMemoryModal] = useState<
 		"default" | "custom" | "custom-editable" | null
 	>(null);
 	const [isMemoryEditable, setIsMemoryEditable] = useState<boolean>(false);
 	const [openDate, setOpenDate] = useState<Date | null>(null);
 	const [timeRemaining, setTimeRemaining] = useState<number>(0);
-	const [capsuleFormData, setCapsuleFormData] = useState<Capsule>({
-		author: "",
-		cover_art: "",
-		created_on: new Date(),
-		edit_by: new Date(),
-		open_date: new Date(),
-		password: "",
-		title: "",
-		updated_on: new Date(),
-	});
 	const [uploadedFile, setUploadedFile] = useState<File[] | null>(null);
 	const [memoryFormData, setMemoryFormData] = useState<Memory>({
 		author: "",
@@ -74,8 +62,8 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
 				setCoverArt,
 				isCapsuleEditable,
 				setIsCapsuleEditable,
-				isOpen,
-				setIsOpen,
+				isModalOpen,
+				setIsModalOpen,
 				memoryModal,
 				setMemoryModal,
 				isMemoryEditable,
@@ -84,8 +72,6 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
 				setOpenDate,
 				timeRemaining,
 				setTimeRemaining,
-				capsuleFormData,
-				setCapsuleFormData,
 				uploadedFile,
 				setUploadedFile,
 				memoryFormData,

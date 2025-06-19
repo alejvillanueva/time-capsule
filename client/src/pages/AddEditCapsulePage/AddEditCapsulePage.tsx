@@ -7,6 +7,8 @@ import UploadField from "../../components/UploadField/UploadField";
 import useAppContext from "../../context/useAppContext";
 import { useLocation, matchPath, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { createCapsule } from "../../services/index";
+import { Capsule } from "../../interfaces/index";
 import MemoryModal from "../../components/MemoryModal/MemoryModal";
 
 interface CapsuleErrors {
@@ -21,21 +23,31 @@ interface CapsuleErrors {
 }
 
 function AddEditCapsulePage() {
-	// const navigate = useNavigate();
+	const navigate = useNavigate();
 	const {
 		coverArt,
 		setCoverArt,
 		isCapsuleEditable,
 		setIsCapsuleEditable,
-		setIsOpen,
+		setIsModalOpen,
 		setMemoryModal,
-		capsuleFormData,
-		setCapsuleFormData,
 		memoryFormData,
 		setMemoryFormData,
 		uploadedFile,
 		setUploadedFile,
 	} = useAppContext();
+
+	const [capsuleFormData, setCapsuleFormData] = useState<Capsule>({
+		author: "",
+		cover_art: "",
+		created_on: new Date(),
+		edit_by: new Date(),
+		open_date: new Date(),
+		password: "",
+		title: "",
+		updated_on: new Date(),
+	});
+
 	const [capsuleErrors, setCapsuleErrors] = useState<CapsuleErrors>({
 		author: false,
 		cover_art: false,
@@ -47,16 +59,14 @@ function AddEditCapsulePage() {
 		updated_on: false,
 	});
 
-	const {
-		author,
-		cover_art,
-		created_on,
-		edit_by,
-		open_date,
-		password,
-		title,
-		updated_on,
-	} = capsuleFormData;
+	const addCapsule = async (capsule: Capsule) => {
+		try {
+			const newCapsule = await createCapsule(capsule);
+			if (newCapsule[0].id) navigate(`/capsule/${newCapsule[0].id}/edit`);
+		} catch (error) {
+			console.error("Error adding/updating capsule:", error);
+		}
+	};
 
 	const { pathname } = useLocation();
 
@@ -65,11 +75,11 @@ function AddEditCapsulePage() {
 
 	useEffect(() => {
 		// always allow form editing on add capsule path
-		if (addMatch) setIsCapsuleEditable(true);
+		addMatch ? setIsCapsuleEditable(true) : setIsCapsuleEditable(false);
 	}, [pathname]);
 
 	const handleModalClick = () => {
-		setIsOpen(true);
+		setIsModalOpen(true);
 	};
 
 	const handleCapsuleChange = (
@@ -82,26 +92,21 @@ function AddEditCapsulePage() {
 		setCapsuleFormData({ ...capsuleFormData, [name]: value });
 	};
 
-	const handleCapsuleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleCapsuleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
 		if (!validateCapsuleForm()) return;
 
+		// TODO: update logic for upload file
 		if (!uploadedFile) {
 			console.log("No file uploaded");
-			return;
+			// return;
+		} else {
+			console.log("Uploaded file:", uploadedFile[0]);
 		}
-		console.log("Uploaded file:", uploadedFile[0]);
 
-		try {
-			// Update - replace line below with http request function
-			console.log(capsuleFormData);
-
-			// Update - find capsule id and uncomment line below
-			// navigate(`/capsule/${capsuleId}/edit`)
-		} catch (error) {
-			console.error("Error creating/updating capsule:", error);
-		}
+		setIsCapsuleEditable(false);
+		await addCapsule(capsuleFormData);
 	};
 
 	const validateCapsuleForm = () => {
@@ -117,47 +122,47 @@ function AddEditCapsulePage() {
 		};
 
 		// Author field
-		if (!author) {
+		if (!capsuleFormData.author) {
 			console.error("Missing author field");
 			errorStates.author = true;
-		} else if (author.length < 3) {
+		} else if (capsuleFormData.author.length < 3) {
 			console.error("Author must contain min. 3 characters");
 			errorStates.author = true;
 		}
 
 		// Edit by field
-		if (!edit_by) {
+		if (!capsuleFormData.edit_by) {
 			console.error("Missing edit by date field");
 			errorStates.edit_by = true;
-		} else if (edit_by <= new Date()) {
+		} else if (capsuleFormData.edit_by <= new Date()) {
 			console.error("Invalid edit by date");
 			errorStates.edit_by = true;
 		}
 
 		// Open date field
-		if (!open_date) {
+		if (!capsuleFormData.open_date) {
 			console.error("Missing open date field");
 			errorStates.open_date = true;
-		} else if (open_date <= new Date()) {
+		} else if (capsuleFormData.open_date <= new Date()) {
 			console.error("Invalid open date");
 			errorStates.open_date = true;
-		} else if (edit_by >= open_date) {
+		} else if (capsuleFormData.edit_by >= capsuleFormData.open_date) {
 			console.error("Open date must follow the edit date");
 			errorStates.edit_by = true;
 			errorStates.open_date = true;
 		}
 
 		// Title field
-		if (!title) {
+		if (!capsuleFormData.title) {
 			console.error("Missing title field");
 			errorStates.title = true;
-		} else if (title.length < 5) {
+		} else if (capsuleFormData.title.length < 5) {
 			console.error("Title must contain min. 5 characters");
 			errorStates.title = true;
 		}
 
 		// Optional data
-		if (password && password.length < 8) {
+		if (capsuleFormData.password && capsuleFormData.password.length < 8) {
 			console.error("Password must contain min. 8 characters");
 			errorStates.password = true;
 		}
@@ -187,11 +192,11 @@ function AddEditCapsulePage() {
 						<div className="add-edit-capsule__container">
 							<p className="add-edit-capsule__label text-label">Cover Art</p>
 							<div className="add-edit-capsule__cover-art-container text-body">
-								{cover_art ? (
+								{capsuleFormData.cover_art ? (
 									<img
 										className="add-edit-capsule__cover-art"
-										src={cover_art}
-										alt={`Cover art image for ${title}`}
+										src={capsuleFormData.cover_art}
+										alt={`Cover art image for ${capsuleFormData.title}`}
 									/>
 								) : (
 									"No cover art"
@@ -319,7 +324,7 @@ function AddEditCapsulePage() {
 				</>
 			)}
 			<div className="add-edit-capsule__button-container">
-				{/* add conditional to show buttons below if memory card (with cardType="memory") map length is greater than 0 and editMatch is true */}
+				{/* TODO: add conditional to show buttons below if memory card (with cardType="memory") map length is greater than 0 and editMatch is true */}
 				{editMatch && (
 					<>
 						<Button buttonText="Sort" />

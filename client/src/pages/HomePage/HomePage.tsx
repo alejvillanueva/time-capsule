@@ -21,7 +21,7 @@ function HomePage() {
 		fetchCapsules();
 	}, []);
 
-	if (capsules && capsules.length === 0) {
+	if (capsules.length === 0) {
 		return <div>Loading home page...</div>;
 	}
 

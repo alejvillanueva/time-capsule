@@ -18,8 +18,8 @@ interface MemoryErrors {
 
 function MemoryModal({ memoryTitle }: MemoryModalProps) {
 	const {
-		isOpen,
-		setIsOpen,
+		isModalOpen,
+		setIsModalOpen,
 		memoryFormData,
 		setMemoryFormData,
 		uploadedFile,
@@ -64,10 +64,10 @@ function MemoryModal({ memoryTitle }: MemoryModalProps) {
 		console.log("Uploaded file:", uploadedFile[0]);
 
 		try {
-			// Update - replace line below with http request function
+			// TODO: replace line below with http request function
 			console.log(memoryFormData);
 
-			setIsOpen(false);
+			setIsModalOpen(false);
 		} catch (error) {
 			console.error("Error creating/updating capsule:", error);
 		}
@@ -118,10 +118,10 @@ function MemoryModal({ memoryTitle }: MemoryModalProps) {
 	return (
 		<ReactModal
 			className="memory-modal"
-			isOpen={isOpen}
+			isOpen={isModalOpen}
 			shouldCloseOnEsc={true}
 			onRequestClose={() => {
-				setIsOpen(false);
+				setIsModalOpen(false);
 			}}
 			role={"dialog"}
 			aria-labelledby="modal-heading"
@@ -146,7 +146,7 @@ function MemoryModal({ memoryTitle }: MemoryModalProps) {
 				strokeLinecap="round"
 				strokeLinejoin="round"
 				onClick={() => {
-					setIsOpen(false);
+					setIsModalOpen(false);
 				}}
 			>
 				<path d="M18 6 6 18" />
@@ -189,7 +189,7 @@ function MemoryModal({ memoryTitle }: MemoryModalProps) {
 				/>
 			</form>
 
-			{/* UPDATE - revise with author vs title updates */}
+			{/* TODO: revise with author vs title updates */}
 			{memoryTitle ? (
 				<MainHeading
 					headingType="custom"

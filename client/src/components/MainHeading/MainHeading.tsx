@@ -1,5 +1,7 @@
 import "./MainHeading.scss";
 import { SelectedSnapDisplay } from "../MemoryCarouselFunctions/MemoryCarouselFunctions";
+import useAppContext from "../../context/useAppContext";
+import { matchPath, useLocation, useNavigate } from "react-router-dom";
 
 interface MainHeadingProps {
 	headingType: "default" | "custom" | "custom-editable" | "custom-carousel";
@@ -22,6 +24,12 @@ function MainHeading({
 	memoryCount,
 	currentSlide = 0,
 }: MainHeadingProps) {
+	const { setIsCapsuleEditable } = useAppContext();
+	const navigate = useNavigate();
+	const { pathname } = useLocation();
+
+	const addMatch = matchPath("/capsule/add", pathname);
+
 	return (
 		<>
 			{headingType === "default" && (
@@ -42,6 +50,9 @@ function MainHeading({
 								type="button"
 								aria-label={`Cancel ${resourceType} form creation`}
 								title="Cancel"
+								onClick={() => {
+									addMatch ? navigate("/") : navigate(-1);
+								}}
 							>
 								<svg
 									className="main-heading__icon"
@@ -102,6 +113,7 @@ function MainHeading({
 							type="button"
 							aria-label={`Edit ${resourceType} form`}
 							title="Edit"
+							onClick={() => setIsCapsuleEditable(true)}
 						>
 							<svg
 								className="main-heading__icon"
@@ -168,6 +180,7 @@ function MainHeading({
 							type="button"
 							aria-label={`Cancel ${resourceType} form modifications`}
 							title="Cancel"
+							onClick={() => setIsCapsuleEditable(false)}
 						>
 							<svg
 								className="main-heading__icon"
@@ -231,6 +244,7 @@ function MainHeading({
 							type="button"
 							aria-label={`Share ${resourceType}`}
 							title="Share"
+							onClick={handleModalClick}
 						>
 							<svg
 								className="main-heading__icon"
@@ -241,7 +255,6 @@ function MainHeading({
 								strokeWidth="2"
 								strokeLinecap="round"
 								strokeLinejoin="round"
-								onClick={handleModalClick}
 							>
 								<circle cx="18" cy="5" r="3" />
 								<circle cx="6" cy="12" r="3" />

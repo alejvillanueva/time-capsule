@@ -54,7 +54,7 @@ function CapsuleCard({ cardType, data }: CapsuleCardProps) {
 	const handleShareClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 		e.stopPropagation();
-		// UPDATE: uncomment below and edit share link, add notification that it has been successfully copied
+		// TODO: uncomment below and edit share link, add notification that it has been successfully copied
 		// try {
 		// 	navigator.clipboard.writeText(`/capsule/${data?.id}/unlocked`);
 		// } catch (error) {
