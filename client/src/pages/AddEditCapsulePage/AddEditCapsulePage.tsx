@@ -5,11 +5,23 @@ import MainHeading from "../../components/MainHeading/MainHeading";
 import MemoryCard from "../../components/MemoryCard/MemoryCard";
 import UploadField from "../../components/UploadField/UploadField";
 import useAppContext from "../../context/useAppContext";
-import { useLocation, matchPath } from "react-router-dom";
-import { useEffect } from "react";
+import { useLocation, matchPath, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import MemoryModal from "../../components/MemoryModal/MemoryModal";
 
+interface CapsuleErrors {
+	author: boolean;
+	cover_art?: boolean;
+	created_on?: boolean;
+	edit_by: boolean;
+	open_date: boolean;
+	password?: boolean;
+	title: boolean;
+	updated_on?: boolean;
+}
+
 function AddEditCapsulePage() {
+	// const navigate = useNavigate();
 	const {
 		coverArt,
 		setCoverArt,
@@ -17,7 +29,35 @@ function AddEditCapsulePage() {
 		setIsCapsuleEditable,
 		setIsOpen,
 		setMemoryModal,
+		capsuleFormData,
+		setCapsuleFormData,
+		memoryFormData,
+		setMemoryFormData,
+		uploadedFile,
+		setUploadedFile,
 	} = useAppContext();
+	const [capsuleErrors, setCapsuleErrors] = useState<CapsuleErrors>({
+		author: false,
+		cover_art: false,
+		created_on: false,
+		edit_by: false,
+		open_date: false,
+		password: false,
+		title: false,
+		updated_on: false,
+	});
+
+	const {
+		author,
+		cover_art,
+		created_on,
+		edit_by,
+		open_date,
+		password,
+		title,
+		updated_on,
+	} = capsuleFormData;
+
 	const { pathname } = useLocation();
 
 	const addMatch = matchPath("/capsule/add", pathname);
@@ -28,87 +68,217 @@ function AddEditCapsulePage() {
 		if (addMatch) setIsCapsuleEditable(true);
 	}, [pathname]);
 
-	const handleModalClick = (/* e */) => {
-		// e.currentTarget.dataset.type === "add"
-		// 	? setMemoryModal("default")
-		// 	: setMemoryModal("custom");
-
+	const handleModalClick = () => {
 		setIsOpen(true);
 	};
 
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleCapsuleChange = (
+		e: React.ChangeEvent<
+			HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+		>,
+	) => {
+		const { name, value } = e.target;
+
+		setCapsuleFormData({ ...capsuleFormData, [name]: value });
+	};
+
+	const handleCapsuleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+
+		if (!validateCapsuleForm()) return;
+
+		if (!uploadedFile) {
+			console.log("No file uploaded");
+			return;
+		}
+		console.log("Uploaded file:", uploadedFile[0]);
+
+		try {
+			// Update - replace line below with http request function
+			console.log(capsuleFormData);
+
+			// Update - find capsule id and uncomment line below
+			// navigate(`/capsule/${capsuleId}/edit`)
+		} catch (error) {
+			console.error("Error creating/updating capsule:", error);
+		}
+	};
+
+	const validateCapsuleForm = () => {
+		const errorStates = {
+			author: false,
+			cover_art: false,
+			created_on: false,
+			edit_by: false,
+			open_date: false,
+			password: false,
+			title: false,
+			updated_on: false,
+		};
+
+		// Author field
+		if (!author) {
+			console.error("Missing author field");
+			errorStates.author = true;
+		} else if (author.length < 3) {
+			console.error("Author must contain min. 3 characters");
+			errorStates.author = true;
+		}
+
+		// Edit by field
+		if (!edit_by) {
+			console.error("Missing edit by date field");
+			errorStates.edit_by = true;
+		} else if (edit_by <= new Date()) {
+			console.error("Invalid edit by date");
+			errorStates.edit_by = true;
+		}
+
+		// Open date field
+		if (!open_date) {
+			console.error("Missing open date field");
+			errorStates.open_date = true;
+		} else if (open_date <= new Date()) {
+			console.error("Invalid open date");
+			errorStates.open_date = true;
+		} else if (edit_by >= open_date) {
+			console.error("Open date must follow the edit date");
+			errorStates.edit_by = true;
+			errorStates.open_date = true;
+		}
+
+		// Title field
+		if (!title) {
+			console.error("Missing title field");
+			errorStates.title = true;
+		} else if (title.length < 5) {
+			console.error("Title must contain min. 5 characters");
+			errorStates.title = true;
+		}
+
+		// Optional data
+		if (password && password.length < 8) {
+			console.error("Password must contain min. 8 characters");
+			errorStates.password = true;
+		}
+
+		setCapsuleErrors(errorStates);
+
+		if (Object.values(capsuleErrors).includes(true)) {
+			return false;
+		}
+
+		return true;
 	};
 
 	return (
 		<main className="add-edit-capsule">
-			<form className="add-edit-capsule__form" onSubmit={handleSubmit}>
-				{addMatch && (
-					<UploadField
-						uploadLabel="Cover Art"
-						uploadName="capsule_image"
-						uploadId="capsule_image"
-					/>
-				)}
-				{editMatch && (
-					<img
-						className="add-edit-capsule__cover-art"
-						src="https://images.pexels.com/photos/31009027/pexels-photo-31009027/free-photo-of-australian-shepherd-and-samoyed-playing-on-beach.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-						alt="To be replaced"
-					/>
-				)}
+			<form className="add-edit-capsule__form" onSubmit={handleCapsuleSubmit}>
 				<div className="add-edit-capsule__form-container">
-					<InputField
-						inputType="text"
-						inputLabel="Title"
-						inputName="capsule_title"
-						inputId="capsule
+					{addMatch && (
+						<UploadField
+							uploadLabel="Cover Art"
+							uploadName="cover_art"
+							uploadId="cover_art"
+							onFileChange={setUploadedFile}
+						/>
+					)}
+					{editMatch && (
+						<div className="add-edit-capsule__container">
+							<p className="add-edit-capsule__label text-label">Cover Art</p>
+							<div className="add-edit-capsule__cover-art-container text-body">
+								{cover_art ? (
+									<img
+										className="add-edit-capsule__cover-art"
+										src={cover_art}
+										alt={`Cover art image for ${title}`}
+									/>
+								) : (
+									"No cover art"
+								)}
+							</div>
+						</div>
+					)}
+					<div className="add-edit-capsule__input-container">
+						<InputField
+							inputType="text"
+							inputLabel="Title"
+							inputName="title"
+							inputId="capsule
 					_title"
-						placeholder="Type the capsule title"
-					/>
-					<InputField
-						inputType="text"
-						inputLabel="Author"
-						inputName="capsule_author"
-						inputId="capsule
+							placeholder="Type the capsule title"
+							handleChange={handleCapsuleChange}
+							validation={{ required: true, isInvalid: capsuleErrors.title }}
+						/>
+						<InputField
+							inputType="text"
+							inputLabel="Author"
+							inputName="author"
+							inputId="capsule
 					_author"
-						placeholder="Type your name"
-					/>
-					<InputField
-						inputType="date"
-						inputLabel="Capsule Opens"
-						inputName="capsule_unlock_date"
-						inputId="capsule
-					_unlock_date"
-					/>
-					<InputField
-						inputType="password"
-						inputLabel="Editing Password"
-						inputName="capsule_password"
-						inputId="capsule
+							placeholder="Type your name"
+							handleChange={handleCapsuleChange}
+							validation={{ required: true, isInvalid: capsuleErrors.author }}
+						/>
+						<InputField
+							inputType="date"
+							inputLabel="Capsule Opens"
+							inputName="open_date"
+							inputId="capsule
+					_open_date"
+							handleChange={handleCapsuleChange}
+							validation={{
+								required: true,
+								isInvalid: capsuleErrors.open_date,
+							}}
+						/>
+						<InputField
+							inputType="password"
+							inputLabel="Editing Password"
+							inputName="password"
+							inputId="capsule
 					_password"
-						placeholder="Type the password to edit capsule"
-					/>
-					<InputField
-						inputType="date"
-						inputLabel="Editing Closes"
-						inputName="capsule_edit_date"
-						inputId="capsule
-					_edit_date"
-					/>
+							placeholder="Type the password to edit capsule"
+							handleChange={handleCapsuleChange}
+							validation={{ required: false }}
+						/>
+						<InputField
+							inputType="date"
+							inputLabel="Editing Closes"
+							inputName="edit_by"
+							inputId="capsule
+					_edit_by"
+							handleChange={handleCapsuleChange}
+							validation={{ required: true, isInvalid: capsuleErrors.edit_by }}
+						/>
+					</div>
+				</div>
+				<div className="add-edit-capsule__form-container">
+					{addMatch ? (
+						<MainHeading
+							headingType="default"
+							title="Create Time Capsule"
+							resourceType="capsule"
+							showIcons={true}
+						/>
+					) : editMatch && isCapsuleEditable ? (
+						<MainHeading
+							headingType="custom-editable"
+							title="Lorem Ipsum"
+							resourceType="capsule"
+							showIcons={true}
+						/>
+					) : (
+						<MainHeading
+							headingType="custom"
+							title="Lorem Ipsum"
+							resourceType="capsule"
+							showIcons={true}
+						/>
+					)}
 				</div>
 			</form>
-			{addMatch ? (
-				<MainHeading
-					headingType="default"
-					title="Create Time Capsule"
-					showIcons={true}
-				/>
-			) : editMatch && isCapsuleEditable ? (
-				<MainHeading headingType="custom-editable" title="Lorem Ipsum" />
-			) : (
-				<MainHeading headingType="custom" title="Lorem Ipsum" />
-			)}
+
 			{editMatch && (
 				<>
 					<h2 className="add-edit-capsule__subtitle text-subheading">

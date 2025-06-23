@@ -18,12 +18,12 @@
 	touch-action: manipulation;
 
 	&:disabled {
-		color: $grey-light;
+		color: $grey-med;
 	}
 
 	&:hover {
 		border-radius: 50%;
-		background-color: $grey-light;
+		background-color: $grey-med;
 	}
 
 	// &--prev {

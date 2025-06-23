@@ -31,6 +31,7 @@ function ShareModal() {
 					alignItems: "center",
 					background: "rgba(230, 230, 230, 0.8)",
 					outline: "none",
+					zIndex: 100,
 				},
 			}}
 		>
@@ -123,6 +124,7 @@ function ShareModal() {
 				title="Share"
 				h2={true}
 				showIcons={false}
+				resourceType="memory"
 			/>
 		</ReactModal>
 	);

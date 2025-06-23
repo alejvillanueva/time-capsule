@@ -30,6 +30,7 @@ function UnlockedCapsulePage() {
 				<MainHeading
 					headingType="custom-carousel"
 					title="Lorem Ipsum"
+					resourceType="capsule"
 					handleModalClick={handleModalClick}
 				/>
 			</div>

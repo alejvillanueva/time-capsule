@@ -18,6 +18,32 @@ interface AppContextType {
 	setOpenDate: (value: Date | null) => void;
 	timeRemaining: number;
 	setTimeRemaining: (value: number) => void;
+	capsuleFormData: TimeCapsule;
+	setCapsuleFormData: (value: TimeCapsule) => void;
+	uploadedFile: File[] | null;
+	setUploadedFile: (value: File[] | null) => void;
+	memoryFormData: CapsuleMemory;
+	setMemoryFormData: (value: CapsuleMemory) => void;
+}
+
+interface TimeCapsule {
+	author: string;
+	cover_art?: string;
+	created_on: Date;
+	edit_by: Date;
+	open_date: Date;
+	password?: string;
+	title: string;
+	updated_on: Date;
+}
+
+interface CapsuleMemory {
+	author: string;
+	capsule_id: number;
+	added_on: Date | null;
+	medium: "image" | "text" | "video" | null;
+	message?: string | null;
+	url?: string | null;
 }
 
 // create intially empty context
@@ -36,6 +62,25 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
 	const [isMemoryEditable, setIsMemoryEditable] = useState<boolean>(false);
 	const [openDate, setOpenDate] = useState<Date | null>(null);
 	const [timeRemaining, setTimeRemaining] = useState<number>(0);
+	const [capsuleFormData, setCapsuleFormData] = useState<TimeCapsule>({
+		author: "",
+		cover_art: "",
+		created_on: new Date(),
+		edit_by: new Date(),
+		open_date: new Date(),
+		password: "",
+		title: "",
+		updated_on: new Date(),
+	});
+	const [uploadedFile, setUploadedFile] = useState<File[] | null>(null);
+	const [memoryFormData, setMemoryFormData] = useState<CapsuleMemory>({
+		author: "",
+		capsule_id: 0,
+		added_on: null,
+		medium: null,
+		message: "",
+		url: "",
+	});
 
 	return (
 		<AppContext.Provider
@@ -54,6 +99,12 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
 				setOpenDate,
 				timeRemaining,
 				setTimeRemaining,
+				capsuleFormData,
+				setCapsuleFormData,
+				uploadedFile,
+				setUploadedFile,
+				memoryFormData,
+				setMemoryFormData,
 			}}
 		>
 			{children}
