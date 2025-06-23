@@ -1,4 +1,5 @@
 import { createContext, useState, ReactNode } from "react";
+import { Capsule, Memory } from "../interfaces/index";
 
 // define shape of context
 interface AppContextType {
@@ -18,32 +19,14 @@ interface AppContextType {
 	setOpenDate: (value: Date | null) => void;
 	timeRemaining: number;
 	setTimeRemaining: (value: number) => void;
-	capsuleFormData: TimeCapsule;
-	setCapsuleFormData: (value: TimeCapsule) => void;
+	capsuleFormData: Capsule;
+	setCapsuleFormData: (value: Capsule) => void;
 	uploadedFile: File[] | null;
 	setUploadedFile: (value: File[] | null) => void;
-	memoryFormData: CapsuleMemory;
-	setMemoryFormData: (value: CapsuleMemory) => void;
-}
-
-interface TimeCapsule {
-	author: string;
-	cover_art?: string;
-	created_on: Date;
-	edit_by: Date;
-	open_date: Date;
-	password?: string;
-	title: string;
-	updated_on: Date;
-}
-
-interface CapsuleMemory {
-	author: string;
-	capsule_id: number;
-	added_on: Date | null;
-	medium: "image" | "text" | "video" | null;
-	message?: string | null;
-	url?: string | null;
+	memoryFormData: Memory;
+	setMemoryFormData: (value: Memory) => void;
+	currentMemorySlide: number;
+	setCurrentMemorySlide: (value: number) => void;
 }
 
 // create intially empty context
@@ -62,7 +45,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
 	const [isMemoryEditable, setIsMemoryEditable] = useState<boolean>(false);
 	const [openDate, setOpenDate] = useState<Date | null>(null);
 	const [timeRemaining, setTimeRemaining] = useState<number>(0);
-	const [capsuleFormData, setCapsuleFormData] = useState<TimeCapsule>({
+	const [capsuleFormData, setCapsuleFormData] = useState<Capsule>({
 		author: "",
 		cover_art: "",
 		created_on: new Date(),
@@ -73,14 +56,16 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
 		updated_on: new Date(),
 	});
 	const [uploadedFile, setUploadedFile] = useState<File[] | null>(null);
-	const [memoryFormData, setMemoryFormData] = useState<CapsuleMemory>({
+	const [memoryFormData, setMemoryFormData] = useState<Memory>({
 		author: "",
 		capsule_id: 0,
-		added_on: null,
-		medium: null,
+		added_on: new Date(),
+		id: 0,
+		medium: "text",
 		message: "",
 		url: "",
 	});
+	const [currentMemorySlide, setCurrentMemorySlide] = useState<number>(0);
 
 	return (
 		<AppContext.Provider
@@ -105,6 +90,8 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
 				setUploadedFile,
 				memoryFormData,
 				setMemoryFormData,
+				currentMemorySlide,
+				setCurrentMemorySlide,
 			}}
 		>
 			{children}

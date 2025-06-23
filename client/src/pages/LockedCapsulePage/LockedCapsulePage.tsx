@@ -1,9 +1,39 @@
 import "./LockedCapsulePage.scss";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { getCapsule } from "../../services/index";
+import { Capsule } from "../../interfaces/index";
 import useAppContext from "../../context/useAppContext";
 
 function LockedCapsulePage() {
-	const { openDate, timeRemaining, setTimeRemaining } = useAppContext();
+	const { capsuleId } = useParams();
+	const { openDate, setOpenDate, timeRemaining, setTimeRemaining } =
+		useAppContext();
+	const [capsule, setCapsule] = useState<Capsule>({
+		author: "",
+		cover_art: "",
+		created_on: new Date(),
+		edit_by: new Date(),
+		id: 0,
+		open_date: new Date(),
+		password: "",
+		title: "",
+		updated_on: new Date(),
+	});
+
+	useEffect(() => {
+		const fetchCapsule = async () => {
+			try {
+				const [data] = await getCapsule(Number(capsuleId));
+				setCapsule(data);
+				setOpenDate(new Date(data.open_date));
+			} catch (error) {
+				console.error("Error fetching single capsule:", error);
+			}
+		};
+
+		fetchCapsule();
+	}, [capsuleId]);
 
 	useEffect(() => {
 		if (openDate) {
@@ -47,11 +77,12 @@ function LockedCapsulePage() {
 
 	const formatted = getFormattedTime(timeRemaining);
 
+	if (!capsule.title && !openDate) {
+		return <div>Loading locked capsule page...</div>;
+	}
 	return (
 		<main className="locked">
-			<h1 className="locked__title text-heading">
-				Lorem ipsum dolor sit amet consectetur adipiscing
-			</h1>
+			<h1 className="locked__title text-heading">{capsule.title} </h1>
 			<span className="sr-only" id="countdown-label">
 				Countdown Timer to Open Capsule
 			</span>

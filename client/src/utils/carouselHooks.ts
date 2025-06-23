@@ -8,19 +8,43 @@ type UseArrowButtonState = {
 	onNextButtonClick: () => void;
 };
 
+interface UseArrowButtonOptions {
+	onSlideChange?: (newSlideIndex: number) => void;
+}
+
 export function useMemoryCarouselArrows(
 	emblaApi: EmblaCarouselType | undefined,
+	options?: UseArrowButtonOptions,
 ): UseArrowButtonState {
 	const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
 	const [nextBtnDisabled, setNextBtnDisabled] = useState(true);
 
 	const onPrevButtonClick = useCallback(() => {
-		if (emblaApi) emblaApi.scrollPrev();
-	}, [emblaApi]);
+		if (emblaApi) {
+			const currentIndex = emblaApi.selectedScrollSnap();
+			const newIndex = Math.max(0, currentIndex - 1);
+
+			if (options?.onSlideChange && newIndex !== currentIndex) {
+				options.onSlideChange(newIndex);
+			}
+
+			emblaApi.scrollPrev();
+		}
+	}, [emblaApi, options]);
 
 	const onNextButtonClick = useCallback(() => {
-		if (emblaApi) emblaApi.scrollNext();
-	}, [emblaApi]);
+		if (emblaApi) {
+			const currentIndex = emblaApi.selectedScrollSnap();
+			const snapCount = emblaApi.scrollSnapList().length;
+			const newIndex = Math.min(snapCount - 1, currentIndex + 1);
+
+			if (options?.onSlideChange && newIndex !== currentIndex) {
+				options.onSlideChange(newIndex);
+			}
+
+			emblaApi.scrollNext();
+		}
+	}, [emblaApi, options]);
 
 	const onSelect = useCallback(() => {
 		if (!emblaApi) return;

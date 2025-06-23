@@ -3,6 +3,7 @@
 
 .home {
 	margin: 7.2813rem 0 4.875rem;
+	padding: $spacing-xs 0;
 
 	&__button-container {
 		@include flexbox(row, center, center);

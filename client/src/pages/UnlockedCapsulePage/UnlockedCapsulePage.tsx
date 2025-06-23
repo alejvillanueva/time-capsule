@@ -3,35 +3,55 @@ import MainHeading from "../../components/MainHeading/MainHeading";
 import MemoryCarousel from "../../components/MemoryCarousel/MemoryCarousel";
 import ShareModal from "../../components/ShareModal/ShareModal";
 import useAppContext from "../../context/useAppContext";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { getCapsule } from "../../services/index";
+import { Memory } from "../../interfaces/index";
 
 function UnlockedCapsulePage() {
+	const { capsuleId } = useParams();
 	const { setIsOpen } = useAppContext();
+	const [memories, setMemories] = useState<Memory[]>([]);
+	const [capsuleTitle, setCapsuleTitle] = useState("");
+	const [currentSlide, setCurrentSlide] = useState(0);
+
+	useEffect(() => {
+		const fetchMemories = async () => {
+			try {
+				const [data] = await getCapsule(Number(capsuleId));
+				setCapsuleTitle(data.title);
+				setMemories(data.memories);
+			} catch (error) {
+				console.error("Error fetching memories:", error);
+			}
+		};
+
+		fetchMemories();
+	}, [capsuleId]);
 
 	const handleModalClick = () => {
 		setIsOpen(true);
 	};
 
+	if (memories.length === 0) {
+		return <div>Loading unlocked capsule page...</div>;
+	}
 	return (
 		<main className="unlocked">
-			<MemoryCarousel slides={[0, 1, 2, 3, 4]} options={{ loop: true }} />
-			{/* <div className="unlocked__container">
-				Temp Image
-				<p className="unlocked__text">
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-					eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-					minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-					aliquip ex ea commodo consequat. Duis aute irure dolor in
-					reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-					pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-					culpa qui officia deserunt mollit anim id est laborum.
-				</p>
-			</div> */}
-			<div className="unlocked__title-container">
+			<MemoryCarousel
+				memories={memories}
+				options={{ loop: true }}
+				currentSlide={currentSlide}
+				setCurrentSlide={setCurrentSlide}
+			/>
+			<div className="unlocked__author-container">
 				<MainHeading
 					headingType="custom-carousel"
-					title="Lorem Ipsum"
+					title={capsuleTitle}
 					resourceType="capsule"
 					handleModalClick={handleModalClick}
+					memoryCount={memories.length}
+					currentSlide={currentSlide}
 				/>
 			</div>
 			<ShareModal />

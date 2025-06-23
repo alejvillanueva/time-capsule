@@ -82,13 +82,12 @@ function MemoryModal({ memoryTitle }: MemoryModalProps) {
 		const urlPattern =
 			/^https?:\/\/[^\s/$.?#].[^\s]*\.(jpg|jpeg|png|gif|webp|svg)$/;
 
-		// Update - author should be title
-		// Title field
+		// Author field
 		if (!author) {
-			console.error("Missing title field");
+			console.error("Missing author field");
 			errorStates.author = true;
-		} else if (author.length < 5) {
-			console.error("Title must contain min. 5 characters");
+		} else if (author.length < 3) {
+			console.error("Author must contain min. 3 characters");
 			errorStates.author = true;
 		}
 
@@ -163,13 +162,12 @@ function MemoryModal({ memoryTitle }: MemoryModalProps) {
 						handleChange={handleMemoryChange}
 						validation={{ required: false }}
 					/>
-					{/* Update - don't need author field in memory, title instead */}
 					<InputField
-						inputLabel="Title"
+						inputLabel="Author"
 						inputType="text"
-						inputId="memory_title"
-						inputName="memory_title"
-						placeholder="Type the Memory Title"
+						inputId="memory_author"
+						inputName="memory_author"
+						placeholder="Type the Author(s) of the Memory"
 						handleChange={handleMemoryChange}
 						validation={{ required: true, isInvalid: memoryErrors.author }}
 					/>
@@ -191,6 +189,7 @@ function MemoryModal({ memoryTitle }: MemoryModalProps) {
 				/>
 			</form>
 
+			{/* UPDATE - revise with author vs title updates */}
 			{memoryTitle ? (
 				<MainHeading
 					headingType="custom"
