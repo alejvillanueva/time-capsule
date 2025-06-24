@@ -31,8 +31,12 @@
 		outline: none;
 
 		&::-webkit-datetime-edit {
-			color: $grey-dark;
-			font-weight: $font-weight-light;
+			// TODO: update date input style state when yyyy-mm-dd is displayed
+			// color: $grey-dark;
+			// font-weight: $font-weight-light;
+
+			color: $black;
+			font-weight: $font-weight-medium;
 		}
 
 		&:focus {

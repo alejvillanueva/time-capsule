@@ -16,6 +16,7 @@ interface InputFieldProps {
 		required: boolean;
 		isInvalid?: boolean | undefined;
 	};
+	value?: any;
 }
 
 function InputField({
@@ -26,6 +27,7 @@ function InputField({
 	placeholder,
 	handleChange,
 	validation,
+	value,
 }: InputFieldProps) {
 	const { isCapsuleEditable, isModalOpen, isMemoryEditable } = useAppContext();
 
@@ -65,6 +67,7 @@ function InputField({
 						placeholder={placeholder}
 						disabled={!isCapsuleEditable}
 						onChange={handleChange}
+						value={value}
 					/>
 				</>
 			)}

@@ -5,11 +5,17 @@ import MainHeading from "../../components/MainHeading/MainHeading";
 import MemoryCard from "../../components/MemoryCard/MemoryCard";
 import UploadField from "../../components/UploadField/UploadField";
 import useAppContext from "../../context/useAppContext";
-import { useLocation, matchPath, useNavigate } from "react-router-dom";
+import {
+	useLocation,
+	matchPath,
+	useNavigate,
+	useParams,
+} from "react-router-dom";
 import { useEffect, useState } from "react";
-import { createCapsule } from "../../services/index";
+import { createCapsule, getCapsule, updateCapsule } from "../../services/index";
 import { Capsule } from "../../interfaces/index";
 import MemoryModal from "../../components/MemoryModal/MemoryModal";
+import DeleteModal from "../../components/DeleteModal/DeleteModal";
 
 interface CapsuleErrors {
 	author: boolean;
@@ -24,6 +30,7 @@ interface CapsuleErrors {
 
 function AddEditCapsulePage() {
 	const navigate = useNavigate();
+	const { capsuleId } = useParams();
 	const {
 		coverArt,
 		setCoverArt,
@@ -37,6 +44,17 @@ function AddEditCapsulePage() {
 		setUploadedFile,
 	} = useAppContext();
 
+	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+	const [capsuleData, setCapsuleData] = useState<Capsule>({
+		author: "",
+		cover_art: "",
+		created_on: new Date(),
+		edit_by: new Date(),
+		open_date: new Date(),
+		password: "",
+		title: "",
+		updated_on: new Date(),
+	});
 	const [capsuleFormData, setCapsuleFormData] = useState<Capsule>({
 		author: "",
 		cover_art: "",
@@ -64,7 +82,29 @@ function AddEditCapsulePage() {
 			const newCapsule = await createCapsule(capsule);
 			if (newCapsule[0].id) navigate(`/capsule/${newCapsule[0].id}/edit`);
 		} catch (error) {
-			console.error("Error adding/updating capsule:", error);
+			console.error("Error adding capsule:", error);
+		}
+	};
+
+	const fetchCapsule = async (id: number) => {
+		try {
+			const [data] = await getCapsule(id);
+
+			setCapsuleData(data);
+		} catch (error) {
+			console.error("Error fetching capsule:", error);
+		}
+	};
+
+	useEffect(() => {
+		fetchCapsule(Number(capsuleId));
+	}, [capsuleId]);
+
+	const editCapsule = async (capsule: Capsule) => {
+		try {
+			await updateCapsule(capsule);
+		} catch (error) {
+			console.error("Error updating capsule:", error);
 		}
 	};
 
@@ -74,11 +114,15 @@ function AddEditCapsulePage() {
 	const editMatch = matchPath("/capsule/:capsuleId/edit", pathname);
 
 	useEffect(() => {
-		// always allow form editing on add capsule path
+		// always allow form editing on add capsule path (vs. having disabled input fields)
 		addMatch ? setIsCapsuleEditable(true) : setIsCapsuleEditable(false);
 	}, [pathname]);
 
-	const handleModalClick = () => {
+	const handleDeleteModalClick = () => {
+		setIsDeleteModalOpen(true);
+	};
+
+	const handleMemoryModalClick = () => {
 		setIsModalOpen(true);
 	};
 
@@ -176,6 +220,15 @@ function AddEditCapsulePage() {
 		return true;
 	};
 
+	let formattedDate;
+
+	if (capsuleData.open_date && capsuleData.edit_by) {
+		formattedDate = {
+			open_date: capsuleData.open_date.toString().slice(0, 10),
+			edit_by: capsuleData.edit_by.toString().slice(0, 10),
+		};
+	}
+
 	return (
 		<main className="add-edit-capsule">
 			<form className="add-edit-capsule__form" onSubmit={handleCapsuleSubmit}>
@@ -214,6 +267,7 @@ function AddEditCapsulePage() {
 							placeholder="Type the capsule title"
 							handleChange={handleCapsuleChange}
 							validation={{ required: true, isInvalid: capsuleErrors.title }}
+							value={capsuleData.title}
 						/>
 						<InputField
 							inputType="text"
@@ -224,6 +278,7 @@ function AddEditCapsulePage() {
 							placeholder="Type your name"
 							handleChange={handleCapsuleChange}
 							validation={{ required: true, isInvalid: capsuleErrors.author }}
+							value={capsuleData.author}
 						/>
 						<InputField
 							inputType="date"
@@ -236,25 +291,28 @@ function AddEditCapsulePage() {
 								required: true,
 								isInvalid: capsuleErrors.open_date,
 							}}
+							value={formattedDate?.open_date ? formattedDate.open_date : ""}
 						/>
 						<InputField
 							inputType="password"
 							inputLabel="Editing Password"
 							inputName="password"
 							inputId="capsule
-					_password"
+							_password"
 							placeholder="Type the password to edit capsule"
 							handleChange={handleCapsuleChange}
 							validation={{ required: false }}
+							value={capsuleData.password}
 						/>
 						<InputField
 							inputType="date"
 							inputLabel="Editing Closes"
 							inputName="edit_by"
 							inputId="capsule
-					_edit_by"
+							_edit_by"
 							handleChange={handleCapsuleChange}
 							validation={{ required: true, isInvalid: capsuleErrors.edit_by }}
+							value={formattedDate?.edit_by ? formattedDate.edit_by : ""}
 						/>
 					</div>
 				</div>
@@ -269,16 +327,17 @@ function AddEditCapsulePage() {
 					) : editMatch && isCapsuleEditable ? (
 						<MainHeading
 							headingType="custom-editable"
-							title="Lorem Ipsum"
+							title={capsuleData.title}
 							resourceType="capsule"
 							showIcons={true}
 						/>
 					) : (
 						<MainHeading
 							headingType="custom"
-							title="Lorem Ipsum"
+							title={capsuleData.title}
 							resourceType="capsule"
 							showIcons={true}
+							handleModalClick={handleDeleteModalClick}
 						/>
 					)}
 				</div>
@@ -290,33 +349,36 @@ function AddEditCapsulePage() {
 						Memories
 					</h2>
 					<ul className="add-edit-capsule__list">
-						<MemoryCard cardType="add" handleModalClick={handleModalClick} />
+						<MemoryCard
+							cardType="add"
+							handleModalClick={handleMemoryModalClick}
+						/>
 						{editMatch && (
 							// pass prop with name, if name doesnt exist, show add
 							<>
 								<MemoryCard
 									cardType="memory"
-									handleModalClick={handleModalClick}
+									handleModalClick={handleMemoryModalClick}
 								/>
 								<MemoryCard
 									cardType="memory"
-									handleModalClick={handleModalClick}
+									handleModalClick={handleMemoryModalClick}
 								/>
 								<MemoryCard
 									cardType="memory"
-									handleModalClick={handleModalClick}
+									handleModalClick={handleMemoryModalClick}
 								/>
 								<MemoryCard
 									cardType="memory"
-									handleModalClick={handleModalClick}
+									handleModalClick={handleMemoryModalClick}
 								/>
 								<MemoryCard
 									cardType="memory"
-									handleModalClick={handleModalClick}
+									handleModalClick={handleMemoryModalClick}
 								/>
 								<MemoryCard
 									cardType="memory"
-									handleModalClick={handleModalClick}
+									handleModalClick={handleMemoryModalClick}
 								/>
 							</>
 						)}
@@ -332,6 +394,11 @@ function AddEditCapsulePage() {
 					</>
 				)}
 			</div>
+			<DeleteModal
+				isModalOpen={isDeleteModalOpen}
+				setIsModalOpen={setIsDeleteModalOpen}
+				capsuleTitle={capsuleData.title}
+			/>
 			<MemoryModal memoryTitle={`Lorem Ipsum Test`} />
 		</main>
 	);

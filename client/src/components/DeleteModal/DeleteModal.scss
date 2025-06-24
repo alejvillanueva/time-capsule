@@ -1,0 +1,24 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.delete-modal {
+	width: auto;
+	max-width: 25rem;
+	height: auto;
+	padding: 6rem;
+	background: $white;
+
+	&__container {
+		@include flexbox(column, center, unset);
+
+		gap: $spacing-md;
+	}
+
+	&__icon {
+		width: 1rem;
+		cursor: pointer;
+	}
+
+	// &__text {
+	// }
+}

@@ -136,6 +136,7 @@ function MainHeading({
 							type="button"
 							aria-label={`Delete ${resourceType}`}
 							title="Delete"
+							onClick={handleModalClick}
 						>
 							<svg
 								className="main-heading__icon"
