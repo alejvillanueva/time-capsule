@@ -150,7 +150,11 @@ function AddEditCapsulePage() {
 		}
 
 		setIsCapsuleEditable(false);
-		await addCapsule(capsuleFormData);
+		if (addMatch) {
+			await addCapsule(capsuleFormData);
+		} else {
+			await editCapsule(capsuleFormData);
+		}
 	};
 
 	const validateCapsuleForm = () => {

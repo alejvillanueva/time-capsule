@@ -64,6 +64,7 @@ function InputField({
 						type={inputType}
 						name={inputName}
 						id={inputId}
+						min={inputType === "date" ? new Date().toString().slice(0, 10) : ""}
 						placeholder={placeholder}
 						disabled={!isCapsuleEditable}
 						onChange={handleChange}

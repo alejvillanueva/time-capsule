@@ -2,23 +2,39 @@
 @use "../../styles/partials/mixins" as *;
 
 .delete-modal {
+	position: relative;
 	width: auto;
-	max-width: 25rem;
+	max-width: 35rem;
 	height: auto;
 	padding: 6rem;
 	background: $white;
+	gap: $spacing-lg;
+	@include flexbox(column, unset, unset);
 
 	&__container {
-		@include flexbox(column, center, unset);
+		@include flexbox(row, unset, flex-start);
 
 		gap: $spacing-md;
 	}
 
 	&__icon {
-		width: 1rem;
+		position: absolute;
+		top: 1.5rem;
+		right: 1.5rem;
+		width: 1.5rem;
 		cursor: pointer;
 	}
 
-	// &__text {
-	// }
+	&__warning-icon {
+		width: 1.5rem;
+		min-width: 1.5rem;
+	}
+
+	&__text {
+		text-transform: uppercase;
+
+		&--bold {
+			font-weight: $font-weight-bold;
+		}
+	}
 }

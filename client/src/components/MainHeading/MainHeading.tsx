@@ -1,7 +1,13 @@
 import "./MainHeading.scss";
 import { SelectedSnapDisplay } from "../MemoryCarouselFunctions/MemoryCarouselFunctions";
 import useAppContext from "../../context/useAppContext";
-import { matchPath, useLocation, useNavigate } from "react-router-dom";
+import {
+	matchPath,
+	useLocation,
+	useNavigate,
+	useParams,
+} from "react-router-dom";
+import { deleteCapsule } from "../../services/index";
 
 interface MainHeadingProps {
 	headingType: "default" | "custom" | "custom-editable" | "custom-carousel";
@@ -12,6 +18,7 @@ interface MainHeadingProps {
 	handleModalClick?: () => void;
 	memoryCount?: number;
 	currentSlide?: number;
+	buttonTitle?: string;
 }
 
 function MainHeading({
@@ -23,12 +30,24 @@ function MainHeading({
 	handleModalClick,
 	memoryCount,
 	currentSlide = 0,
+	buttonTitle,
 }: MainHeadingProps) {
 	const { setIsCapsuleEditable } = useAppContext();
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
+	const { capsuleId } = useParams();
 
 	const addMatch = matchPath("/capsule/add", pathname);
+
+	const handleConfirmDeleteClick = async () => {
+		try {
+			const deleteStatus = await deleteCapsule(Number(capsuleId));
+
+			if (deleteStatus === 204) navigate("/");
+		} catch (error) {
+			console.error("Error deleting capsule:", error);
+		}
+	};
 
 	return (
 		<>
@@ -68,24 +87,47 @@ function MainHeading({
 									<path d="m6 6 12 12" />
 								</svg>
 							</button>
-							<button
-								className="main-heading__button"
-								aria-label={`Submit ${resourceType} form`}
-								title="Submit"
-							>
-								<svg
-									className="main-heading__icon"
-									xmlns="http://www.w3.org/2000/svg"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="#757575"
-									strokeWidth="2"
-									strokeLinecap="round"
-									strokeLinejoin="round"
+							{buttonTitle ? (
+								<button
+									className="main-heading__button"
+									aria-label={`${buttonTitle} ${resourceType}`}
+									title={buttonTitle}
+									type="button"
+									onClick={handleConfirmDeleteClick}
 								>
-									<path d="M20 6 9 17l-5-5" />
-								</svg>
-							</button>
+									<svg
+										className="main-heading__icon"
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="#757575"
+										strokeWidth="2"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+									>
+										<path d="M20 6 9 17l-5-5" />
+									</svg>
+								</button>
+							) : (
+								<button
+									className="main-heading__button"
+									aria-label={`Submit ${resourceType} form`}
+									title="Submit"
+								>
+									<svg
+										className="main-heading__icon"
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="#757575"
+										strokeWidth="2"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+									>
+										<path d="M20 6 9 17l-5-5" />
+									</svg>
+								</button>
+							)}
 						</div>
 					)}
 				</div>
@@ -197,6 +239,7 @@ function MainHeading({
 								<path d="m6 6 12 12" />
 							</svg>
 						</button>
+
 						<button
 							className="main-heading__button"
 							aria-label={`Submit ${resourceType} form`}

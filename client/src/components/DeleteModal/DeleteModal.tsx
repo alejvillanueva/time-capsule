@@ -43,9 +43,25 @@ function DeleteModal({
 				},
 			}}
 		>
+			<svg
+				className="delete-modal__icon"
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="#757575"
+				strokeWidth="3"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				onClick={() => {
+					setIsModalOpen(false);
+				}}
+			>
+				<path d="M18 6 6 18" />
+				<path d="m6 6 12 12" />
+			</svg>
 			<div className="delete-modal__container">
 				<svg
-					className="delete-modal__icon"
+					className="delete-modal__warning-icon"
 					xmlns="http://www.w3.org/2000/svg"
 					viewBox="0 0 24 24"
 					fill="#d10000"
@@ -58,7 +74,12 @@ function DeleteModal({
 					<path d="M12 9v4" />
 					<path d="M12 17h.01" />
 				</svg>
-				<p className="delete-modal__text">{`Are you sure you want to delete the ${capsuleTitle} capsule? This will permanently delete the capsule and cannot be undone.`}</p>
+				<p className="delete-modal__text text-body">
+					Are you sure you want to delete the
+					<span className="delete-modal__text--bold"> {capsuleTitle} </span>
+					capsule? This will permanently delete the capsule and cannot be
+					undone.
+				</p>
 			</div>
 
 			<MainHeading
@@ -67,6 +88,7 @@ function DeleteModal({
 				h2={true}
 				showIcons={true}
 				resourceType="capsule"
+				buttonTitle="Delete"
 			/>
 		</ReactModal>
 	);
