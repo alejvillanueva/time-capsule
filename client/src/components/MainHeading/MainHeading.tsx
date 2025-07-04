@@ -45,7 +45,7 @@ function MainHeading({
 
 			if (deleteStatus === 204) navigate("/");
 		} catch (error) {
-			console.error("Error deleting capsule:", error);
+			console.error("Deleting capsule error:", error);
 		}
 	};
 

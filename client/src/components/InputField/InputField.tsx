@@ -31,6 +31,7 @@ function InputField({
 }: InputFieldProps) {
 	const { isCapsuleEditable, isModalOpen, isMemoryEditable } = useAppContext();
 
+	// TODO: add form element attributes as needed (e.g. required, maxlength, spellcheck, pattern, etc.)
 	return (
 		<>
 			{inputType !== "select" && inputType !== "textArea" && (

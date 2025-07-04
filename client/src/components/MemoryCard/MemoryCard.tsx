@@ -1,11 +1,13 @@
 import "./MemoryCard.scss";
+import { Memory } from "../../interfaces/index";
 
 interface MemoryCardProps {
 	cardType: "add" | "memory";
 	handleModalClick?: () => void;
+	memory?: Memory;
 }
 
-function MemoryCard({ cardType, handleModalClick }: MemoryCardProps) {
+function MemoryCard({ cardType, handleModalClick, memory }: MemoryCardProps) {
 	return (
 		<>
 			{cardType === "add" && (
@@ -44,17 +46,16 @@ function MemoryCard({ cardType, handleModalClick }: MemoryCardProps) {
 				>
 					<div className="memory-card__container">
 						<div className="memory-card__card-container">
-							{/* add conditional for each media type to show */}
+							{/* TODO: add conditional for each media type to show */}
 							<img
 								className="memory-card__image"
 								src="https://blog.adobe.com/en/topics/media_1b0bc6f8d7d4e93986294e9b25e41afd86c6c4822.jpeg?width=750&format=jpeg&optimize=medium"
+								// src={memory?.url}
 								alt=""
 							/>
 						</div>
 						<div className="memory-card__card-container">
-							<h2 className="memory-card__title ">
-								Lorem ipsum dolor sit amet
-							</h2>
+							<h2 className="memory-card__title ">{memory?.author}</h2>
 						</div>
 					</div>
 				</li>

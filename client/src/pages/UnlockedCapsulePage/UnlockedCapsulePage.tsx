@@ -22,7 +22,7 @@ function UnlockedCapsulePage() {
 				setCapsuleTitle(data.title);
 				setMemories(data.memories);
 			} catch (error) {
-				console.error("Error fetching memories:", error);
+				console.error("Fetching memories error:", error);
 			}
 		};
 

@@ -28,7 +28,7 @@ function LockedCapsulePage() {
 				setCapsule(data);
 				setOpenDate(new Date(data.open_date));
 			} catch (error) {
-				console.error("Error fetching single capsule:", error);
+				console.error("Fetching single capsule error:", error);
 			}
 		};
 

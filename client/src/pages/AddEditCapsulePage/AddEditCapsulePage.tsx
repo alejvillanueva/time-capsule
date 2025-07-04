@@ -4,6 +4,8 @@ import InputField from "../../components/InputField/InputField";
 import MainHeading from "../../components/MainHeading/MainHeading";
 import MemoryCard from "../../components/MemoryCard/MemoryCard";
 import UploadField from "../../components/UploadField/UploadField";
+import MemoryModal from "../../components/MemoryModal/MemoryModal";
+import DeleteModal from "../../components/DeleteModal/DeleteModal";
 import useAppContext from "../../context/useAppContext";
 import {
 	useLocation,
@@ -13,9 +15,11 @@ import {
 } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { createCapsule, getCapsule, updateCapsule } from "../../services/index";
-import { Capsule } from "../../interfaces/index";
-import MemoryModal from "../../components/MemoryModal/MemoryModal";
-import DeleteModal from "../../components/DeleteModal/DeleteModal";
+import { Capsule, Memory } from "../../interfaces/index";
+
+interface CapsuleWithMemories extends Capsule {
+	memories?: Memory[];
+}
 
 interface CapsuleErrors {
 	author: boolean;
@@ -26,6 +30,7 @@ interface CapsuleErrors {
 	password?: boolean;
 	title: boolean;
 	updated_on?: boolean;
+	alert_message?: string;
 }
 
 function AddEditCapsulePage() {
@@ -45,17 +50,7 @@ function AddEditCapsulePage() {
 	} = useAppContext();
 
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
-	const [capsuleData, setCapsuleData] = useState<Capsule>({
-		author: "",
-		cover_art: "",
-		created_on: new Date(),
-		edit_by: new Date(),
-		open_date: new Date(),
-		password: "",
-		title: "",
-		updated_on: new Date(),
-	});
-	const [capsuleFormData, setCapsuleFormData] = useState<Capsule>({
+	const [capsuleFormData, setCapsuleFormData] = useState<CapsuleWithMemories>({
 		author: "",
 		cover_art: "",
 		created_on: new Date(),
@@ -80,9 +75,21 @@ function AddEditCapsulePage() {
 	const addCapsule = async (capsule: Capsule) => {
 		try {
 			const newCapsule = await createCapsule(capsule);
-			if (newCapsule[0].id) navigate(`/capsule/${newCapsule[0].id}/edit`);
+			if (newCapsule[0].id) {
+				setCapsuleErrors({
+					author: false,
+					cover_art: false,
+					created_on: false,
+					edit_by: false,
+					open_date: false,
+					password: false,
+					title: false,
+					updated_on: false,
+				});
+				navigate(`/capsule/${newCapsule[0].id}/edit`);
+			}
 		} catch (error) {
-			console.error("Error adding capsule:", error);
+			console.error("Adding capsule error:", error);
 		}
 	};
 
@@ -90,21 +97,27 @@ function AddEditCapsulePage() {
 		try {
 			const [data] = await getCapsule(id);
 
-			setCapsuleData(data);
+			setCapsuleFormData(data);
 		} catch (error) {
-			console.error("Error fetching capsule:", error);
+			console.error("Fetching capsule error:", error);
 		}
 	};
 
 	useEffect(() => {
-		fetchCapsule(Number(capsuleId));
+		if (capsuleId) fetchCapsule(Number(capsuleId));
 	}, [capsuleId]);
 
-	const editCapsule = async (capsule: Capsule) => {
+	const editCapsule = async (capsule: CapsuleWithMemories) => {
 		try {
-			await updateCapsule(capsule);
+			// Remove "memories" property and update "updated_on" property during PUT request
+			const { memories, ...putReadyCapsule } = capsule;
+			putReadyCapsule.updated_on = new Date();
+
+			await updateCapsule(putReadyCapsule);
+
+			fetchCapsule(Number(capsule.id));
 		} catch (error) {
-			console.error("Error updating capsule:", error);
+			console.error("Updating capsule error:", error);
 		}
 	};
 
@@ -169,33 +182,42 @@ function AddEditCapsulePage() {
 			updated_on: false,
 		};
 
+		let alertMessage = "Please revise the following errors before submitting:";
+
 		// Author field
 		if (!capsuleFormData.author) {
 			console.error("Missing author field");
+			alertMessage += "\nMissing author field";
 			errorStates.author = true;
 		} else if (capsuleFormData.author.length < 3) {
 			console.error("Author must contain min. 3 characters");
+			alertMessage += "\nAuthor must contain min. 3 characters";
 			errorStates.author = true;
 		}
 
 		// Edit by field
 		if (!capsuleFormData.edit_by) {
 			console.error("Missing edit by date field");
+			alertMessage += "\nMissing edit by date field";
 			errorStates.edit_by = true;
 		} else if (capsuleFormData.edit_by <= new Date()) {
 			console.error("Invalid edit by date");
+			alertMessage += "\nInvalid edit by date";
 			errorStates.edit_by = true;
 		}
 
 		// Open date field
 		if (!capsuleFormData.open_date) {
 			console.error("Missing open date field");
+			alertMessage += "\nMissing open date field";
 			errorStates.open_date = true;
 		} else if (capsuleFormData.open_date <= new Date()) {
 			console.error("Invalid open date");
+			alertMessage += "\nInvalid open date";
 			errorStates.open_date = true;
 		} else if (capsuleFormData.edit_by >= capsuleFormData.open_date) {
 			console.error("Open date must follow the edit date");
+			alertMessage += "\nOpen date must follow the edit date";
 			errorStates.edit_by = true;
 			errorStates.open_date = true;
 		}
@@ -203,21 +225,24 @@ function AddEditCapsulePage() {
 		// Title field
 		if (!capsuleFormData.title) {
 			console.error("Missing title field");
+			alertMessage += "\nMissing title field";
 			errorStates.title = true;
 		} else if (capsuleFormData.title.length < 5) {
 			console.error("Title must contain min. 5 characters");
+			alertMessage += "\nTitle must contain min. 5 characters";
 			errorStates.title = true;
 		}
 
 		// Optional data
 		if (capsuleFormData.password && capsuleFormData.password.length < 8) {
 			console.error("Password must contain min. 8 characters");
+			alertMessage += "\nPassword must contain min. 8 characters";
 			errorStates.password = true;
 		}
 
-		setCapsuleErrors(errorStates);
-
-		if (Object.values(capsuleErrors).includes(true)) {
+		if (Object.values(errorStates).includes(true)) {
+			alert(alertMessage);
+			setCapsuleErrors(errorStates);
 			return false;
 		}
 
@@ -226,12 +251,14 @@ function AddEditCapsulePage() {
 
 	let formattedDate;
 
-	if (capsuleData.open_date && capsuleData.edit_by) {
+	if (capsuleFormData.open_date && capsuleFormData.edit_by) {
 		formattedDate = {
-			open_date: capsuleData.open_date.toString().slice(0, 10),
-			edit_by: capsuleData.edit_by.toString().slice(0, 10),
+			open_date: capsuleFormData.open_date.toString().slice(0, 10),
+			edit_by: capsuleFormData.edit_by.toString().slice(0, 10),
 		};
 	}
+
+	// TODO: add logic to prompt for password when entering edit page, logic must not prompt following capsule creation, however
 
 	return (
 		<main className="add-edit-capsule">
@@ -261,6 +288,7 @@ function AddEditCapsulePage() {
 							</div>
 						</div>
 					)}
+					{/* TODO: add hidden input elements to capture date timestamps */}
 					<div className="add-edit-capsule__input-container">
 						<InputField
 							inputType="text"
@@ -271,7 +299,7 @@ function AddEditCapsulePage() {
 							placeholder="Type the capsule title"
 							handleChange={handleCapsuleChange}
 							validation={{ required: true, isInvalid: capsuleErrors.title }}
-							value={capsuleData.title}
+							value={capsuleFormData.title}
 						/>
 						<InputField
 							inputType="text"
@@ -282,7 +310,7 @@ function AddEditCapsulePage() {
 							placeholder="Type your name"
 							handleChange={handleCapsuleChange}
 							validation={{ required: true, isInvalid: capsuleErrors.author }}
-							value={capsuleData.author}
+							value={capsuleFormData.author}
 						/>
 						<InputField
 							inputType="date"
@@ -306,7 +334,7 @@ function AddEditCapsulePage() {
 							placeholder="Type the password to edit capsule"
 							handleChange={handleCapsuleChange}
 							validation={{ required: false }}
-							value={capsuleData.password}
+							value={capsuleFormData.password}
 						/>
 						<InputField
 							inputType="date"
@@ -331,14 +359,14 @@ function AddEditCapsulePage() {
 					) : editMatch && isCapsuleEditable ? (
 						<MainHeading
 							headingType="custom-editable"
-							title={capsuleData.title}
+							title={capsuleFormData.title}
 							resourceType="capsule"
 							showIcons={true}
 						/>
 					) : (
 						<MainHeading
 							headingType="custom"
-							title={capsuleData.title}
+							title={capsuleFormData.title}
 							resourceType="capsule"
 							showIcons={true}
 							handleModalClick={handleDeleteModalClick}
@@ -357,35 +385,16 @@ function AddEditCapsulePage() {
 							cardType="add"
 							handleModalClick={handleMemoryModalClick}
 						/>
-						{editMatch && (
-							// pass prop with name, if name doesnt exist, show add
-							<>
+						{capsuleFormData.memories &&
+							capsuleFormData.memories[0].author &&
+							capsuleFormData.memories.map((memory, i) => (
 								<MemoryCard
+									key={i}
 									cardType="memory"
 									handleModalClick={handleMemoryModalClick}
+									memory={memory}
 								/>
-								<MemoryCard
-									cardType="memory"
-									handleModalClick={handleMemoryModalClick}
-								/>
-								<MemoryCard
-									cardType="memory"
-									handleModalClick={handleMemoryModalClick}
-								/>
-								<MemoryCard
-									cardType="memory"
-									handleModalClick={handleMemoryModalClick}
-								/>
-								<MemoryCard
-									cardType="memory"
-									handleModalClick={handleMemoryModalClick}
-								/>
-								<MemoryCard
-									cardType="memory"
-									handleModalClick={handleMemoryModalClick}
-								/>
-							</>
-						)}
+							))}
 					</ul>
 				</>
 			)}
@@ -401,7 +410,7 @@ function AddEditCapsulePage() {
 			<DeleteModal
 				isModalOpen={isDeleteModalOpen}
 				setIsModalOpen={setIsDeleteModalOpen}
-				capsuleTitle={capsuleData.title}
+				capsuleTitle={capsuleFormData.title}
 			/>
 			<MemoryModal memoryTitle={`Lorem Ipsum Test`} />
 		</main>

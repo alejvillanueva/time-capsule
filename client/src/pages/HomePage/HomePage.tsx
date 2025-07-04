@@ -14,7 +14,7 @@ function HomePage() {
 				const data = await getAllCapsules();
 				setCapsules(data);
 			} catch (error) {
-				console.error("Error fetching home page capsules:", error);
+				console.error("Fetching home page capsules error:", error);
 			}
 		};
 

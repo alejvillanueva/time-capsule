@@ -69,10 +69,11 @@ function MemoryModal({ memoryTitle }: MemoryModalProps) {
 
 			setIsModalOpen(false);
 		} catch (error) {
-			console.error("Error creating/updating capsule:", error);
+			console.error("Creating/updating capsule error:", error);
 		}
 	};
 
+	// TODO: update validation as per capsule validation techniques
 	const validateMemoryForm = () => {
 		const errorStates = {
 			author: false,
