@@ -32,9 +32,7 @@ function MemoryCard({ cardType, handleModalClick, memory }: MemoryCardProps) {
 								<path d="M12 5v14" />
 							</svg>
 						</div>
-						<p className="memory-card__title memory-card__title--add">
-							Create Memory
-						</p>
+						<p className="memory-card__title">Create Memory</p>
 					</div>
 				</li>
 			)}
@@ -46,16 +44,27 @@ function MemoryCard({ cardType, handleModalClick, memory }: MemoryCardProps) {
 				>
 					<div className="memory-card__container">
 						<div className="memory-card__card-container">
-							{/* TODO: add conditional for each media type to show */}
-							<img
-								className="memory-card__image"
-								src="https://blog.adobe.com/en/topics/media_1b0bc6f8d7d4e93986294e9b25e41afd86c6c4822.jpeg?width=750&format=jpeg&optimize=medium"
-								// src={memory?.url}
-								alt=""
-							/>
+							{memory?.url && memory?.medium === "image" ? (
+								<img
+									className="memory-card__image"
+									src={memory?.url}
+									alt={memory?.message ?? `Image authored by ${memory.author}`}
+								/>
+							) : memory?.url && memory?.medium === "video" ? (
+								<video className="memory-card__video" src={memory?.url}></video>
+							) : (
+								<p className="memory-card__message">
+									{memory?.message && memory?.message?.length > 200
+										? memory?.message?.slice(0, 200) + "..."
+										: memory?.message}
+								</p>
+							)}
 						</div>
 						<div className="memory-card__card-container">
-							<h2 className="memory-card__title ">{memory?.author}</h2>
+							<h3 className="memory-card__author text-label">
+								{memory?.author}
+							</h3>
+							<p className="memory-card__medium text-label">{memory?.medium}</p>
 						</div>
 					</div>
 				</li>

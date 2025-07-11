@@ -30,7 +30,6 @@ interface CapsuleErrors {
 	password?: boolean;
 	title: boolean;
 	updated_on?: boolean;
-	alert_message?: string;
 }
 
 function AddEditCapsulePage() {
@@ -258,7 +257,7 @@ function AddEditCapsulePage() {
 		};
 	}
 
-	// TODO: add logic to prompt for password when entering edit page, logic must not prompt following capsule creation, however
+	// TODO: add logic to prompt for password when entering edit page (using prompt method), logic must not prompt following capsule creation, however
 
 	return (
 		<main className="add-edit-capsule">

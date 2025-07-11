@@ -2,14 +2,15 @@
 @use "../../styles/partials/mixins" as *;
 
 .delete-modal {
+	@include flexbox(column, unset, unset);
+
 	position: relative;
+	gap: $spacing-lg;
 	width: auto;
 	max-width: 35rem;
 	height: auto;
 	padding: 6rem;
 	background: $white;
-	gap: $spacing-lg;
-	@include flexbox(column, unset, unset);
 
 	&__container {
 		@include flexbox(row, unset, flex-start);
