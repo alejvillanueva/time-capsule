@@ -16,7 +16,7 @@ interface InputFieldProps {
 		required: boolean;
 		isInvalid?: boolean | undefined;
 	};
-	value?: any;
+	value?: string | string[] | number | null | undefined;
 }
 
 function InputField({
@@ -29,7 +29,7 @@ function InputField({
 	validation,
 	value,
 }: InputFieldProps) {
-	const { isCapsuleEditable, isModalOpen, isMemoryEditable } = useAppContext();
+	const { isFormEditable, isModalOpen } = useAppContext();
 
 	// TODO: add form element attributes as needed (e.g. required, maxlength, spellcheck, pattern, etc.)
 	return (
@@ -67,9 +67,9 @@ function InputField({
 						id={inputId}
 						min={inputType === "date" ? new Date().toString().slice(0, 10) : ""}
 						placeholder={placeholder}
-						disabled={!isCapsuleEditable}
+						disabled={!isFormEditable}
 						onChange={handleChange}
-						value={value}
+						value={value ?? ""}
 					/>
 				</>
 			)}
@@ -103,7 +103,8 @@ function InputField({
 						className="input-field__input input-field__input--select"
 						name={inputName}
 						id={inputId}
-						disabled={!isCapsuleEditable}
+						onChange={handleChange}
+						disabled={!isFormEditable}
 					>
 						<option value="">Select a Memory Type</option>
 						<option value="image">Image</option>
@@ -143,7 +144,7 @@ function InputField({
 						name={inputName}
 						id={inputId}
 						placeholder={placeholder}
-						disabled={!isCapsuleEditable}
+						disabled={!isFormEditable}
 						onChange={handleChange}
 					></textarea>
 				</>

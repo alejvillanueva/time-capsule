@@ -1,37 +1,92 @@
 import "./MemoryModal.scss";
 import InputField from "../InputField/InputField";
 import MainHeading from "../MainHeading/MainHeading";
+import UploadField from "../UploadField/UploadField";
 import ReactModal from "react-modal";
 import useAppContext from "../../context/useAppContext";
-import UploadField from "../UploadField/UploadField";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Memory } from "../../interfaces/index";
+import { useParams } from "react-router-dom";
+import { createMemory } from "../../services/index";
+import { Medium } from "../../interfaces/Memory";
 
-interface MemoryModalProps {
-	memoryTitle?: string;
+interface MemoryWithoutMedium extends Omit<Memory, "medium"> {
+	medium: Medium | "";
 }
 
 interface MemoryErrors {
+	medium: boolean;
 	author: boolean;
 	message: boolean;
 	url: boolean;
 }
 
-function MemoryModal({ memoryTitle }: MemoryModalProps) {
+function MemoryModal({ fetchCapsule }: any) {
+	const { capsuleId } = useParams();
 	const {
 		isModalOpen,
 		setIsModalOpen,
-		memoryFormData,
-		setMemoryFormData,
 		uploadedFile,
 		setUploadedFile,
+		memoryModalMode,
+		setIsFormEditable,
 	} = useAppContext();
+	const [memoryFormData, setMemoryFormData] = useState<MemoryWithoutMedium>({
+		author: "",
+		capsule_id: Number(capsuleId) ?? 0,
+		added_on: new Date(),
+		medium: "",
+		message: "",
+		url: "",
+	});
 	const [memoryErrors, setMemoryErrors] = useState<MemoryErrors>({
+		medium: false,
 		author: false,
 		message: false,
 		url: false,
 	});
 
-	const { author, capsule_id, added_on, medium, message, url } = memoryFormData;
+	const addMemory = async (memory: MemoryWithoutMedium) => {
+		try {
+			if (memory.medium === "") {
+				throw new Error("Medium must be selected before submitting.");
+			}
+
+			const newMemory = await createMemory(memory as Memory);
+			if (newMemory[0].id) {
+				setMemoryFormData({
+					author: "",
+					capsule_id: Number(capsuleId) ?? 0,
+					added_on: new Date(),
+					medium: "",
+					message: "",
+					url: "",
+				});
+				setMemoryErrors({
+					medium: false,
+					author: false,
+					message: false,
+					url: false,
+				});
+				fetchCapsule(capsuleId);
+				setIsModalOpen(false);
+			}
+		} catch (error) {
+			console.error("Adding memory error:", error);
+		}
+	};
+
+	useEffect(() => {
+		if (isModalOpen && memoryModalMode === "add")
+			setMemoryFormData({
+				author: "",
+				capsule_id: Number(capsuleId) ?? 0,
+				added_on: new Date(),
+				medium: "",
+				message: "",
+				url: "",
+			});
+	}, [isModalOpen, memoryModalMode]);
 
 	const handleMemoryChange = (
 		e: React.ChangeEvent<
@@ -52,30 +107,30 @@ function MemoryModal({ memoryTitle }: MemoryModalProps) {
 		console.error("Root element not found!");
 	}
 
-	const handleMemorySubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleMemorySubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
 		if (!validateMemoryForm()) return;
 
+		// TODO: update logic for upload file
 		if (!uploadedFile) {
 			console.log("No file uploaded");
-			return;
+			// return;
+		} else {
+			console.log("Uploaded file:", uploadedFile[0]);
 		}
-		console.log("Uploaded file:", uploadedFile[0]);
 
-		try {
-			// TODO: replace line below with http request function
-			console.log(memoryFormData);
-
-			setIsModalOpen(false);
-		} catch (error) {
-			console.error("Creating/updating capsule error:", error);
+		if (memoryModalMode === "add") {
+			await addMemory(memoryFormData);
+			console.log("Submitted!");
+		} else {
+			// await editMemory(memoryFormData);
 		}
 	};
 
-	// TODO: update validation as per capsule validation techniques
 	const validateMemoryForm = () => {
 		const errorStates = {
+			medium: false,
 			author: false,
 			message: false,
 			url: false,
@@ -83,33 +138,51 @@ function MemoryModal({ memoryTitle }: MemoryModalProps) {
 		const urlPattern =
 			/^https?:\/\/[^\s/$.?#].[^\s]*\.(jpg|jpeg|png|gif|webp|svg)$/;
 
-		// Author field
-		if (!author) {
-			console.error("Missing author field");
-			errorStates.author = true;
-		} else if (author.length < 3) {
-			console.error("Author must contain min. 3 characters");
-			errorStates.author = true;
+		let alertMessage = "Please revise the following errors before submitting:";
+
+		// Medium field
+		if (memoryFormData.medium === "") {
+			console.error("Medium field missing");
+			alertMessage += "\nMedium field missing, select a memory type";
+			errorStates.medium = true;
+		} else {
+			// Author field
+			if (!memoryFormData.author) {
+				console.error("Missing author field");
+				alertMessage += "\nMissing author field";
+				errorStates.author = true;
+			} else if (memoryFormData.author.length < 3) {
+				console.error("Author must contain min. 3 characters");
+				alertMessage += "\nAuthor must contain min. 3 characters";
+				errorStates.author = true;
+			}
+
+			// URL field
+			if (!memoryFormData.url && memoryFormData.medium === "image") {
+				console.error("Missing image file");
+				alertMessage += "\nMissing image field";
+				errorStates.url = true;
+			} else if (!memoryFormData.url && memoryFormData.medium === "video") {
+				console.error("Missing video file");
+				alertMessage += "\nMissing video field";
+				errorStates.url = true;
+			} else if (memoryFormData.url && urlPattern.test(memoryFormData.url)) {
+				console.error("Invalid url");
+				alertMessage += "\nInvalid url";
+				errorStates.url = true;
+			}
+
+			// Optional data
+			if (memoryFormData.message && memoryFormData.message.length < 3) {
+				console.error("Caption must contain min. 3 characters");
+				alertMessage += "\nCaption must contain min. 3 characters";
+				errorStates.message = true;
+			}
 		}
 
-		// URL field
-		if (!url) {
-			console.error("Missing url field");
-			errorStates.url = true;
-		} else if (urlPattern.test(url)) {
-			console.error("Invalid url");
-			errorStates.url = true;
-		}
-
-		// Optional data
-		if (message && message.length < 3) {
-			console.error("Caption must contain min. 3 characters");
-			errorStates.message = true;
-		}
-
-		setMemoryErrors(errorStates);
-
-		if (Object.values(memoryErrors).includes(true)) {
+		if (Object.values(errorStates).includes(true)) {
+			alert(alertMessage);
+			setMemoryErrors(errorStates);
 			return false;
 		}
 
@@ -154,59 +227,114 @@ function MemoryModal({ memoryTitle }: MemoryModalProps) {
 				<path d="m6 6 12 12" />
 			</svg>
 			<form className="memory-modal__form" onSubmit={handleMemorySubmit}>
-				<div className="memory-modal__container">
-					<InputField
-						inputLabel="Memory Medium"
-						inputType="select"
-						inputId="medium"
-						inputName="medium"
-						handleChange={handleMemoryChange}
-						validation={{ required: false }}
-					/>
-					<InputField
-						inputLabel="Author"
-						inputType="text"
-						inputId="memory_author"
-						inputName="memory_author"
-						placeholder="Type the Author(s) of the Memory"
-						handleChange={handleMemoryChange}
-						validation={{ required: true, isInvalid: memoryErrors.author }}
-					/>
-					<InputField
-						inputLabel="Caption"
-						inputType="textArea"
-						inputId="message"
-						inputName="message"
-						placeholder="Type the Caption"
-						handleChange={handleMemoryChange}
-						validation={{ required: false, isInvalid: memoryErrors.message }}
-					/>
+				<div className="memory-modal__form-container">
+					<div className="memory-modal__container">
+						<InputField
+							inputLabel="Memory Medium"
+							inputType="select"
+							inputId="memory_medium"
+							inputName="medium"
+							handleChange={handleMemoryChange}
+							validation={{ required: false }}
+							value={memoryFormData.medium}
+						/>
+						{(memoryFormData.medium === "image" ||
+							memoryFormData.medium === "video") && (
+							<>
+								<InputField
+									inputLabel="Author"
+									inputType="text"
+									inputId="memory_author"
+									inputName="author"
+									placeholder="Type the Author(s) of the Memory"
+									handleChange={handleMemoryChange}
+									validation={{
+										required: true,
+										isInvalid: memoryErrors.author,
+									}}
+									value={memoryFormData.author}
+								/>
+								<InputField
+									inputLabel="Caption"
+									inputType="textArea"
+									inputId="memory_message"
+									inputName="message"
+									placeholder="Type the Caption"
+									handleChange={handleMemoryChange}
+									validation={{
+										required: false,
+										isInvalid: memoryErrors.message,
+									}}
+									value={memoryFormData.message}
+								/>
+							</>
+						)}
+						{memoryFormData.medium === "text" && (
+							<InputField
+								inputLabel="Author"
+								inputType="text"
+								inputId="memory_author"
+								inputName="author"
+								placeholder="Type the Author(s) of the Memory"
+								handleChange={handleMemoryChange}
+								validation={{
+									required: true,
+									isInvalid: memoryErrors.author,
+								}}
+								value={memoryFormData.author}
+							/>
+						)}
+					</div>
+					{memoryFormData.medium === "" && (
+						<div className="memory-modal__filler"></div>
+					)}
+					{(memoryFormData.medium === "image" ||
+						memoryFormData.medium === "video") && (
+						<UploadField
+							uploadLabel="Image"
+							uploadId="memory_image"
+							uploadName="url"
+							onFileChange={setUploadedFile}
+						/>
+					)}
+					{memoryFormData.medium === "text" && (
+						<div className="memory-modal__container">
+							<InputField
+								inputLabel="Message"
+								inputType="textArea"
+								inputId="memory_message"
+								inputName="message"
+								placeholder="Type the Message"
+								handleChange={handleMemoryChange}
+								validation={{
+									required: false,
+									isInvalid: memoryErrors.message,
+								}}
+								value={memoryFormData.message}
+							/>
+						</div>
+					)}
 				</div>
-				<UploadField
-					uploadLabel="Image"
-					uploadId="memory_image"
-					uploadName="memory_image"
-					onFileChange={setUploadedFile}
-				/>
+				<div className="memory-modal__form-container">
+					{/* TODO: revise with author vs title updates */}
+					{memoryModalMode !== "add" ? (
+						<MainHeading
+							headingType="custom"
+							title={`<name>'s Memory`}
+							h2={true}
+							resourceType="memory"
+						/>
+					) : (
+						<MainHeading
+							headingType="default"
+							title="Add Memory"
+							h2={true}
+							resourceType="memory"
+							showIcons={true}
+						/>
+					)}
+				</div>
 			</form>
-
-			{/* TODO: revise with author vs title updates */}
-			{memoryTitle ? (
-				<MainHeading
-					headingType="custom"
-					title={memoryTitle}
-					h2={true}
-					resourceType="memory"
-				/>
-			) : (
-				<MainHeading
-					headingType="default"
-					title="Add Memory"
-					h2={true}
-					resourceType="memory"
-					showIcons={true}
-				/>
-			)}
 		</ReactModal>
 	);
 }

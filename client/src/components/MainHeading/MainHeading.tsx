@@ -32,7 +32,7 @@ function MainHeading({
 	currentSlide = 0,
 	buttonTitle,
 }: MainHeadingProps) {
-	const { setIsCapsuleEditable } = useAppContext();
+	const { setIsFormEditable } = useAppContext();
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
 	const { capsuleId } = useParams();
@@ -155,7 +155,7 @@ function MainHeading({
 							type="button"
 							aria-label={`Edit ${resourceType} form`}
 							title="Edit"
-							onClick={() => setIsCapsuleEditable(true)}
+							onClick={() => setIsFormEditable(true)}
 						>
 							<svg
 								className="main-heading__icon"
@@ -223,7 +223,7 @@ function MainHeading({
 							type="button"
 							aria-label={`Cancel ${resourceType} form modifications`}
 							title="Cancel"
-							onClick={() => setIsCapsuleEditable(false)}
+							onClick={() => setIsFormEditable(false)}
 						>
 							<svg
 								className="main-heading__icon"

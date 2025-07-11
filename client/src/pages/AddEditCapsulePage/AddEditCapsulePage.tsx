@@ -38,14 +38,15 @@ function AddEditCapsulePage() {
 	const {
 		coverArt,
 		setCoverArt,
-		isCapsuleEditable,
-		setIsCapsuleEditable,
+		isFormEditable,
+		setIsFormEditable,
+		isModalOpen,
 		setIsModalOpen,
 		setMemoryModal,
-		memoryFormData,
-		setMemoryFormData,
 		uploadedFile,
 		setUploadedFile,
+		memoryModalMode,
+		// setMemoryModalMode,
 	} = useAppContext();
 
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
@@ -126,9 +127,21 @@ function AddEditCapsulePage() {
 	const editMatch = matchPath("/capsule/:capsuleId/edit", pathname);
 
 	useEffect(() => {
-		// always allow form editing on add capsule path (vs. having disabled input fields)
-		addMatch ? setIsCapsuleEditable(true) : setIsCapsuleEditable(false);
+		// Always allow form editing on add capsule path (vs. having disabled input fields)
+		addMatch ? setIsFormEditable(true) : setIsFormEditable(false);
 	}, [pathname]);
+
+	useEffect(() => {
+		// Disable (capsule) form editing when memory modal is closed or when memory modal not in "read" mode
+		if (
+			(isModalOpen && memoryModalMode === "add") ||
+			(isModalOpen && memoryModalMode === "edit")
+		) {
+			setIsFormEditable(true);
+		} else {
+			setIsFormEditable(false);
+		}
+	}, [isModalOpen, memoryModalMode]);
 
 	const handleDeleteModalClick = () => {
 		setIsDeleteModalOpen(true);
@@ -161,7 +174,7 @@ function AddEditCapsulePage() {
 			console.log("Uploaded file:", uploadedFile[0]);
 		}
 
-		setIsCapsuleEditable(false);
+		setIsFormEditable(false);
 		if (addMatch) {
 			await addCapsule(capsuleFormData);
 		} else {
@@ -275,6 +288,7 @@ function AddEditCapsulePage() {
 						<div className="add-edit-capsule__container">
 							<p className="add-edit-capsule__label text-label">Cover Art</p>
 							<div className="add-edit-capsule__cover-art-container text-body">
+								{/* TODO: allow image to be edited as well somehow, add cta for */}
 								{capsuleFormData.cover_art ? (
 									<img
 										className="add-edit-capsule__cover-art"
@@ -355,7 +369,7 @@ function AddEditCapsulePage() {
 							resourceType="capsule"
 							showIcons={true}
 						/>
-					) : editMatch && isCapsuleEditable ? (
+					) : editMatch && isFormEditable ? (
 						<MainHeading
 							headingType="custom-editable"
 							title={capsuleFormData.title}
@@ -411,7 +425,7 @@ function AddEditCapsulePage() {
 				setIsModalOpen={setIsDeleteModalOpen}
 				capsuleTitle={capsuleFormData.title}
 			/>
-			<MemoryModal memoryTitle={`Lorem Ipsum Test`} />
+			<MemoryModal fetchCapsule={fetchCapsule} />
 		</main>
 	);
 }

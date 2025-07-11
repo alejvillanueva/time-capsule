@@ -1,5 +1,6 @@
 import "./MemoryCard.scss";
 import { Memory } from "../../interfaces/index";
+import useAppContext from "../../context/useAppContext";
 
 interface MemoryCardProps {
 	cardType: "add" | "memory";
@@ -8,13 +9,20 @@ interface MemoryCardProps {
 }
 
 function MemoryCard({ cardType, handleModalClick, memory }: MemoryCardProps) {
+	const { setMemoryModalMode } = useAppContext();
+
+	const handleCardClick = (mode: "add" | "edit" | "read" | null) => {
+		if (handleModalClick) handleModalClick();
+		setMemoryModalMode(mode);
+	};
+
 	return (
 		<>
 			{cardType === "add" && (
 				<li
 					className="memory-card memory-card--add"
 					data-type="add"
-					onClick={handleModalClick}
+					onClick={() => handleCardClick("add")}
 				>
 					<div className="memory-card__container memory-card__container--add">
 						<div className="memory-card__icon-container">
@@ -40,7 +48,7 @@ function MemoryCard({ cardType, handleModalClick, memory }: MemoryCardProps) {
 				<li
 					className="memory-card"
 					data-type="memory"
-					onClick={handleModalClick}
+					onClick={() => handleCardClick("read")}
 				>
 					<div className="memory-card__container">
 						<div className="memory-card__card-container">
