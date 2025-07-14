@@ -7,7 +7,7 @@ import {
 	useNavigate,
 	useParams,
 } from "react-router-dom";
-import { deleteCapsule } from "../../services/index";
+import { deleteCapsule, deleteMemory } from "../../services/index";
 
 interface MainHeadingProps {
 	headingType: "default" | "custom" | "custom-editable" | "custom-carousel";
@@ -19,6 +19,7 @@ interface MainHeadingProps {
 	memoryCount?: number;
 	currentSlide?: number;
 	buttonTitle?: string;
+	memoryId?: number;
 }
 
 function MainHeading({
@@ -31,8 +32,16 @@ function MainHeading({
 	memoryCount,
 	currentSlide = 0,
 	buttonTitle,
+	memoryId,
 }: MainHeadingProps) {
-	const { setIsFormEditable } = useAppContext();
+	const {
+		setIsFormEditable,
+		setMemoryModalMode,
+		isModalOpen,
+		setIsModalOpen,
+		isDeleteModalOpen,
+		setIsDeleteModalOpen,
+	} = useAppContext();
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
 	const { capsuleId } = useParams();
@@ -41,9 +50,18 @@ function MainHeading({
 
 	const handleConfirmDeleteClick = async () => {
 		try {
-			const deleteStatus = await deleteCapsule(Number(capsuleId));
+			if (isModalOpen && isDeleteModalOpen) {
+				const deleteStatus = await deleteMemory(Number(memoryId));
 
-			if (deleteStatus === 204) navigate("/");
+				if (deleteStatus === 204) {
+					setIsDeleteModalOpen(false);
+					setIsModalOpen(false);
+				}
+			} else if (!isModalOpen) {
+				const deleteStatus = await deleteCapsule(Number(capsuleId));
+
+				if (deleteStatus === 204) navigate("/");
+			}
 		} catch (error) {
 			console.error("Deleting capsule error:", error);
 		}
@@ -70,7 +88,11 @@ function MainHeading({
 								aria-label={`Cancel ${resourceType} form creation`}
 								title="Cancel"
 								onClick={() => {
-									addMatch ? navigate("/") : navigate(-1);
+									addMatch
+										? navigate("/")
+										: isModalOpen
+											? setIsModalOpen(false)
+											: navigate(-1);
 								}}
 							>
 								<svg
@@ -155,7 +177,10 @@ function MainHeading({
 							type="button"
 							aria-label={`Edit ${resourceType} form`}
 							title="Edit"
-							onClick={() => setIsFormEditable(true)}
+							onClick={() => {
+								setIsFormEditable(true);
+								setMemoryModalMode("edit");
+							}}
 						>
 							<svg
 								className="main-heading__icon"
@@ -223,7 +248,10 @@ function MainHeading({
 							type="button"
 							aria-label={`Cancel ${resourceType} form modifications`}
 							title="Cancel"
-							onClick={() => setIsFormEditable(false)}
+							onClick={() => {
+								setIsFormEditable(false);
+								setMemoryModalMode("read");
+							}}
 						>
 							<svg
 								className="main-heading__icon"

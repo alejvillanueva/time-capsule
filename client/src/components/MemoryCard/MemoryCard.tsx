@@ -1,18 +1,27 @@
 import "./MemoryCard.scss";
+import { Dispatch, SetStateAction } from "react";
 import { Memory } from "../../interfaces/index";
 import useAppContext from "../../context/useAppContext";
 
 interface MemoryCardProps {
 	cardType: "add" | "memory";
 	handleModalClick?: () => void;
+	setCurrentMemoryId?: Dispatch<SetStateAction<number | null>>;
 	memory?: Memory;
 }
 
-function MemoryCard({ cardType, handleModalClick, memory }: MemoryCardProps) {
+function MemoryCard({
+	cardType,
+	handleModalClick,
+	setCurrentMemoryId,
+	memory,
+}: MemoryCardProps) {
 	const { setMemoryModalMode } = useAppContext();
 
 	const handleCardClick = (mode: "add" | "edit" | "read" | null) => {
 		if (handleModalClick) handleModalClick();
+		if (mode !== "add" && memory?.id && setCurrentMemoryId)
+			setCurrentMemoryId(() => Number(memory.id));
 		setMemoryModalMode(mode);
 	};
 

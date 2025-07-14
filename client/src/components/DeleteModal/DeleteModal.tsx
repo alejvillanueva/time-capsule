@@ -1,19 +1,26 @@
 import "./DeleteModal.scss";
 import MainHeading from "../MainHeading/MainHeading";
-import useAppContext from "../../context/useAppContext";
 import ReactModal from "react-modal";
+import { Medium } from "../../interfaces/Memory";
+import useAppContext from "../../context/useAppContext";
 
 interface DeleteModalProps {
-	capsuleTitle: string;
-	isModalOpen: boolean;
-	setIsModalOpen: (value: boolean) => void;
+	resourceType: "capsule" | "memory";
+	title: string;
+	medium?: Medium;
+	id?: number;
+	handleDeleteModalClick?: () => void;
 }
 
 function DeleteModal({
-	capsuleTitle,
-	isModalOpen,
-	setIsModalOpen,
+	resourceType,
+	title,
+	medium,
+	id,
+	handleDeleteModalClick,
 }: DeleteModalProps) {
+	const { isDeleteModalOpen, setIsDeleteModalOpen } = useAppContext();
+
 	const rootElement = document.getElementById("root");
 
 	if (rootElement) {
@@ -25,10 +32,10 @@ function DeleteModal({
 	return (
 		<ReactModal
 			className="delete-modal"
-			isOpen={isModalOpen}
+			isOpen={isDeleteModalOpen}
 			shouldCloseOnEsc={true}
 			onRequestClose={() => {
-				setIsModalOpen(false);
+				setIsDeleteModalOpen(false);
 			}}
 			role={"dialog"}
 			aria-labelledby="modal-heading"
@@ -39,7 +46,7 @@ function DeleteModal({
 					alignItems: "center",
 					background: "rgba(230, 230, 230, 0.8)",
 					outline: "none",
-					zIndex: 100,
+					zIndex: 500,
 				},
 			}}
 		>
@@ -53,7 +60,7 @@ function DeleteModal({
 				strokeLinecap="round"
 				strokeLinejoin="round"
 				onClick={() => {
-					setIsModalOpen(false);
+					setIsDeleteModalOpen(false);
 				}}
 			>
 				<path d="M18 6 6 18" />
@@ -75,20 +82,25 @@ function DeleteModal({
 					<path d="M12 17h.01" />
 				</svg>
 				<p className="delete-modal__text text-body">
-					Are you sure you want to delete the
-					<span className="delete-modal__text--bold"> {capsuleTitle} </span>
-					capsule? This will permanently delete the capsule and cannot be
-					undone.
+					Are you sure you want to delete the{" "}
+					{resourceType === "memory" && (
+						<span className="delete-modal__text--bold">{medium + " "}</span>
+					)}
+					{resourceType} authored by
+					<span className="delete-modal__text--bold"> {title} </span>? This will
+					permanently delete the {resourceType} and cannot be undone.
 				</p>
 			</div>
 
 			<MainHeading
 				headingType="default"
-				title="Delete Capsule"
+				title={`Delete ${resourceType}`}
 				h2={true}
 				showIcons={true}
-				resourceType="capsule"
+				resourceType={resourceType}
 				buttonTitle="Delete"
+				memoryId={id}
+				handleModalClick={handleDeleteModalClick}
 			/>
 		</ReactModal>
 	);

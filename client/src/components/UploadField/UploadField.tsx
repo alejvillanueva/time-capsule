@@ -21,6 +21,7 @@ function UploadField({
 }: UploadFieldProps) {
 	const hiddenInputRef = useRef<HTMLInputElement | null>(null);
 	const { getRootProps, getInputProps, acceptedFiles } = useDropzone({
+		// TODO: change accepted types conditionally based on medium of upload field ("image" versus "video")
 		accept: acceptedTypes || {
 			"image/png": [".png"],
 			"image/jpeg": [".jpg", ".jpeg"],
@@ -42,6 +43,7 @@ function UploadField({
 			<label className="upload-field__label text-label" htmlFor={uploadId}>
 				{uploadLabel}
 			</label>
+			{/* TODO: add state and styling for when image is uploaded, but upload field is available, refer to AddEditCapsulePage + MemoryModal components */}
 			<div
 				className="upload-field__drop-zone"
 				role="button"
@@ -77,6 +79,7 @@ function UploadField({
 							.trim()})`}
 					</p>
 				) : (
+					// TODO: change accepted types conditionally based on medium of upload field ("image" versus "video")
 					<p className="upload-field__drop-text upload-field__drop-text--light text-body">
 						(jpg, jpeg, png, webp)
 					</p>

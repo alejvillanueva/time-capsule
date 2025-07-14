@@ -8,13 +8,14 @@
 	margin-top: 7.2813rem;
 	padding: 6rem;
 	background: $white;
-	overflow-y: scroll;
+	overflow-y: auto;
 
 	&__container {
 		@include flexbox(column, unset, unset);
 
 		width: 100%;
 		overflow: auto;
+		aspect-ratio: 40 / 31;
 	}
 
 	&__filler {
@@ -39,5 +40,33 @@
 		right: 1.5rem;
 		width: 1.5rem;
 		cursor: pointer;
+	}
+
+	&__image {
+		display: block;
+		height: 100%;
+		object-fit: contain;
+	}
+
+	&__label {
+		margin-bottom: $spacing-sm;
+	}
+
+	&__media-container {
+		@include flexbox(row, center, center);
+
+		max-width: 30rem;
+		aspect-ratio: 40 / 31;
+		background: $grey-light;
+		font-size: $font-size-dt-sm;
+		text-transform: uppercase;
+		overflow: hidden;
+	}
+
+	&__video {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
 	}
 }

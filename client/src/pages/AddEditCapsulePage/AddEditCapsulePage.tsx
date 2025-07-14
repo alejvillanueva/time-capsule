@@ -42,14 +42,14 @@ function AddEditCapsulePage() {
 		setIsFormEditable,
 		isModalOpen,
 		setIsModalOpen,
-		setMemoryModal,
+		isDeleteModalOpen,
+		setIsDeleteModalOpen,
 		uploadedFile,
 		setUploadedFile,
 		memoryModalMode,
-		// setMemoryModalMode,
 	} = useAppContext();
 
-	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+	const [currentMemoryId, setCurrentMemoryId] = useState<number | null>(null);
 	const [capsuleFormData, setCapsuleFormData] = useState<CapsuleWithMemories>({
 		author: "",
 		cover_art: "",
@@ -105,7 +105,7 @@ function AddEditCapsulePage() {
 
 	useEffect(() => {
 		if (capsuleId) fetchCapsule(Number(capsuleId));
-	}, [capsuleId]);
+	}, [capsuleId, isModalOpen, isDeleteModalOpen]);
 
 	const editCapsule = async (capsule: CapsuleWithMemories) => {
 		try {
@@ -276,6 +276,7 @@ function AddEditCapsulePage() {
 		<main className="add-edit-capsule">
 			<form className="add-edit-capsule__form" onSubmit={handleCapsuleSubmit}>
 				<div className="add-edit-capsule__form-container">
+					{/* TODO: add state and styling for when image is uploaded, but upload field is available */}
 					{addMatch && (
 						<UploadField
 							uploadLabel="Cover Art"
@@ -405,6 +406,7 @@ function AddEditCapsulePage() {
 									key={i}
 									cardType="memory"
 									handleModalClick={handleMemoryModalClick}
+									setCurrentMemoryId={setCurrentMemoryId}
 									memory={memory}
 								/>
 							))}
@@ -420,12 +422,12 @@ function AddEditCapsulePage() {
 					</>
 				)}
 			</div>
-			<DeleteModal
-				isModalOpen={isDeleteModalOpen}
-				setIsModalOpen={setIsDeleteModalOpen}
-				capsuleTitle={capsuleFormData.title}
+			<DeleteModal title={capsuleFormData.title} resourceType="capsule" />
+			<MemoryModal
+				fetchCapsule={fetchCapsule}
+				memoryId={currentMemoryId}
+				handleDeleteModalClick={handleDeleteModalClick}
 			/>
-			<MemoryModal fetchCapsule={fetchCapsule} />
 		</main>
 	);
 }

@@ -29,7 +29,7 @@ function InputField({
 	validation,
 	value,
 }: InputFieldProps) {
-	const { isFormEditable, isModalOpen } = useAppContext();
+	const { isFormEditable } = useAppContext();
 
 	// TODO: add form element attributes as needed (e.g. required, maxlength, spellcheck, pattern, etc.)
 	return (
@@ -103,8 +103,9 @@ function InputField({
 						className="input-field__input input-field__input--select"
 						name={inputName}
 						id={inputId}
-						onChange={handleChange}
 						disabled={!isFormEditable}
+						onChange={handleChange}
+						value={value ?? ""}
 					>
 						<option value="">Select a Memory Type</option>
 						<option value="image">Image</option>
@@ -146,6 +147,7 @@ function InputField({
 						placeholder={placeholder}
 						disabled={!isFormEditable}
 						onChange={handleChange}
+						value={value ?? ""}
 					></textarea>
 				</>
 			)}
