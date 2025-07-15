@@ -271,6 +271,12 @@ function AddEditCapsulePage() {
 		};
 	}
 
+	const mediumPriority = {
+		video: 0,
+		image: 1,
+		text: 2,
+	};
+
 	// TODO: add logic to prompt for password when entering edit page (using prompt method), logic must not prompt following capsule creation, however
 
 	return (
@@ -402,15 +408,21 @@ function AddEditCapsulePage() {
 						/>
 						{capsuleFormData.memories &&
 							capsuleFormData.memories[0].author &&
-							capsuleFormData.memories.map((memory, i) => (
-								<MemoryCard
-									key={i}
-									cardType="memory"
-									handleModalClick={handleMemoryModalClick}
-									setCurrentMemoryId={setCurrentMemoryId}
-									memory={memory}
-								/>
-							))}
+							capsuleFormData.memories
+								.sort(
+									(a, b) =>
+										mediumPriority[a.medium] - mediumPriority[b.medium] ||
+										a.author.localeCompare(b.author),
+								)
+								.map((memory, i) => (
+									<MemoryCard
+										key={i}
+										cardType="memory"
+										handleModalClick={handleMemoryModalClick}
+										setCurrentMemoryId={setCurrentMemoryId}
+										memory={memory}
+									/>
+								))}
 					</ul>
 				</>
 			)}
