@@ -19,7 +19,12 @@ function DeleteModal({
 	id,
 	handleDeleteModalClick,
 }: DeleteModalProps) {
-	const { isDeleteModalOpen, setIsDeleteModalOpen } = useAppContext();
+	const {
+		isDeleteModalOpen,
+		setIsDeleteModalOpen,
+		isMemoryDeleteModalOpen,
+		setIsMemoryDeleteModalOpen,
+	} = useAppContext();
 
 	const rootElement = document.getElementById("root");
 
@@ -32,10 +37,16 @@ function DeleteModal({
 	return (
 		<ReactModal
 			className="delete-modal"
-			isOpen={isDeleteModalOpen}
+			isOpen={
+				resourceType === "memory" && isMemoryDeleteModalOpen
+					? isMemoryDeleteModalOpen
+					: isDeleteModalOpen
+			}
 			shouldCloseOnEsc={true}
 			onRequestClose={() => {
-				setIsDeleteModalOpen(false);
+				resourceType === "memory" && setIsMemoryDeleteModalOpen
+					? setIsMemoryDeleteModalOpen(false)
+					: setIsDeleteModalOpen(false);
 			}}
 			role={"dialog"}
 			aria-labelledby="modal-heading"
@@ -60,7 +71,9 @@ function DeleteModal({
 				strokeLinecap="round"
 				strokeLinejoin="round"
 				onClick={() => {
-					setIsDeleteModalOpen(false);
+					resourceType === "memory" && setIsMemoryDeleteModalOpen
+						? setIsMemoryDeleteModalOpen(false)
+						: setIsDeleteModalOpen(false);
 				}}
 			>
 				<path d="M18 6 6 18" />
@@ -86,7 +99,7 @@ function DeleteModal({
 					{resourceType === "memory" && (
 						<span className="delete-modal__text--bold">{medium + " "}</span>
 					)}
-					{resourceType} authored by
+					{resourceType === "memory" && `${resourceType} authored by`}
 					<span className="delete-modal__text--bold"> {title} </span>? This will
 					permanently delete the {resourceType} and cannot be undone.
 				</p>

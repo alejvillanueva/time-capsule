@@ -56,11 +56,11 @@
 		@include flexbox(row, center, center);
 
 		max-width: 30rem;
-		aspect-ratio: 40 / 31;
 		background: $grey-light;
 		font-size: $font-size-dt-sm;
 		text-transform: uppercase;
 		overflow: hidden;
+		aspect-ratio: 40 / 31;
 	}
 
 	&__video {

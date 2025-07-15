@@ -109,10 +109,7 @@ function MemoryModal({
 
 	const editMemory = async (memory: Memory) => {
 		try {
-			// Remove "id" property during PUT request
-			const { id, ...editReadyMemory } = memory;
-
-			await updateMemory(editReadyMemory);
+			await updateMemory(memory);
 
 			fetchCapsule(Number(capsuleId));
 			fetchMemory(Number(memoryId) ?? Number(memory.id));
@@ -133,7 +130,7 @@ function MemoryModal({
 				message: "",
 				url: "",
 			});
-	}, [isModalOpen, memoryModalMode]);
+	}, [isModalOpen, memoryModalMode, memoryId]);
 
 	const handleMemoryChange = (
 		e: React.ChangeEvent<
@@ -438,13 +435,15 @@ function MemoryModal({
 					</div>
 				</form>
 			</ReactModal>
-			<DeleteModal
-				title={memoryFormData.author}
-				medium={memoryFormData.medium || undefined}
-				id={memoryFormData.id || undefined}
-				resourceType="memory"
-				handleDeleteModalClick={handleDeleteModalClick}
-			/>
+			{memoryId && memoryFormData.author && memoryFormData.medium && (
+				<DeleteModal
+					title={memoryFormData.author}
+					medium={memoryFormData.medium}
+					id={memoryFormData.id || undefined}
+					resourceType="memory"
+					handleDeleteModalClick={handleDeleteModalClick}
+				/>
+			)}
 		</>
 	);
 }

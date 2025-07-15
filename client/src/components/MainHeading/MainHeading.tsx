@@ -39,28 +39,34 @@ function MainHeading({
 		setMemoryModalMode,
 		isModalOpen,
 		setIsModalOpen,
-		isDeleteModalOpen,
 		setIsDeleteModalOpen,
+		memoryModalMode,
+		isMemoryDeleteModalOpen,
+		setIsMemoryDeleteModalOpen,
 	} = useAppContext();
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
 	const { capsuleId } = useParams();
 
 	const addMatch = matchPath("/capsule/add", pathname);
+	const editMatch = matchPath("/capsule/:capsuleId/edit", pathname);
 
 	const handleConfirmDeleteClick = async () => {
 		try {
-			if (isModalOpen && isDeleteModalOpen) {
+			if (isModalOpen && isMemoryDeleteModalOpen) {
 				const deleteStatus = await deleteMemory(Number(memoryId));
 
 				if (deleteStatus === 204) {
-					setIsDeleteModalOpen(false);
+					setIsMemoryDeleteModalOpen(false);
 					setIsModalOpen(false);
 				}
 			} else if (!isModalOpen) {
 				const deleteStatus = await deleteCapsule(Number(capsuleId));
 
-				if (deleteStatus === 204) navigate("/");
+				if (deleteStatus === 204) {
+					setIsDeleteModalOpen(false);
+					navigate("/");
+				}
 			}
 		} catch (error) {
 			console.error("Deleting capsule error:", error);
@@ -178,7 +184,12 @@ function MainHeading({
 							aria-label={`Edit ${resourceType} form`}
 							title="Edit"
 							onClick={() => {
-								setIsFormEditable(true);
+								if (
+									(isModalOpen && memoryModalMode === "read") ||
+									(editMatch && !isModalOpen)
+								)
+									setIsFormEditable(true);
+
 								setMemoryModalMode("edit");
 							}}
 						>

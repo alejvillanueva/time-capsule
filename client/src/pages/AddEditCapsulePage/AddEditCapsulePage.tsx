@@ -47,6 +47,8 @@ function AddEditCapsulePage() {
 		uploadedFile,
 		setUploadedFile,
 		memoryModalMode,
+		isMemoryDeleteModalOpen,
+		setIsMemoryDeleteModalOpen,
 	} = useAppContext();
 
 	const [currentMemoryId, setCurrentMemoryId] = useState<number | null>(null);
@@ -60,7 +62,6 @@ function AddEditCapsulePage() {
 		title: "",
 		updated_on: new Date(),
 	});
-
 	const [capsuleErrors, setCapsuleErrors] = useState<CapsuleErrors>({
 		author: false,
 		cover_art: false,
@@ -87,6 +88,7 @@ function AddEditCapsulePage() {
 					updated_on: false,
 				});
 				navigate(`/capsule/${newCapsule[0].id}/edit`);
+				alert("Capsule created successfully!");
 			}
 		} catch (error) {
 			console.error("Adding capsule error:", error);
@@ -128,23 +130,22 @@ function AddEditCapsulePage() {
 
 	useEffect(() => {
 		// Always allow form editing on add capsule path (vs. having disabled input fields)
-		addMatch ? setIsFormEditable(true) : setIsFormEditable(false);
+		if (addMatch) setIsFormEditable(true);
 	}, [pathname]);
 
 	useEffect(() => {
-		// Disable (capsule) form editing when memory modal is closed or when memory modal not in "read" mode
-		if (
-			(isModalOpen && memoryModalMode === "add") ||
-			(isModalOpen && memoryModalMode === "edit")
-		) {
-			setIsFormEditable(true);
-		} else {
-			setIsFormEditable(false);
-		}
-	}, [isModalOpen, memoryModalMode]);
+		// 	// Disable (capsule) form editing when memory modal is closed
+		if (!isModalOpen && editMatch) setIsFormEditable(false);
+
+		if (isModalOpen && memoryModalMode === "add") setIsFormEditable(true);
+	}, [isModalOpen]);
 
 	const handleDeleteModalClick = () => {
-		setIsDeleteModalOpen(true);
+		if (isModalOpen) {
+			setIsMemoryDeleteModalOpen(true);
+		} else {
+			setIsDeleteModalOpen(true);
+		}
 	};
 
 	const handleMemoryModalClick = () => {
@@ -422,7 +423,9 @@ function AddEditCapsulePage() {
 					</>
 				)}
 			</div>
-			<DeleteModal title={capsuleFormData.title} resourceType="capsule" />
+			{!isModalOpen && !isMemoryDeleteModalOpen && (
+				<DeleteModal title={capsuleFormData.title} resourceType="capsule" />
+			)}
 			<MemoryModal
 				fetchCapsule={fetchCapsule}
 				memoryId={currentMemoryId}

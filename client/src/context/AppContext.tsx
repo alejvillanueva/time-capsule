@@ -10,6 +10,8 @@ interface AppContextType {
 	setIsModalOpen: (value: boolean) => void;
 	isDeleteModalOpen: boolean;
 	setIsDeleteModalOpen: (value: boolean) => void;
+	isMemoryDeleteModalOpen: boolean;
+	setIsMemoryDeleteModalOpen: (value: boolean) => void;
 	memoryModal: "default" | "custom" | "custom-editable" | null;
 	setMemoryModal: (
 		value: "default" | "custom" | "custom-editable" | null,
@@ -37,6 +39,8 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
 	const [isFormEditable, setIsFormEditable] = useState<boolean>(false);
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+	const [isMemoryDeleteModalOpen, setIsMemoryDeleteModalOpen] =
+		useState<boolean>(false);
 	const [memoryModal, setMemoryModal] = useState<
 		"default" | "custom" | "custom-editable" | null
 	>(null);
@@ -59,6 +63,8 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
 				setIsModalOpen,
 				isDeleteModalOpen,
 				setIsDeleteModalOpen,
+				isMemoryDeleteModalOpen,
+				setIsMemoryDeleteModalOpen,
 				memoryModal,
 				setMemoryModal,
 				openDate,
