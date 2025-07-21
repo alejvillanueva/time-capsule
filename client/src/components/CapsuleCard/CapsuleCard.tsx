@@ -54,7 +54,7 @@ function CapsuleCard({ cardType, data }: CapsuleCardProps) {
 	const handleShareClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 		e.stopPropagation();
-		// UPDATE: uncomment below and edit share link, add notification that it has been successfully copied
+		// TODO: uncomment below and edit share link, add notification that it has been successfully copied
 		// try {
 		// 	navigator.clipboard.writeText(`/capsule/${data?.id}/unlocked`);
 		// } catch (error) {
@@ -144,6 +144,7 @@ function CapsuleCard({ cardType, data }: CapsuleCardProps) {
 										<circle cx="12" cy="19" r="1" />
 									</svg>
 								</button>
+								{/* TODO: add logic to show edit button if edit_by date has not passed */}
 								{isOptionsVisible && (
 									<div className="capsule-card__options" ref={optionRef}>
 										<button

@@ -10,7 +10,7 @@ import { Memory } from "../../interfaces/index";
 
 function UnlockedCapsulePage() {
 	const { capsuleId } = useParams();
-	const { setIsOpen } = useAppContext();
+	const { setIsModalOpen } = useAppContext();
 	const [memories, setMemories] = useState<Memory[]>([]);
 	const [capsuleTitle, setCapsuleTitle] = useState("");
 	const [currentSlide, setCurrentSlide] = useState(0);
@@ -22,7 +22,7 @@ function UnlockedCapsulePage() {
 				setCapsuleTitle(data.title);
 				setMemories(data.memories);
 			} catch (error) {
-				console.error("Error fetching memories:", error);
+				console.error("Fetching memories error:", error);
 			}
 		};
 
@@ -30,7 +30,7 @@ function UnlockedCapsulePage() {
 	}, [capsuleId]);
 
 	const handleModalClick = () => {
-		setIsOpen(true);
+		setIsModalOpen(true);
 	};
 
 	if (memories.length === 0) {

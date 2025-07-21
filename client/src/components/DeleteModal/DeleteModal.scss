@@ -1,13 +1,22 @@
 @use "../../styles/partials/variables" as *;
 @use "../../styles/partials/mixins" as *;
 
-.share-modal {
+.delete-modal {
+	@include flexbox(column, unset, unset);
+
 	position: relative;
+	gap: $spacing-lg;
 	width: auto;
 	max-width: 35rem;
 	height: auto;
 	padding: 6rem;
 	background: $white;
+
+	&__container {
+		@include flexbox(row, unset, flex-start);
+
+		gap: $spacing-md;
+	}
 
 	&__icon {
 		position: absolute;
@@ -17,16 +26,16 @@
 		cursor: pointer;
 	}
 
-	&__social-icon {
-		width: 2rem;
-		cursor: pointer;
+	&__warning-icon {
+		width: 1.5rem;
+		min-width: 1.5rem;
 	}
 
-	&__social-container {
-		@include flexbox(row, center, center);
+	&__text {
+		text-transform: uppercase;
 
-		gap: $spacing-xl;
-		margin-bottom: $spacing-xl;
-		flex-wrap: wrap;
+		&--bold {
+			font-weight: $font-weight-bold;
+		}
 	}
 }

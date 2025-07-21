@@ -1,5 +1,13 @@
 import "./MainHeading.scss";
 import { SelectedSnapDisplay } from "../MemoryCarouselFunctions/MemoryCarouselFunctions";
+import useAppContext from "../../context/useAppContext";
+import {
+	matchPath,
+	useLocation,
+	useNavigate,
+	useParams,
+} from "react-router-dom";
+import { deleteCapsule, deleteMemory } from "../../services/index";
 
 interface MainHeadingProps {
 	headingType: "default" | "custom" | "custom-editable" | "custom-carousel";
@@ -10,6 +18,8 @@ interface MainHeadingProps {
 	handleModalClick?: () => void;
 	memoryCount?: number;
 	currentSlide?: number;
+	buttonTitle?: string;
+	memoryId?: number;
 }
 
 function MainHeading({
@@ -21,7 +31,48 @@ function MainHeading({
 	handleModalClick,
 	memoryCount,
 	currentSlide = 0,
+	buttonTitle,
+	memoryId,
 }: MainHeadingProps) {
+	const {
+		setIsFormEditable,
+		setMemoryModalMode,
+		isModalOpen,
+		setIsModalOpen,
+		setIsDeleteModalOpen,
+		memoryModalMode,
+		isMemoryDeleteModalOpen,
+		setIsMemoryDeleteModalOpen,
+	} = useAppContext();
+	const navigate = useNavigate();
+	const { pathname } = useLocation();
+	const { capsuleId } = useParams();
+
+	const addMatch = matchPath("/capsule/add", pathname);
+	const editMatch = matchPath("/capsule/:capsuleId/edit", pathname);
+
+	const handleConfirmDeleteClick = async () => {
+		try {
+			if (isModalOpen && isMemoryDeleteModalOpen) {
+				const deleteStatus = await deleteMemory(Number(memoryId));
+
+				if (deleteStatus === 204) {
+					setIsMemoryDeleteModalOpen(false);
+					setIsModalOpen(false);
+				}
+			} else if (!isModalOpen) {
+				const deleteStatus = await deleteCapsule(Number(capsuleId));
+
+				if (deleteStatus === 204) {
+					setIsDeleteModalOpen(false);
+					navigate("/");
+				}
+			}
+		} catch (error) {
+			console.error("Deleting capsule error:", error);
+		}
+	};
+
 	return (
 		<>
 			{headingType === "default" && (
@@ -42,6 +93,13 @@ function MainHeading({
 								type="button"
 								aria-label={`Cancel ${resourceType} form creation`}
 								title="Cancel"
+								onClick={() => {
+									addMatch
+										? navigate("/")
+										: isModalOpen
+											? setIsModalOpen(false)
+											: navigate(-1);
+								}}
 							>
 								<svg
 									className="main-heading__icon"
@@ -57,24 +115,47 @@ function MainHeading({
 									<path d="m6 6 12 12" />
 								</svg>
 							</button>
-							<button
-								className="main-heading__button"
-								aria-label={`Submit ${resourceType} form`}
-								title="Submit"
-							>
-								<svg
-									className="main-heading__icon"
-									xmlns="http://www.w3.org/2000/svg"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="#757575"
-									strokeWidth="2"
-									strokeLinecap="round"
-									strokeLinejoin="round"
+							{buttonTitle ? (
+								<button
+									className="main-heading__button"
+									aria-label={`${buttonTitle} ${resourceType}`}
+									title={buttonTitle}
+									type="button"
+									onClick={handleConfirmDeleteClick}
 								>
-									<path d="M20 6 9 17l-5-5" />
-								</svg>
-							</button>
+									<svg
+										className="main-heading__icon"
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="#757575"
+										strokeWidth="2"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+									>
+										<path d="M20 6 9 17l-5-5" />
+									</svg>
+								</button>
+							) : (
+								<button
+									className="main-heading__button"
+									aria-label={`Submit ${resourceType} form`}
+									title="Submit"
+								>
+									<svg
+										className="main-heading__icon"
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="#757575"
+										strokeWidth="2"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+									>
+										<path d="M20 6 9 17l-5-5" />
+									</svg>
+								</button>
+							)}
 						</div>
 					)}
 				</div>
@@ -102,6 +183,15 @@ function MainHeading({
 							type="button"
 							aria-label={`Edit ${resourceType} form`}
 							title="Edit"
+							onClick={() => {
+								if (
+									(isModalOpen && memoryModalMode === "read") ||
+									(editMatch && !isModalOpen)
+								)
+									setIsFormEditable(true);
+
+								setMemoryModalMode("edit");
+							}}
 						>
 							<svg
 								className="main-heading__icon"
@@ -124,6 +214,7 @@ function MainHeading({
 							type="button"
 							aria-label={`Delete ${resourceType}`}
 							title="Delete"
+							onClick={handleModalClick}
 						>
 							<svg
 								className="main-heading__icon"
@@ -168,6 +259,10 @@ function MainHeading({
 							type="button"
 							aria-label={`Cancel ${resourceType} form modifications`}
 							title="Cancel"
+							onClick={() => {
+								setIsFormEditable(false);
+								setMemoryModalMode("read");
+							}}
 						>
 							<svg
 								className="main-heading__icon"
@@ -183,6 +278,7 @@ function MainHeading({
 								<path d="m6 6 12 12" />
 							</svg>
 						</button>
+
 						<button
 							className="main-heading__button"
 							aria-label={`Submit ${resourceType} form`}
@@ -231,6 +327,7 @@ function MainHeading({
 							type="button"
 							aria-label={`Share ${resourceType}`}
 							title="Share"
+							onClick={handleModalClick}
 						>
 							<svg
 								className="main-heading__icon"
@@ -241,7 +338,6 @@ function MainHeading({
 								strokeWidth="2"
 								strokeLinecap="round"
 								strokeLinejoin="round"
-								onClick={handleModalClick}
 							>
 								<circle cx="18" cy="5" r="3" />
 								<circle cx="6" cy="12" r="3" />

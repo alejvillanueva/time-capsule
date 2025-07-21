@@ -1,18 +1,37 @@
 import "./MemoryCard.scss";
+import { Dispatch, SetStateAction } from "react";
+import { Memory } from "../../interfaces/index";
+import useAppContext from "../../context/useAppContext";
 
 interface MemoryCardProps {
 	cardType: "add" | "memory";
 	handleModalClick?: () => void;
+	setCurrentMemoryId?: Dispatch<SetStateAction<number | null>>;
+	memory?: Memory;
 }
 
-function MemoryCard({ cardType, handleModalClick }: MemoryCardProps) {
+function MemoryCard({
+	cardType,
+	handleModalClick,
+	setCurrentMemoryId,
+	memory,
+}: MemoryCardProps) {
+	const { setMemoryModalMode } = useAppContext();
+
+	const handleCardClick = (mode: "add" | "edit" | "read" | null) => {
+		if (handleModalClick) handleModalClick();
+		if (mode !== "add" && memory?.id && setCurrentMemoryId)
+			setCurrentMemoryId(() => Number(memory.id));
+		setMemoryModalMode(mode);
+	};
+
 	return (
 		<>
 			{cardType === "add" && (
 				<li
 					className="memory-card memory-card--add"
 					data-type="add"
-					onClick={handleModalClick}
+					onClick={() => handleCardClick("add")}
 				>
 					<div className="memory-card__container memory-card__container--add">
 						<div className="memory-card__icon-container">
@@ -30,9 +49,7 @@ function MemoryCard({ cardType, handleModalClick }: MemoryCardProps) {
 								<path d="M12 5v14" />
 							</svg>
 						</div>
-						<p className="memory-card__title memory-card__title--add">
-							Create Memory
-						</p>
+						<p className="memory-card__title">Create Memory</p>
 					</div>
 				</li>
 			)}
@@ -40,21 +57,31 @@ function MemoryCard({ cardType, handleModalClick }: MemoryCardProps) {
 				<li
 					className="memory-card"
 					data-type="memory"
-					onClick={handleModalClick}
+					onClick={() => handleCardClick("read")}
 				>
 					<div className="memory-card__container">
 						<div className="memory-card__card-container">
-							{/* add conditional for each media type to show */}
-							<img
-								className="memory-card__image"
-								src="https://blog.adobe.com/en/topics/media_1b0bc6f8d7d4e93986294e9b25e41afd86c6c4822.jpeg?width=750&format=jpeg&optimize=medium"
-								alt=""
-							/>
+							{memory?.url && memory?.medium === "image" ? (
+								<img
+									className="memory-card__image"
+									src={memory?.url}
+									alt={memory?.message ?? `Image authored by ${memory.author}`}
+								/>
+							) : memory?.url && memory?.medium === "video" ? (
+								<video className="memory-card__video" src={memory?.url}></video>
+							) : (
+								<p className="memory-card__message">
+									{memory?.message && memory?.message?.length > 200
+										? memory?.message?.slice(0, 200) + "..."
+										: memory?.message}
+								</p>
+							)}
 						</div>
 						<div className="memory-card__card-container">
-							<h2 className="memory-card__title ">
-								Lorem ipsum dolor sit amet
-							</h2>
+							<h3 className="memory-card__author text-label">
+								{memory?.author}
+							</h3>
+							<p className="memory-card__medium text-label">{memory?.medium}</p>
 						</div>
 					</div>
 				</li>

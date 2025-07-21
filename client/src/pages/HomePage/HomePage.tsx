@@ -14,14 +14,14 @@ function HomePage() {
 				const data = await getAllCapsules();
 				setCapsules(data);
 			} catch (error) {
-				console.error("Error fetching home page capsules:", error);
+				console.error("Fetching home page capsules error:", error);
 			}
 		};
 
 		fetchCapsules();
 	}, []);
 
-	if (capsules && capsules.length === 0) {
+	if (capsules.length === 0) {
 		return <div>Loading home page...</div>;
 	}
 
@@ -29,9 +29,14 @@ function HomePage() {
 		<main className="home">
 			<ul className="home__list">
 				<CapsuleCard cardType="add" />
-				{capsules?.map((capsule, i) => (
-					<CapsuleCard key={i} cardType="capsule" data={capsule} />
-				))}
+				{capsules
+					?.sort(
+						(a, b) =>
+							new Date(a.open_date).getTime() - new Date(b.open_date).getTime(),
+					)
+					.map((capsule, i) => (
+						<CapsuleCard key={i} cardType="capsule" data={capsule} />
+					))}
 			</ul>
 			<div className="home__button-container">
 				<Button buttonText="Sort" />
