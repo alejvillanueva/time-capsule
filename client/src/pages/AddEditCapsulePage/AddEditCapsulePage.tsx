@@ -174,7 +174,7 @@ function AddEditCapsulePage() {
 			// return;
 		} else {
 			const mediaURL = await uploadFile(uploadedFile);
-			console.log("URL", mediaURL);
+			console.log("URL", mediaURL); // MEDIA URL - needs to be added to memoryFormData?
 		}
 
 		setIsFormEditable(false);
@@ -282,7 +282,7 @@ function AddEditCapsulePage() {
 	// TODO: add logic to prompt for password when entering edit page (using prompt method), logic must not prompt following capsule creation, however
 	const uploadMedia = async (files: File[]) => {
 		const file = files[0];
-		setUploadedFile(file); // THIS IS MEDIA URL THAT SHOULD BE SAVED TO BACKEND
+		setUploadedFile(file);
 	};
 	return (
 		<main className="add-edit-capsule">

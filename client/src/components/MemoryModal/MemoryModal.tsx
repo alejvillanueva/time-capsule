@@ -168,7 +168,7 @@ function MemoryModal({
 			// return;
 		} else {
 			const mediaURL = await uploadFile(uploadedFile);
-			console.log("URL", mediaURL);
+			console.log("URL", mediaURL); // MEDIA URL - needs to be added to memoryFormData?
 		}
 
 		if (memoryModalMode === "add") {
