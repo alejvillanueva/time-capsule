@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 import { Memory } from "../../interfaces/index";
 import { Medium } from "../../interfaces/Memory";
 import { createMemory, getMemory, updateMemory } from "../../services/index";
+import { uploadFile } from "../../utils/media";
 
 interface MemoryWithoutMedium extends Omit<Memory, "medium"> {
 	medium: Medium | "";
@@ -93,6 +94,11 @@ function MemoryModal({
 		}
 	};
 
+	const uploadMedia = async (files: File[]) => {
+		const file = files[0];
+		setUploadedFile(file);
+	};
+
 	const fetchMemory = async (id: number) => {
 		try {
 			const [data] = await getMemory(id);
@@ -161,7 +167,8 @@ function MemoryModal({
 			console.log("No file uploaded");
 			// return;
 		} else {
-			console.log("Uploaded file:", uploadedFile[0]);
+			const mediaURL = await uploadFile(uploadedFile);
+			console.log("URL", mediaURL);
 		}
 
 		if (memoryModalMode === "add") {
@@ -339,7 +346,7 @@ function MemoryModal({
 									uploadLabel="Image"
 									uploadId="memory_image"
 									uploadName="url"
-									onFileChange={setUploadedFile}
+									onFileChange={uploadMedia}
 								/>
 							)}
 						{memoryFormData.medium === "image" &&
@@ -366,7 +373,7 @@ function MemoryModal({
 									uploadLabel="Video"
 									uploadId="memory_video"
 									uploadName="url"
-									onFileChange={setUploadedFile}
+									onFileChange={uploadMedia}
 								/>
 							)}
 						{memoryFormData.medium === "video" &&
