@@ -16,6 +16,7 @@ import {
 import { useEffect, useState } from "react";
 import { createCapsule, getCapsule, updateCapsule } from "../../services/index";
 import { Capsule, Memory } from "../../interfaces/index";
+import { uploadFile } from "../../utils/media";
 
 interface CapsuleWithMemories extends Capsule {
 	memories?: Memory[];
@@ -172,7 +173,8 @@ function AddEditCapsulePage() {
 			console.log("No file uploaded");
 			// return;
 		} else {
-			console.log("Uploaded file:", uploadedFile[0]);
+			const mediaURL = await uploadFile(uploadedFile);
+			console.log("URL", mediaURL); // MEDIA URL - needs to be added to memoryFormData?
 		}
 
 		setIsFormEditable(false);
@@ -278,7 +280,10 @@ function AddEditCapsulePage() {
 	};
 
 	// TODO: add logic to prompt for password when entering edit page (using prompt method), logic must not prompt following capsule creation, however
-
+	const uploadMedia = async (files: File[]) => {
+		const file = files[0];
+		setUploadedFile(file);
+	};
 	return (
 		<main className="add-edit-capsule">
 			<form className="add-edit-capsule__form" onSubmit={handleCapsuleSubmit}>
@@ -289,7 +294,7 @@ function AddEditCapsulePage() {
 							uploadLabel="Cover Art"
 							uploadName="cover_art"
 							uploadId="cover_art"
-							onFileChange={setUploadedFile}
+							onFileChange={uploadMedia}
 						/>
 					)}
 					{editMatch && (

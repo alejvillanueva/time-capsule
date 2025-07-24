@@ -20,8 +20,8 @@ interface AppContextType {
 	setOpenDate: (value: Date | null) => void;
 	timeRemaining: number;
 	setTimeRemaining: (value: number) => void;
-	uploadedFile: File[] | null;
-	setUploadedFile: (value: File[] | null) => void;
+	uploadedFile: File | null;
+	setUploadedFile: (value: File | null) => void;
 	currentMemorySlide: number;
 	setCurrentMemorySlide: (value: number) => void;
 	memoryModalMode: "add" | "edit" | "read" | null;
@@ -46,7 +46,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
 	>(null);
 	const [openDate, setOpenDate] = useState<Date | null>(null);
 	const [timeRemaining, setTimeRemaining] = useState<number>(0);
-	const [uploadedFile, setUploadedFile] = useState<File[] | null>(null);
+	const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 	const [currentMemorySlide, setCurrentMemorySlide] = useState<number>(0);
 	const [memoryModalMode, setMemoryModalMode] = useState<
 		"add" | "edit" | "read" | null
