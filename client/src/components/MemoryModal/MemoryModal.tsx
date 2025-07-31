@@ -6,6 +6,8 @@ import DeleteModal from "../DeleteModal/DeleteModal";
 import ReactModal from "react-modal";
 import useAppContext from "../../context/useAppContext";
 import { useEffect, useState } from "react";
+import { FileWithPath } from "react-dropzone";
+
 import { useParams } from "react-router-dom";
 import { Memory } from "../../interfaces/index";
 import { Medium } from "../../interfaces/Memory";
@@ -94,7 +96,7 @@ function MemoryModal({
 		}
 	};
 
-	const uploadMedia = async (files: File[]) => {
+	const uploadMedia = async (files: FileWithPath[]) => {
 		const file = files[0];
 		setUploadedFile(file);
 	};
@@ -168,7 +170,7 @@ function MemoryModal({
 			// return;
 		} else {
 			const mediaURL = await uploadFile(uploadedFile);
-			console.log("URL", mediaURL); // MEDIA URL - needs to be added to memoryFormData?
+			memoryFormData.url = mediaURL;
 		}
 
 		if (memoryModalMode === "add") {
@@ -207,6 +209,8 @@ function MemoryModal({
 				errorStates.author = true;
 			}
 
+			/* TO DO: Fix logic so this checks if a file was upload since a url isn't created until after the submit
+                                - Check if file uploaded is there, then later check valid URL
 			// URL field
 			if (!memoryFormData.url && memoryFormData.medium === "image") {
 				console.error("Missing image file");
@@ -221,6 +225,7 @@ function MemoryModal({
 				alertMessage += "\nInvalid url";
 				errorStates.url = true;
 			}
+      */
 
 			// Optional data
 			if (memoryFormData.message && memoryFormData.message.length < 3) {

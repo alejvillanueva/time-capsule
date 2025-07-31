@@ -1,5 +1,5 @@
 import "./UploadField.scss";
-import { useDropzone } from "react-dropzone";
+import { useDropzone, FileWithPath } from "react-dropzone";
 import { useRef } from "react";
 
 interface UploadFieldProps {
@@ -9,7 +9,7 @@ interface UploadFieldProps {
 	acceptedTypes?: {
 		[key: string]: string[];
 	};
-	onFileChange: (files: File[]) => void;
+	onFileChange: (files: FileWithPath[]) => void;
 }
 
 function UploadField({

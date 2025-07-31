@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { createCapsule, getCapsule, updateCapsule } from "../../services/index";
 import { Capsule, Memory } from "../../interfaces/index";
 import { uploadFile } from "../../utils/media";
+import { FileWithPath } from "react-dropzone";
 
 interface CapsuleWithMemories extends Capsule {
 	memories?: Memory[];
@@ -159,7 +160,6 @@ function AddEditCapsulePage() {
 		>,
 	) => {
 		const { name, value } = e.target;
-
 		setCapsuleFormData({ ...capsuleFormData, [name]: value });
 	};
 
@@ -174,7 +174,7 @@ function AddEditCapsulePage() {
 			// return;
 		} else {
 			const mediaURL = await uploadFile(uploadedFile);
-			console.log("URL", mediaURL); // MEDIA URL - needs to be added to memoryFormData?
+			capsuleFormData.cover_art = mediaURL;
 		}
 
 		setIsFormEditable(false);
@@ -280,7 +280,7 @@ function AddEditCapsulePage() {
 	};
 
 	// TODO: add logic to prompt for password when entering edit page (using prompt method), logic must not prompt following capsule creation, however
-	const uploadMedia = async (files: File[]) => {
+	const uploadMedia = async (files: FileWithPath[]) => {
 		const file = files[0];
 		setUploadedFile(file);
 	};
