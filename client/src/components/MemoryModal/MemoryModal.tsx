@@ -6,6 +6,8 @@ import DeleteModal from "../DeleteModal/DeleteModal";
 import ReactModal from "react-modal";
 import useAppContext from "../../context/useAppContext";
 import { useEffect, useState } from "react";
+import { FileWithPath } from "react-dropzone";
+
 import { useParams } from "react-router-dom";
 import { Memory } from "../../interfaces/index";
 import { Medium } from "../../interfaces/Memory";
@@ -26,7 +28,7 @@ interface MemoryErrors {
 	medium: boolean;
 	author: boolean;
 	message: boolean;
-	url: boolean;
+	file: boolean;
 }
 
 function MemoryModal({
@@ -57,7 +59,7 @@ function MemoryModal({
 		medium: false,
 		author: false,
 		message: false,
-		url: false,
+		file: false,
 	});
 
 	const addMemory = async (memory: MemoryWithoutMedium) => {
@@ -94,7 +96,7 @@ function MemoryModal({
 		}
 	};
 
-	const uploadMedia = async (files: File[]) => {
+	const uploadMedia = async (files: FileWithPath[]) => {
 		const file = files[0];
 		setUploadedFile(file);
 	};
@@ -162,13 +164,13 @@ function MemoryModal({
 
 		if (!validateMemoryForm()) return;
 
-		// TODO: update logic for upload file
-		if (!uploadedFile) {
-			console.log("No file uploaded");
-			// return;
-		} else {
+		if (uploadedFile) {
 			const mediaURL = await uploadFile(uploadedFile);
-			console.log("URL", mediaURL); // MEDIA URL - needs to be added to memoryFormData?
+			if (validateURL(mediaURL)) {
+				memoryFormData.url = mediaURL;
+			} else {
+				return new Error("Error with file - no valid url");
+			}
 		}
 
 		if (memoryModalMode === "add") {
@@ -178,15 +180,20 @@ function MemoryModal({
 		}
 	};
 
+	const validateURL = (url) => {
+		const urlPattern =
+			/^https?:\/\/[^\s/$.?#].[^\s]*\.(jpg|jpeg|png|gif|webp|svg)$/;
+		const isValidURL = urlPattern.test(url);
+		return isValidURL;
+	};
+
 	const validateMemoryForm = () => {
 		const errorStates = {
 			medium: false,
 			author: false,
 			message: false,
-			url: false,
+			file: false,
 		};
-		const urlPattern =
-			/^https?:\/\/[^\s/$.?#].[^\s]*\.(jpg|jpeg|png|gif|webp|svg)$/;
 
 		let alertMessage = "Please revise the following errors before submitting:";
 
@@ -207,19 +214,18 @@ function MemoryModal({
 				errorStates.author = true;
 			}
 
+			//TO DO: Fix logic so this checks if a file was upload since a url isn't created until after the submit
+			///                        - Check if file uploaded is there, then later check valid URL
+
 			// URL field
-			if (!memoryFormData.url && memoryFormData.medium === "image") {
+			if (!uploadedFile && memoryFormData.medium === "image") {
 				console.error("Missing image file");
 				alertMessage += "\nMissing image field";
-				errorStates.url = true;
-			} else if (!memoryFormData.url && memoryFormData.medium === "video") {
+				errorStates.file = true;
+			} else if (!uploadedFile && memoryFormData.medium === "video") {
 				console.error("Missing video file");
 				alertMessage += "\nMissing video field";
-				errorStates.url = true;
-			} else if (memoryFormData.url && urlPattern.test(memoryFormData.url)) {
-				console.error("Invalid url");
-				alertMessage += "\nInvalid url";
-				errorStates.url = true;
+				errorStates.file = true;
 			}
 
 			// Optional data
