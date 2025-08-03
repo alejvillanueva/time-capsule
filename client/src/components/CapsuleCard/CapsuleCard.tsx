@@ -5,20 +5,23 @@ import React, { useEffect, useRef, useState } from "react";
 
 interface CapsuleCardProps {
 	cardType: "add" | "capsule";
-	data?: Capsule;
+	capsuleData?: Capsule;
 }
 
-function CapsuleCard({ cardType, data }: CapsuleCardProps) {
+function CapsuleCard({ cardType, capsuleData }: CapsuleCardProps) {
 	const navigate = useNavigate();
 	const optionRef = useRef<HTMLDivElement | null>(null);
 	const [isOptionsVisible, setIsOptionsVisible] = useState<boolean>(false);
 	let formattedDate;
-	if (data) {
-		formattedDate = new Date(data.open_date).toLocaleDateString("en-GB", {
-			day: "2-digit",
-			month: "short",
-			year: "2-digit",
-		});
+	if (capsuleData) {
+		formattedDate = new Date(capsuleData.open_date).toLocaleDateString(
+			"en-GB",
+			{
+				day: "2-digit",
+				month: "short",
+				year: "2-digit",
+			},
+		);
 	}
 
 	useEffect(() => {
@@ -48,7 +51,11 @@ function CapsuleCard({ cardType, data }: CapsuleCardProps) {
 	const handleEditClick = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 		e.stopPropagation();
-		navigate(`/capsule/${data?.id}/edit`);
+		if (capsuleData?.password) {
+			navigate(`/capsule/${capsuleData?.id}/access`);
+		} else {
+			navigate(`/capsule/${capsuleData?.id}/edit`);
+		}
 	};
 
 	const handleShareClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -56,7 +63,7 @@ function CapsuleCard({ cardType, data }: CapsuleCardProps) {
 		e.stopPropagation();
 		// TODO: uncomment below and edit share link, add notification that it has been successfully copied
 		// try {
-		// 	navigator.clipboard.writeText(`/capsule/${data?.id}/unlocked`);
+		// 	navigator.clipboard.writeText(`/capsule/${capsuleData?.id}/unlocked`);
 		// } catch (error) {
 		// 	console.error("Failed to copy share link:", error);
 		// }
@@ -91,22 +98,22 @@ function CapsuleCard({ cardType, data }: CapsuleCardProps) {
 					</Link>
 				</li>
 			)}
-			{cardType === "capsule" && data && (
+			{cardType === "capsule" && capsuleData && (
 				<li className="capsule-card">
 					<Link
 						className="capsule-card__link"
 						to={
-							new Date() < new Date(data.open_date)
-								? `/capsule/${data.id}/locked`
-								: `/capsule/${data.id}/unlocked`
+							new Date() < new Date(capsuleData.open_date)
+								? `/capsule/${capsuleData.id}/locked`
+								: `/capsule/${capsuleData.id}/unlocked`
 						}
 					>
 						<div className="capsule-card__container">
 							<img
 								className="capsule-card__image"
 								src={
-									data.cover_art
-										? data.cover_art
+									capsuleData.cover_art
+										? capsuleData.cover_art
 										: "https://images.pexels.com/photos/1293120/pexels-photo-1293120.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
 								}
 								alt=""
@@ -120,10 +127,10 @@ function CapsuleCard({ cardType, data }: CapsuleCardProps) {
 								{formattedDate}
 							</time>
 							<small className="capsule-card__author text-label">
-								{data.author}
+								{capsuleData.author}
 							</small>
 							<div className="capsule-card__title-container">
-								<h2 className="capsule-card__title ">{data.title}</h2>
+								<h2 className="capsule-card__title ">{capsuleData.title}</h2>
 								<button
 									className="capsule-card__button capsule-card__button--ellipsis"
 									type="button"
@@ -144,16 +151,17 @@ function CapsuleCard({ cardType, data }: CapsuleCardProps) {
 										<circle cx="12" cy="19" r="1" />
 									</svg>
 								</button>
-								{/* TODO: add logic to show edit button if edit_by date has not passed */}
 								{isOptionsVisible && (
 									<div className="capsule-card__options" ref={optionRef}>
-										<button
-											className="capsule-card__button capsule-card__button--option text-label"
-											type="button"
-											onClick={handleEditClick}
-										>
-											Edit
-										</button>
+										{new Date() < new Date(capsuleData.edit_by) && (
+											<button
+												className="capsule-card__button capsule-card__button--option text-label"
+												type="button"
+												onClick={handleEditClick}
+											>
+												Edit
+											</button>
+										)}
 										<button
 											className="capsule-card__button capsule-card__button--option text-label"
 											type="button"

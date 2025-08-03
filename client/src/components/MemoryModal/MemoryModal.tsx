@@ -256,7 +256,7 @@ function MemoryModal({
 						justifyContent: "center",
 						alignItems: "flex-start",
 						background: "rgba(230, 230, 230, 0.8)",
-						outline: "none",
+						outline: "#d14200",
 						zIndex: 100,
 					},
 				}}

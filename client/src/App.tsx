@@ -6,6 +6,7 @@ import HomePage from "./pages/HomePage/HomePage";
 import LockedCapsulePage from "./pages/LockedCapsulePage/LockedCapsulePage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 import UnlockedCapsulePage from "./pages/UnlockedCapsulePage/UnlockedCapsulePage";
+import PasswordPage from "./pages/PasswordPage/PasswordPage";
 
 function App() {
 	return (
@@ -14,6 +15,7 @@ function App() {
 			<Routes>
 				<Route path="/" element={<HomePage />} />
 				<Route path="/capsule/add" element={<AddEditCapsulePage />} />
+				<Route path="/capsule/:capsuleId/access" element={<PasswordPage />} />
 				<Route
 					path="/capsule/:capsuleId/edit"
 					element={<AddEditCapsulePage />}

@@ -35,7 +35,7 @@ function HomePage() {
 							new Date(a.open_date).getTime() - new Date(b.open_date).getTime(),
 					)
 					.map((capsule, i) => (
-						<CapsuleCard key={i} cardType="capsule" data={capsule} />
+						<CapsuleCard key={i} cardType="capsule" capsuleData={capsule} />
 					))}
 			</ul>
 			<div className="home__button-container">

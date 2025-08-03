@@ -369,7 +369,10 @@ function AddEditCapsulePage() {
 							inputId="capsule
 							_edit_by"
 							handleChange={handleCapsuleChange}
-							validation={{ required: true, isInvalid: capsuleErrors.edit_by }}
+							validation={{
+								required: true,
+								isInvalid: capsuleErrors.edit_by,
+							}}
 							value={formattedDate?.edit_by ? formattedDate.edit_by : ""}
 						/>
 					</div>
