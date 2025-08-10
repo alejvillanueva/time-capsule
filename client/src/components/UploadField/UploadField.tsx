@@ -1,11 +1,12 @@
 import "./UploadField.scss";
 import { useDropzone, FileWithPath } from "react-dropzone";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 interface UploadFieldProps {
 	uploadLabel: string;
 	uploadName: string;
 	uploadId: string;
+	fileUrl?: string;
 	acceptedTypes?: {
 		[key: string]: string[];
 	};
@@ -16,10 +17,12 @@ function UploadField({
 	uploadLabel,
 	uploadName,
 	uploadId,
+	fileUrl,
 	acceptedTypes,
 	onFileChange,
 }: UploadFieldProps) {
 	const hiddenInputRef = useRef<HTMLInputElement | null>(null);
+	const [mediaUrl, setMediaUrl] = useState(fileUrl);
 	const { getRootProps, getInputProps, acceptedFiles } = useDropzone({
 		// TODO: change accepted types conditionally based on medium of upload field ("image" versus "video")
 		accept: acceptedTypes || {
@@ -34,6 +37,11 @@ function UploadField({
 			if (hiddenInputRef.current) {
 				hiddenInputRef.current.files = dataTransfer.files;
 			}
+
+			const media = incomingFile[0];
+			const url = URL.createObjectURL(media);
+			setMediaUrl(url);
+
 			onFileChange(incomingFile);
 		},
 	});
@@ -93,6 +101,7 @@ function UploadField({
 				/>
 				<input {...getInputProps()} />
 			</div>
+			<img src={mediaUrl} style={{ width: "50%" }} />
 		</div>
 	);
 }
