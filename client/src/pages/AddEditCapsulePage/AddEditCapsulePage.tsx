@@ -294,6 +294,7 @@ function AddEditCapsulePage() {
 							uploadLabel="Cover Art"
 							uploadName="cover_art"
 							uploadId="cover_art"
+							fileUrl={capsuleFormData.cover_art}
 							onFileChange={uploadMedia}
 						/>
 					)}

@@ -353,6 +353,7 @@ function MemoryModal({
 									uploadId="memory_image"
 									uploadName="url"
 									onFileChange={uploadMedia}
+									fileUrl={memoryFormData.url || ""}
 								/>
 							)}
 						{memoryFormData.medium === "image" &&
@@ -380,6 +381,7 @@ function MemoryModal({
 									uploadId="memory_video"
 									uploadName="url"
 									onFileChange={uploadMedia}
+									fileUrl={memoryFormData.url || ""}
 								/>
 							)}
 						{memoryFormData.medium === "video" &&
