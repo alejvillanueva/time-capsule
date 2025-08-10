@@ -136,7 +136,7 @@ function AddEditCapsulePage() {
 	}, [pathname]);
 
 	useEffect(() => {
-		// 	// Disable (capsule) form editing when memory modal is closed
+		// Disable (capsule) form editing when memory modal is closed
 		if (!isModalOpen && editMatch) setIsFormEditable(false);
 
 		if (isModalOpen && memoryModalMode === "add") setIsFormEditable(true);
@@ -168,10 +168,8 @@ function AddEditCapsulePage() {
 
 		if (!validateCapsuleForm()) return;
 
-		// TODO: update logic for upload file
 		if (!uploadedFile) {
 			console.log("No file uploaded");
-			// return;
 		} else {
 			const mediaURL = await uploadFile(uploadedFile);
 			capsuleFormData.cover_art = mediaURL;
@@ -279,7 +277,6 @@ function AddEditCapsulePage() {
 		text: 2,
 	};
 
-	// TODO: add logic to prompt for password when entering edit page (using prompt method), logic must not prompt following capsule creation, however
 	const uploadMedia = async (files: FileWithPath[]) => {
 		const file = files[0];
 		setUploadedFile(file);

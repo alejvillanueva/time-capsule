@@ -2,25 +2,26 @@
 @use "../../styles/partials/mixins" as *;
 
 .tooltip {
-	position: relative;
-	visibility: hidden;
 	display: inline-block;
+	position: relative;
 	width: auto;
 	height: auto;
+	visibility: hidden;
 
 	&__text {
-		cursor: default;
-		font-family: Nohemi, Arial, sans-serif;
+		position: absolute;
+		z-index: 100;
 		width: 4rem;
+		padding: $spacing-sm;
+		border-radius: 6px;
 		background-color: $grey-med;
 		color: $black;
 		text-align: center;
-		padding: $spacing-sm;
-		position: absolute;
 		letter-spacing: 0.025rem;
-		border-radius: 6px;
-
-		z-index: 100;
+		transition: opacity 0.5s;
+		cursor: default;
+		opacity: 0;
+		font-family: Nohemi, Arial, sans-serif;
 
 		&--top {
 			bottom: 2rem;
@@ -28,14 +29,14 @@
 			margin-left: -1.4rem;
 
 			&::after {
-				content: " ";
 				position: absolute;
 				top: 100%;
 				left: 50%;
 				margin-left: -5px;
-				border-width: 5px;
-				border-style: solid;
 				border-color: $grey-med transparent transparent transparent;
+				border-style: solid;
+				border-width: 5px;
+				content: " ";
 			}
 		}
 
@@ -44,14 +45,14 @@
 			left: 105%;
 
 			&::after {
-				content: " ";
 				position: absolute;
 				top: 50%;
 				right: 100%;
 				margin-left: -5px;
-				border-width: 5px;
-				border-style: solid;
 				border-color: transparent $grey-med transparent transparent;
+				border-style: solid;
+				border-width: 5px;
+				content: " ";
 			}
 		}
 
@@ -61,14 +62,14 @@
 			margin-left: -1.4rem;
 
 			&::after {
-				content: " ";
 				position: absolute;
 				bottom: 100%;
 				left: 50%;
 				margin-left: -5px;
-				border-width: 5px;
+				border-color: transparent transparent $grey-med;
 				border-style: solid;
-				border-color: transparent transparent $grey-med transparent;
+				border-width: 5px;
+				content: " ";
 			}
 		}
 
@@ -77,14 +78,14 @@
 			right: 105%;
 
 			&::after {
-				content: " ";
 				position: absolute;
 				top: 50%;
 				left: 100%;
 				margin-left: -5px;
-				border-width: 5px;
-				border-style: solid;
 				border-color: transparent transparent transparent $grey-med;
+				border-style: solid;
+				border-width: 5px;
+				content: " ";
 			}
 		}
 	}
@@ -93,5 +94,6 @@
 *:has(> .tooltip) {
 	&:hover .tooltip__text {
 		visibility: visible;
+		opacity: 1;
 	}
 }

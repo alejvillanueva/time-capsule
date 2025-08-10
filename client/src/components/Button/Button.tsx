@@ -1,13 +1,13 @@
 import "./Button.scss";
 
 interface ButtonProps {
-	buttonType?: string;
 	buttonText: string;
+	click?: () => void;
 }
 
-function Button({ buttonType, buttonText }: ButtonProps) {
+function Button({ buttonText, click }: ButtonProps) {
 	return (
-		<button className="button text-label" type="button">
+		<button className="button text-label" type="button" onClick={click}>
 			{buttonText}
 		</button>
 	);
