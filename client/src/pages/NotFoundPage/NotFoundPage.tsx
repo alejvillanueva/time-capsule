@@ -21,6 +21,7 @@ function NotFoundPage() {
 				headingType="default"
 				title="Page Not Found"
 				showIcons={false}
+				resourceType="not found"
 			/>
 			<p className="not-found__text text-body">
 				Nothing here but space dust and forgotten memories... We can't find the

@@ -1,0 +1,97 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.tooltip {
+	position: relative;
+	visibility: hidden;
+	display: inline-block;
+	width: auto;
+	height: auto;
+
+	&__text {
+		cursor: default;
+		font-family: Nohemi, Arial, sans-serif;
+		width: 4rem;
+		background-color: $grey-med;
+		color: $black;
+		text-align: center;
+		padding: $spacing-sm;
+		position: absolute;
+		letter-spacing: 0.025rem;
+		border-radius: 6px;
+
+		z-index: 100;
+
+		&--top {
+			bottom: 2rem;
+			left: 50%;
+			margin-left: -1.4rem;
+
+			&::after {
+				content: " ";
+				position: absolute;
+				top: 100%;
+				left: 50%;
+				margin-left: -5px;
+				border-width: 5px;
+				border-style: solid;
+				border-color: $grey-med transparent transparent transparent;
+			}
+		}
+
+		&--right {
+			top: -$spacing-sm;
+			left: 105%;
+
+			&::after {
+				content: " ";
+				position: absolute;
+				top: 50%;
+				right: 100%;
+				margin-left: -5px;
+				border-width: 5px;
+				border-style: solid;
+				border-color: transparent $grey-med transparent transparent;
+			}
+		}
+
+		&--bottom {
+			top: 0.5rem;
+			left: 50%;
+			margin-left: -1.4rem;
+
+			&::after {
+				content: " ";
+				position: absolute;
+				bottom: 100%;
+				left: 50%;
+				margin-left: -5px;
+				border-width: 5px;
+				border-style: solid;
+				border-color: transparent transparent $grey-med transparent;
+			}
+		}
+
+		&--left {
+			top: -$spacing-sm;
+			right: 105%;
+
+			&::after {
+				content: " ";
+				position: absolute;
+				top: 50%;
+				left: 100%;
+				margin-left: -5px;
+				border-width: 5px;
+				border-style: solid;
+				border-color: transparent transparent transparent $grey-med;
+			}
+		}
+	}
+}
+
+*:has(> .tooltip) {
+	&:hover .tooltip__text {
+		visibility: visible;
+	}
+}

@@ -29,19 +29,19 @@
 		font-family: Nohemi, Arial, sans-serif;
 		outline: none;
 
-		&::-webkit-datetime-edit-day-field,
-		&::-webkit-datetime-edit-month-field,
-		&::-webkit-datetime-edit-year-field {
-			text-transform: uppercase;
-		}
+		// &::-webkit-datetime-edit-day-field,
+		// &::-webkit-datetime-edit-month-field,
+		// &::-webkit-datetime-edit-year-field {
+		// text-transform: uppercase;
+		// }
 
 		&::-webkit-datetime-edit {
 			// TODO: update date input style state when yyyy-mm-dd is displayed
-			// color: $grey-dark;
-			// font-weight: $font-weight-light;
+			color: $grey-dark;
+			font-weight: $font-weight-light;
 
-			color: $black;
-			font-weight: $font-weight-medium;
+			// color: $black;
+			// font-weight: $font-weight-medium;
 		}
 
 		&:focus {
