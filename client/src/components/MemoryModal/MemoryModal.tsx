@@ -254,8 +254,6 @@ function MemoryModal({
 		return true;
 	};
 
-	// TODO: issue submitting video + text as new memory
-
 	return (
 		<>
 			<ReactModal
