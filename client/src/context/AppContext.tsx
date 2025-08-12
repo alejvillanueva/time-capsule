@@ -3,10 +3,10 @@ import { FileWithPath } from "react-dropzone";
 
 // define shape of context
 interface AppContextType {
-	coverArt: string | null;
-	setCoverArt: (value: string | null) => void;
 	isFormEditable: boolean;
 	setIsFormEditable: (value: boolean) => void;
+	isMemoryFormEditable: boolean;
+	setIsMemoryFormEditable: (value: boolean) => void;
 	isModalOpen: boolean;
 	setIsModalOpen: (value: boolean) => void;
 	isDeleteModalOpen: boolean;
@@ -36,8 +36,9 @@ export const AppContext = createContext<AppContextType | undefined>(undefined);
 // create provider component
 // ReactNode -> can be any valid React component (allows anything valid in JSX (e.g. components, text, fragments, arrays, etc.))
 const AppProvider = ({ children }: { children: ReactNode }) => {
-	const [coverArt, setCoverArt] = useState<string | null>(null);
 	const [isFormEditable, setIsFormEditable] = useState<boolean>(false);
+	const [isMemoryFormEditable, setIsMemoryFormEditable] =
+		useState<boolean>(false);
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
 	const [isMemoryDeleteModalOpen, setIsMemoryDeleteModalOpen] =
@@ -56,10 +57,10 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
 	return (
 		<AppContext.Provider
 			value={{
-				coverArt,
-				setCoverArt,
 				isFormEditable,
 				setIsFormEditable,
+				isMemoryFormEditable,
+				setIsMemoryFormEditable,
 				isModalOpen,
 				setIsModalOpen,
 				isDeleteModalOpen,

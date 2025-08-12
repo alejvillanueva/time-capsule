@@ -7,14 +7,13 @@
 	width: 100%;
 
 	&__button-container {
-		@include flexbox(row, flex-end, center);
+		@include flexbox(row, flex-start, center);
 
 		gap: $spacing-md;
 	}
 
 	&__drop-text {
 		font-size: $font-size-dt-sm;
-		// text-transform: uppercase;text-transform
 
 		&--light {
 			color: $grey-dark;
@@ -42,14 +41,23 @@
 		margin-bottom: $spacing-sm;
 	}
 
-	&__preview {
+	&__image {
+		width: 100%;
 		max-width: 30rem;
 		height: 100%;
 		aspect-ratio: 40 / 31;
-		object-fit: cover;
+		object-fit: contain;
+
+		&--cover-art {
+			object-fit: cover;
+
+			& ~ .upload-field__button-container {
+				justify-content: flex-end;
+			}
+		}
 	}
 
-	&__preview-container {
+	&__image-container {
 		@include flexbox(column, unset, unset);
 
 		gap: $spacing-sm;
@@ -63,5 +71,12 @@
 		&:hover {
 			color: $primary;
 		}
+	}
+
+	&__video {
+		width: 100%;
+		height: 100%;
+		aspect-ratio: 40 / 31;
+		object-fit: contain;
 	}
 }

@@ -12,6 +12,7 @@ interface UploadFieldProps {
 		[key: string]: string[];
 	};
 	onFileChange: (files: FileWithPath[]) => void;
+	uploadType: "cover" | "video" | "image";
 }
 
 function UploadField({
@@ -21,10 +22,10 @@ function UploadField({
 	fileUrl,
 	acceptedTypes,
 	onFileChange,
+	uploadType,
 }: UploadFieldProps) {
 	const [mediaUrl, setMediaUrl] = useState(fileUrl);
-	const { getRootProps, getInputProps, acceptedFiles } = useDropzone({
-		// TODO: change accepted types conditionally based on medium of upload field ("image" versus "video")
+	const { getRootProps, getInputProps } = useDropzone({
 		accept: acceptedTypes || {
 			"image/png": [".png"],
 			"image/jpeg": [".jpg", ".jpeg"],
@@ -44,6 +45,8 @@ function UploadField({
 
 	const handleRemoveClick = () => {
 		setMediaUrl("");
+		// TODO: update event handler once removeFile function created
+		// TODO: delete url from database as well
 	};
 
 	return (
@@ -51,10 +54,20 @@ function UploadField({
 			<label className="upload-field__label text-label" htmlFor={uploadId}>
 				{uploadLabel}
 			</label>
-			{/* TODO: add state and styling for when image is uploaded, but upload field is available, refer to AddEditCapsulePage + MemoryModal components */}
 			{mediaUrl ? (
-				<div className="upload-field__preview-container">
-					<img className="upload-field__preview" src={mediaUrl} />
+				<div className="upload-field__image-container">
+					{uploadType === "video" ? (
+						<video
+							className="upload-field__video"
+							src={mediaUrl}
+							controls
+						></video>
+					) : (
+						<img
+							className={`upload-field__image  ${uploadType === "cover" ? "upload-field__image--cover-art" : ""}`}
+							src={mediaUrl}
+						/>
+					)}
 					<div className="upload-field__button-container">
 						<div
 							{...getRootProps({
@@ -113,7 +126,6 @@ function UploadField({
 								.trim()})`}
 						</p>
 					) : (
-						// TODO: change accepted types conditionally based on medium of upload field ("image" versus "video")
 						<p className="upload-field__drop-text upload-field__drop-text--light text-body">
 							(jpg, jpeg, png, webp)
 						</p>

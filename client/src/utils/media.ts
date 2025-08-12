@@ -14,4 +14,6 @@ const uploadFile = async (file: File) => {
 	return url;
 };
 
+// TODO: add removeFile function that deletes from the cloud
+
 export { uploadFile };

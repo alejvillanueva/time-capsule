@@ -30,7 +30,6 @@ function ShareModal() {
 					justifyContent: "center",
 					alignItems: "center",
 					background: "rgba(230, 230, 230, 0.8)",
-					outline: "none",
 					zIndex: 100,
 				},
 			}}

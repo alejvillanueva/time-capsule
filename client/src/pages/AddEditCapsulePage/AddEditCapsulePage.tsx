@@ -19,8 +19,10 @@ import { Capsule, Memory } from "../../interfaces/index";
 import { uploadFile } from "../../utils/media";
 import { FileWithPath } from "react-dropzone";
 
-interface CapsuleWithMemories extends Capsule {
+interface CapsuleWithMemories extends Omit<Capsule, "open_date" | "edit_by"> {
 	memories?: Memory[];
+	edit_by: Date | null;
+	open_date: Date | null;
 }
 
 interface CapsuleErrors {
@@ -38,10 +40,9 @@ function AddEditCapsulePage() {
 	const navigate = useNavigate();
 	const { capsuleId } = useParams();
 	const {
-		coverArt,
-		setCoverArt,
 		isFormEditable,
 		setIsFormEditable,
+		setIsMemoryFormEditable,
 		isModalOpen,
 		setIsModalOpen,
 		isDeleteModalOpen,
@@ -58,8 +59,8 @@ function AddEditCapsulePage() {
 		author: "",
 		cover_art: "",
 		created_on: new Date(),
-		edit_by: new Date(),
-		open_date: new Date(),
+		edit_by: null,
+		open_date: null,
 		password: "",
 		title: "",
 		updated_on: new Date(),
@@ -109,13 +110,20 @@ function AddEditCapsulePage() {
 
 	useEffect(() => {
 		if (capsuleId) fetchCapsule(Number(capsuleId));
-	}, [capsuleId, isModalOpen, isDeleteModalOpen]);
+	}, [capsuleId, isModalOpen, isDeleteModalOpen, isFormEditable]);
 
 	const editCapsule = async (capsule: CapsuleWithMemories) => {
 		try {
 			// Remove "memories" property and update "updated_on" property during PUT request
-			const { memories, ...putReadyCapsule } = capsule;
-			putReadyCapsule.updated_on = new Date();
+			const { memories, ...editedCapsule } = capsule;
+			editedCapsule.updated_on = new Date();
+
+			// Type assertion since validation guarantees these are not null
+			const putReadyCapsule = {
+				...editedCapsule,
+				edit_by: editedCapsule.edit_by as Date,
+				open_date: editedCapsule.open_date as Date,
+			};
 
 			await updateCapsule(putReadyCapsule);
 
@@ -136,10 +144,13 @@ function AddEditCapsulePage() {
 	}, [pathname]);
 
 	useEffect(() => {
-		// Disable (capsule) form editing when memory modal is closed
-		if (!isModalOpen && editMatch) setIsFormEditable(false);
+		// Disable form editing when memory modal is closed
+		if (!isModalOpen && editMatch) {
+			setIsFormEditable(false);
+			setIsMemoryFormEditable(false);
+		}
 
-		if (isModalOpen && memoryModalMode === "add") setIsFormEditable(true);
+		if (isModalOpen && memoryModalMode === "add") setIsMemoryFormEditable(true);
 	}, [isModalOpen]);
 
 	const handleDeleteModalClick = () => {
@@ -175,11 +186,18 @@ function AddEditCapsulePage() {
 			capsuleFormData.cover_art = mediaURL;
 		}
 
+		// Transform the form data to match API expectations
+		const apiReadyCapsule = {
+			...capsuleFormData,
+			edit_by: capsuleFormData.edit_by as Date,
+			open_date: capsuleFormData.open_date as Date,
+		};
+
 		setIsFormEditable(false);
 		if (addMatch) {
-			await addCapsule(capsuleFormData);
+			await addCapsule(apiReadyCapsule);
 		} else {
-			await editCapsule(capsuleFormData);
+			await editCapsule(apiReadyCapsule);
 		}
 	};
 
@@ -228,7 +246,10 @@ function AddEditCapsulePage() {
 			console.error("Invalid open date");
 			alertMessage += "\nInvalid open date";
 			errorStates.open_date = true;
-		} else if (capsuleFormData.edit_by >= capsuleFormData.open_date) {
+		} else if (
+			capsuleFormData.edit_by &&
+			capsuleFormData.edit_by >= capsuleFormData.open_date
+		) {
 			console.error("Open date must follow the edit date");
 			alertMessage += "\nOpen date must follow the edit date";
 			errorStates.edit_by = true;
@@ -262,14 +283,22 @@ function AddEditCapsulePage() {
 		return true;
 	};
 
-	let formattedDate;
+	const formatDate = (date: Date | string | null) => {
+		if (!date) return "";
 
-	if (capsuleFormData.open_date && capsuleFormData.edit_by) {
-		formattedDate = {
-			open_date: capsuleFormData.open_date.toString().slice(0, 10),
-			edit_by: capsuleFormData.edit_by.toString().slice(0, 10),
-		};
-	}
+		if (typeof date === "string") {
+			// If it's a full ISO string, extract just the date part
+			if (date.includes("T")) {
+				return date.split("T")[0];
+			}
+
+			return date;
+		}
+
+		if (date instanceof Date) return date.toISOString().slice(0, 10);
+
+		return "";
+	};
 
 	const mediumPriority = {
 		video: 0,
@@ -285,7 +314,6 @@ function AddEditCapsulePage() {
 		<main className="add-edit-capsule">
 			<form className="add-edit-capsule__form" onSubmit={handleCapsuleSubmit}>
 				<div className="add-edit-capsule__form-container">
-					{/* TODO: add state and styling for when image is uploaded, but upload field is available */}
 					{addMatch && (
 						<UploadField
 							uploadLabel="Cover Art"
@@ -293,23 +321,41 @@ function AddEditCapsulePage() {
 							uploadId="cover_art"
 							fileUrl={capsuleFormData.cover_art}
 							onFileChange={uploadMedia}
+							uploadType="cover"
 						/>
 					)}
 					{editMatch && (
-						<div className="add-edit-capsule__container">
-							<p className="add-edit-capsule__label text-label">Cover Art</p>
-							<div className="add-edit-capsule__cover-art-container text-body">
-								{/* TODO: allow image to be edited as well somehow, add cta for */}
-								{capsuleFormData.cover_art ? (
+						<div className="add-edit-capsule__container add-edit-capsule__container--cover-art text-body">
+							{isFormEditable ? (
+								<UploadField
+									uploadLabel="Cover Art"
+									uploadName="cover_art"
+									uploadId="cover_art"
+									fileUrl={capsuleFormData.cover_art}
+									onFileChange={uploadMedia}
+									uploadType="cover"
+								/>
+							) : !isFormEditable && capsuleFormData.cover_art ? (
+								<>
+									<p className="add-edit-capsule__label text-label">
+										Cover Art
+									</p>
 									<img
 										className="add-edit-capsule__cover-art"
 										src={capsuleFormData.cover_art}
 										alt={`Cover art image for ${capsuleFormData.title}`}
 									/>
-								) : (
-									"No cover art"
-								)}
-							</div>
+								</>
+							) : (
+								<>
+									<p className="add-edit-capsule__label text-label">
+										Cover Art
+									</p>
+									<div className="add-edit-capsule__cover-art-container text-body">
+										No cover art
+									</div>
+								</>
+							)}
 						</div>
 					)}
 					{/* TODO: add hidden input elements to capture date timestamps */}
@@ -347,7 +393,11 @@ function AddEditCapsulePage() {
 								required: true,
 								isInvalid: capsuleErrors.open_date,
 							}}
-							value={formattedDate?.open_date ? formattedDate.open_date : ""}
+							value={
+								capsuleFormData?.open_date
+									? formatDate(capsuleFormData.open_date)
+									: ""
+							}
 						/>
 						<InputField
 							inputType="password"
@@ -368,7 +418,11 @@ function AddEditCapsulePage() {
 							_edit_by"
 							handleChange={handleCapsuleChange}
 							validation={{ required: true, isInvalid: capsuleErrors.edit_by }}
-							value={formattedDate?.edit_by ? formattedDate.edit_by : ""}
+							value={
+								capsuleFormData?.edit_by
+									? formatDate(capsuleFormData.edit_by)
+									: ""
+							}
 						/>
 					</div>
 				</div>

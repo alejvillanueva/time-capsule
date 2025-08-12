@@ -1,5 +1,6 @@
 import "./InputField.scss";
 import useAppContext from "../../context/useAppContext";
+import { useState } from "react";
 
 interface InputFieldProps {
 	inputLabel: string;
@@ -29,7 +30,13 @@ function InputField({
 	validation,
 	value,
 }: InputFieldProps) {
-	const { isFormEditable } = useAppContext();
+	const { isFormEditable, isMemoryFormEditable, isModalOpen } = useAppContext();
+	const [hasDateInput, setHasDateInput] = useState(false);
+
+	const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		handleChange(e);
+		setHasDateInput(e.target.value.length > 0);
+	};
 
 	// TODO: add form element attributes as needed (e.g. required, maxlength, spellcheck, pattern, etc.)
 	return (
@@ -61,14 +68,18 @@ function InputField({
 						</div>
 					)}
 					<input
-						className="input-field__input"
+						className={`input-field__input ${inputType === "date" && (hasDateInput || /\d/.test((value as string) || "")) ? "input-field__input--date-added" : ""}`}
 						type={inputType}
 						name={inputName}
 						id={inputId}
-						min={inputType === "date" ? new Date().toString().slice(0, 10) : ""}
+						min={
+							inputType === "date"
+								? new Date().toISOString().substring(0, 10)
+								: ""
+						}
 						placeholder={placeholder}
-						disabled={!isFormEditable}
-						onChange={handleChange}
+						disabled={!isModalOpen ? !isFormEditable : !isMemoryFormEditable}
+						onChange={inputType === "date" ? handleDateChange : handleChange}
 						value={value ?? ""}
 					/>
 				</>
@@ -103,7 +114,7 @@ function InputField({
 						className="input-field__input input-field__input--select"
 						name={inputName}
 						id={inputId}
-						disabled={!isFormEditable}
+						disabled={!isModalOpen ? !isFormEditable : !isMemoryFormEditable}
 						onChange={handleChange}
 						value={value ?? ""}
 					>
@@ -145,7 +156,7 @@ function InputField({
 						name={inputName}
 						id={inputId}
 						placeholder={placeholder}
-						disabled={!isFormEditable}
+						disabled={!isModalOpen ? !isFormEditable : !isMemoryFormEditable}
 						onChange={handleChange}
 						value={value ?? ""}
 					></textarea>

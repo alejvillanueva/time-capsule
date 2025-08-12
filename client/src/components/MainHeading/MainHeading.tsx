@@ -37,6 +37,7 @@ function MainHeading({
 }: MainHeadingProps) {
 	const {
 		setIsFormEditable,
+		setIsMemoryFormEditable,
 		setMemoryModalMode,
 		isModalOpen,
 		setIsModalOpen,
@@ -184,11 +185,10 @@ function MainHeading({
 							type="button"
 							aria-label={`Edit ${resourceType} form`}
 							onClick={() => {
-								if (
-									(isModalOpen && memoryModalMode === "read") ||
-									(editMatch && !isModalOpen)
-								)
-									setIsFormEditable(true);
+								if (editMatch && !isModalOpen) setIsFormEditable(true);
+
+								if (isModalOpen && memoryModalMode === "read")
+									setIsMemoryFormEditable(true);
 
 								setMemoryModalMode("edit");
 							}}
@@ -260,7 +260,11 @@ function MainHeading({
 							type="button"
 							aria-label={`Cancel ${resourceType} form modifications`}
 							onClick={() => {
-								setIsFormEditable(false);
+								if (!isModalOpen) {
+									setIsFormEditable(false);
+								} else {
+									setIsMemoryFormEditable(false);
+								}
 								setMemoryModalMode("read");
 							}}
 						>

@@ -27,8 +27,9 @@
 	}
 
 	&__cover-art {
-		width: 100%;
+		max-width: 30rem;
 		height: 100%;
+		aspect-ratio: 40 / 31;
 		object-fit: cover;
 	}
 
