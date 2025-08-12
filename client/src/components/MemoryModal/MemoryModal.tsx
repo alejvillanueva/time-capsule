@@ -169,12 +169,16 @@ function MemoryModal({
 
 		if (!validateMemoryForm()) return;
 
-		if (uploadedFile) {
-			const mediaURL = await uploadFile(uploadedFile);
-			if (validateURL(mediaURL)) {
+		if (memoryFormData.medium !== "text" && uploadedFile) {
+			try {
+				const mediaURL = await uploadFile(uploadedFile);
+
+				if (!validateURL(mediaURL)) return;
+
 				memoryFormData.url = mediaURL;
-			} else {
-				return new Error("Error with file - no valid url");
+				fetchMemory(Number(memoryId));
+			} catch (error) {
+				console.error("Error with file - no valid url");
 			}
 		}
 
@@ -187,7 +191,7 @@ function MemoryModal({
 
 	const validateURL = (url: string) => {
 		const urlPattern =
-			/^https?:\/\/[^\s/$.?#].[^\s]*\.(jpg|jpeg|png|gif|webp|svg)$/;
+			/^https?:\/\/[^\/]+\/.*\.(jpg|jpeg|png|gif|webp|svg|webm|ogg|ogv|mov|mp4)(?=$|\?|#)/;
 		const isValidURL = urlPattern.test(url);
 		return isValidURL;
 	};

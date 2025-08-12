@@ -2,6 +2,7 @@ import "./UploadField.scss";
 import { useDropzone, FileWithPath } from "react-dropzone";
 import { useState } from "react";
 import Button from "../Button/Button";
+import useAppContext from "../../context/useAppContext";
 
 interface UploadFieldProps {
 	uploadLabel: string;
@@ -24,6 +25,7 @@ function UploadField({
 	onFileChange,
 	uploadType,
 }: UploadFieldProps) {
+	const { isFormEditable, isMemoryFormEditable } = useAppContext();
 	const [mediaUrl, setMediaUrl] = useState(fileUrl);
 	const { getRootProps, getInputProps } = useDropzone({
 		accept: acceptedTypes || {
@@ -68,26 +70,28 @@ function UploadField({
 							src={mediaUrl}
 						/>
 					)}
-					<div className="upload-field__button-container">
-						<div
-							{...getRootProps({
-								className: "upload-field__replace  text-label",
-								role: "button",
-								tabIndex: 0,
-								"aria-label": "Replace file",
-							})}
-						>
-							Replace
-							<input
-								{...getInputProps({
-									type: "file",
-									name: uploadName,
-									id: uploadId,
+					{(isFormEditable || isMemoryFormEditable) && (
+						<div className="upload-field__button-container">
+							<div
+								{...getRootProps({
+									className: "upload-field__replace text-label",
+									role: "button",
+									tabIndex: 0,
+									"aria-label": "Replace file",
 								})}
-							/>
+							>
+								Replace
+								<input
+									{...getInputProps({
+										type: "file",
+										name: uploadName,
+										id: uploadId,
+									})}
+								/>
+							</div>
+							<Button buttonText="Remove" click={handleRemoveClick} />
 						</div>
-						<Button buttonText="Remove" click={handleRemoveClick} />
-					</div>
+					)}
 				</div>
 			) : (
 				<div
