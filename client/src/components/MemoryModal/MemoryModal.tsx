@@ -43,8 +43,8 @@ function MemoryModal({
 		uploadedFile,
 		setUploadedFile,
 		memoryModalMode,
-		isFormEditable,
-		setIsFormEditable,
+		isMemoryFormEditable,
+		setIsMemoryFormEditable,
 	} = useAppContext();
 	const [memoryFormData, setMemoryFormData] = useState<MemoryWithoutMedium>({
 		author: "",
@@ -86,7 +86,7 @@ function MemoryModal({
 					medium: false,
 					author: false,
 					message: false,
-					url: false,
+					file: false,
 				});
 				fetchCapsule(Number(capsuleId));
 				setIsModalOpen(false);
@@ -121,7 +121,7 @@ function MemoryModal({
 
 			fetchCapsule(Number(capsuleId));
 			fetchMemory(Number(memoryId) ?? Number(memory.id));
-			setIsFormEditable(false);
+			setIsMemoryFormEditable(false);
 		} catch (error) {
 			console.error("Updating memory error:", error);
 		}
@@ -139,6 +139,11 @@ function MemoryModal({
 				url: "",
 			});
 	}, [isModalOpen, memoryModalMode, memoryId]);
+
+	useEffect(() => {
+		if (isModalOpen && memoryModalMode !== "add" && memoryId)
+			fetchMemory(Number(memoryId));
+	}, [isMemoryFormEditable]);
 
 	const handleMemoryChange = (
 		e: React.ChangeEvent<
@@ -164,12 +169,16 @@ function MemoryModal({
 
 		if (!validateMemoryForm()) return;
 
-		if (uploadedFile) {
-			const mediaURL = await uploadFile(uploadedFile);
-			if (validateURL(mediaURL)) {
+		if (memoryFormData.medium !== "text" && uploadedFile) {
+			try {
+				const mediaURL = await uploadFile(uploadedFile);
+
+				if (!validateURL(mediaURL)) return;
+
 				memoryFormData.url = mediaURL;
-			} else {
-				return new Error("Error with file - no valid url");
+				fetchMemory(Number(memoryId));
+			} catch (error) {
+				console.error("Error with file - no valid url");
 			}
 		}
 
@@ -180,9 +189,9 @@ function MemoryModal({
 		}
 	};
 
-	const validateURL = (url) => {
+	const validateURL = (url: string) => {
 		const urlPattern =
-			/^https?:\/\/[^\s/$.?#].[^\s]*\.(jpg|jpeg|png|gif|webp|svg)$/;
+			/^https?:\/\/[^\/]+\/.*\.(jpg|jpeg|png|gif|webp|svg|webm|ogg|ogv|mov|mp4)(?=$|\?|#)/;
 		const isValidURL = urlPattern.test(url);
 		return isValidURL;
 	};
@@ -262,7 +271,6 @@ function MemoryModal({
 						justifyContent: "center",
 						alignItems: "flex-start",
 						background: "rgba(230, 230, 230, 0.8)",
-						outline: "#d14200",
 						zIndex: 100,
 					},
 				}}
@@ -345,7 +353,6 @@ function MemoryModal({
 						{memoryFormData.medium === "" && (
 							<div className="memory-modal__filler"></div>
 						)}
-						{/* TODO: add state and styling for when image is uploaded, but upload field is available */}
 						{memoryFormData.medium === "image" &&
 							(memoryModalMode === "add" || memoryModalMode === "edit") && (
 								<UploadField
@@ -354,24 +361,38 @@ function MemoryModal({
 									uploadName="url"
 									onFileChange={uploadMedia}
 									fileUrl={memoryFormData.url || ""}
+									uploadType="image"
 								/>
 							)}
 						{memoryFormData.medium === "image" &&
 							memoryModalMode === "read" && (
 								<div className="memory-modal__container">
-									<p className="memory-modal__label text-label">Image</p>
-									<div className="memory-modal__media-container text-body">
-										{/* TODO: allow image to be edited as well somehow, add cta for */}
-										{memoryFormData.url ? (
+									{isMemoryFormEditable ? (
+										<UploadField
+											uploadLabel="Image"
+											uploadId="memory_image"
+											uploadName="url"
+											onFileChange={uploadMedia}
+											fileUrl={memoryFormData.url || ""}
+											uploadType="image"
+										/>
+									) : !isMemoryFormEditable && memoryFormData.url ? (
+										<>
+											<p className="memory-modal__label text-label">Image</p>
 											<img
 												className="memory-modal__image"
 												src={memoryFormData.url}
 												alt={`Memory image by ${memoryFormData.author}`}
 											/>
-										) : (
-											"No image selected, please upload an image"
-										)}
-									</div>
+										</>
+									) : (
+										<>
+											<p className="memory-modal__label text-label">Image</p>
+											<div className="memory-modal__media-container text-body">
+												No image selected, please upload an image
+											</div>
+										</>
+									)}
 								</div>
 							)}
 						{memoryFormData.medium === "video" &&
@@ -382,24 +403,50 @@ function MemoryModal({
 									uploadName="url"
 									onFileChange={uploadMedia}
 									fileUrl={memoryFormData.url || ""}
+									uploadType="video"
+									acceptedTypes={{
+										"video/mp4": [".mp4"],
+										"video/webm": [".webm"],
+										"video/ogg": [".ogg", ".ogv"],
+										"video/quicktime": [".mov"],
+									}}
 								/>
 							)}
 						{memoryFormData.medium === "video" &&
 							memoryModalMode === "read" && (
 								<div className="memory-modal__container">
-									<p className="memory-modal__label text-label">Image</p>
-									<div className="memory-modal__media-container text-body">
-										{/* TODO: allow video to be edited as well somehow, add cta for */}
-										{memoryFormData.url ? (
+									{isMemoryFormEditable ? (
+										<UploadField
+											uploadLabel="Video"
+											uploadId="memory_video"
+											uploadName="url"
+											onFileChange={uploadMedia}
+											fileUrl={memoryFormData.url || ""}
+											uploadType="video"
+											acceptedTypes={{
+												"video/mp4": [".mp4"],
+												"video/webm": [".webm"],
+												"video/ogg": [".ogg", ".ogv"],
+												"video/quicktime": [".mov"],
+											}}
+										/>
+									) : !isMemoryFormEditable && memoryFormData.url ? (
+										<>
+											<p className="memory-modal__label text-label">Video</p>
 											<video
 												className="memory-modal__video"
 												src={memoryFormData?.url}
 												controls
 											></video>
-										) : (
-											"No video selected, please upload a video"
-										)}
-									</div>
+										</>
+									) : (
+										<>
+											<p className="memory-modal__label text-label">Video</p>
+											<div className="memory-modal__media-container text-body">
+												No video selected, please upload a video
+											</div>
+										</>
+									)}
 								</div>
 							)}
 						{memoryFormData.medium === "text" && (
@@ -429,7 +476,7 @@ function MemoryModal({
 								resourceType="memory"
 								showIcons={true}
 							/>
-						) : memoryModalMode === "edit" && isFormEditable ? (
+						) : memoryModalMode === "edit" && isMemoryFormEditable ? (
 							<MainHeading
 								headingType="custom-editable"
 								title={`${memoryFormData.author}'s Memory`}

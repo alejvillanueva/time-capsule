@@ -29,29 +29,43 @@
 		font-family: Nohemi, Arial, sans-serif;
 		outline: none;
 
-		&::-webkit-datetime-edit-day-field,
-		&::-webkit-datetime-edit-month-field,
-		&::-webkit-datetime-edit-year-field {
-			text-transform: uppercase;
-		}
-
 		&::-webkit-datetime-edit {
-			// TODO: update date input style state when yyyy-mm-dd is displayed
-			// color: $grey-dark;
-			// font-weight: $font-weight-light;
-
-			color: $black;
-			font-weight: $font-weight-medium;
+			color: $grey-dark;
+			font-weight: $font-weight-light;
 		}
 
 		&:focus {
-			font-weight: $font-weight-medium;
 			border-bottom: 1px solid $primary;
 		}
 
 		&:disabled {
 			background-color: initial;
 			color: $black;
+		}
+
+		// Apply medium weight only for non-date inputs on focus
+		&:focus:not([type="date"]) {
+			font-weight: $font-weight-medium;
+		}
+
+		// Apply medium weight only for date inputs that have the --date-added class
+		&:focus.input-field__input--date-added {
+			font-weight: $font-weight-medium;
+
+			&::-webkit-datetime-edit {
+				color: $black;
+				font-weight: $font-weight-medium;
+			}
+		}
+
+		&--date-added {
+			color: $black;
+			font-weight: $font-weight-regular;
+
+			&::-webkit-datetime-edit {
+				color: $black;
+				font-weight: $font-weight-regular;
+			}
 		}
 
 		&--select {

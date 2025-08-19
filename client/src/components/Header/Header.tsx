@@ -1,15 +1,12 @@
 import "./Header.scss";
-import { Link, matchPath, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function Header() {
 	const { pathname } = useLocation();
 
-	const addMatch = matchPath("/capsule/add", pathname);
-	const editMatch = matchPath("/capsule/:capsuleId/edit", pathname);
-
 	return (
 		<header className="header">
-			{(addMatch || editMatch) && (
+			{pathname !== "/" && (
 				<Link className={`header__link header__link--back text-link`} to="/">
 					<svg
 						className="header__icon"

@@ -8,12 +8,13 @@ import {
 	useParams,
 } from "react-router-dom";
 import { deleteCapsule, deleteMemory } from "../../services/index";
+import Tooltip from "../Tooltip/Tooltip";
 
 interface MainHeadingProps {
 	headingType: "default" | "custom" | "custom-editable" | "custom-carousel";
 	title: string | string[];
 	h2?: boolean;
-	resourceType: "capsule" | "memory";
+	resourceType: "capsule" | "memory" | "not found";
 	showIcons?: boolean;
 	handleModalClick?: () => void;
 	memoryCount?: number;
@@ -36,6 +37,7 @@ function MainHeading({
 }: MainHeadingProps) {
 	const {
 		setIsFormEditable,
+		setIsMemoryFormEditable,
 		setMemoryModalMode,
 		isModalOpen,
 		setIsModalOpen,
@@ -92,7 +94,6 @@ function MainHeading({
 								className="main-heading__button"
 								type="button"
 								aria-label={`Cancel ${resourceType} form creation`}
-								title="Cancel"
 								onClick={() => {
 									addMatch
 										? navigate("/")
@@ -101,6 +102,7 @@ function MainHeading({
 											: navigate(-1);
 								}}
 							>
+								<Tooltip title={"Cancel"} position="bottom" />
 								<svg
 									className="main-heading__icon"
 									xmlns="http://www.w3.org/2000/svg"
@@ -119,10 +121,10 @@ function MainHeading({
 								<button
 									className="main-heading__button"
 									aria-label={`${buttonTitle} ${resourceType}`}
-									title={buttonTitle}
 									type="button"
 									onClick={handleConfirmDeleteClick}
 								>
+									<Tooltip title={buttonTitle} position="bottom" />
 									<svg
 										className="main-heading__icon"
 										xmlns="http://www.w3.org/2000/svg"
@@ -140,8 +142,8 @@ function MainHeading({
 								<button
 									className="main-heading__button"
 									aria-label={`Submit ${resourceType} form`}
-									title="Submit"
 								>
+									<Tooltip title="Submit" position="bottom" />
 									<svg
 										className="main-heading__icon"
 										xmlns="http://www.w3.org/2000/svg"
@@ -182,17 +184,16 @@ function MainHeading({
 							className="main-heading__button"
 							type="button"
 							aria-label={`Edit ${resourceType} form`}
-							title="Edit"
 							onClick={() => {
-								if (
-									(isModalOpen && memoryModalMode === "read") ||
-									(editMatch && !isModalOpen)
-								)
-									setIsFormEditable(true);
+								if (editMatch && !isModalOpen) setIsFormEditable(true);
+
+								if (isModalOpen && memoryModalMode === "read")
+									setIsMemoryFormEditable(true);
 
 								setMemoryModalMode("edit");
 							}}
 						>
+							<Tooltip title={"Edit"} position="bottom" />
 							<svg
 								className="main-heading__icon"
 								xmlns="http://www.w3.org/2000/svg"
@@ -213,9 +214,9 @@ function MainHeading({
 							className="main-heading__button"
 							type="button"
 							aria-label={`Delete ${resourceType}`}
-							title="Delete"
 							onClick={handleModalClick}
 						>
+							<Tooltip title={"Delete"} position="bottom" />
 							<svg
 								className="main-heading__icon"
 								xmlns="http://www.w3.org/2000/svg"
@@ -258,12 +259,16 @@ function MainHeading({
 							className="main-heading__button"
 							type="button"
 							aria-label={`Cancel ${resourceType} form modifications`}
-							title="Cancel"
 							onClick={() => {
-								setIsFormEditable(false);
+								if (!isModalOpen) {
+									setIsFormEditable(false);
+								} else {
+									setIsMemoryFormEditable(false);
+								}
 								setMemoryModalMode("read");
 							}}
 						>
+							<Tooltip title={"Cancel"} position="bottom" />
 							<svg
 								className="main-heading__icon"
 								xmlns="http://www.w3.org/2000/svg"
@@ -282,8 +287,8 @@ function MainHeading({
 						<button
 							className="main-heading__button"
 							aria-label={`Submit ${resourceType} form`}
-							title="Submit"
 						>
+							<Tooltip title={"Submit"} position="bottom" />
 							<svg
 								className="main-heading__icon"
 								xmlns="http://www.w3.org/2000/svg"
@@ -326,9 +331,9 @@ function MainHeading({
 							className="main-heading__button"
 							type="button"
 							aria-label={`Share ${resourceType}`}
-							title="Share"
 							onClick={handleModalClick}
 						>
+							<Tooltip title={"Share"} position="bottom" />
 							<svg
 								className="main-heading__icon"
 								xmlns="http://www.w3.org/2000/svg"
