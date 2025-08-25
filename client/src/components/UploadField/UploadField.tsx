@@ -47,8 +47,6 @@ function UploadField({
 
 	const handleRemoveClick = () => {
 		setMediaUrl("");
-		// TODO: update event handler once removeFile function created
-		// TODO: delete url from database as well
 	};
 
 	return (

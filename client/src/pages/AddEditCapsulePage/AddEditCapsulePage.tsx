@@ -16,7 +16,7 @@ import {
 import { useEffect, useState } from "react";
 import { createCapsule, getCapsule, updateCapsule } from "../../services/index";
 import { Capsule, Memory } from "../../interfaces/index";
-import { uploadFile } from "../../utils/media";
+import { uploadFile, deleteFile } from "../../utils/media";
 import { FileWithPath } from "react-dropzone";
 
 interface CapsuleWithMemories extends Omit<Capsule, "open_date" | "edit_by"> {
@@ -180,7 +180,14 @@ function AddEditCapsulePage() {
 		if (!validateCapsuleForm()) return;
 
 		if (!uploadedFile) {
-			console.log("No file uploaded");
+			if (capsuleFormData.cover_art) {
+				const mediaDeleteStatus = await deleteFile(
+					capsuleFormData.cover_art,
+					"image",
+				);
+
+				if (mediaDeleteStatus === "Success") capsuleFormData.cover_art = "";
+			}
 		} else {
 			const mediaURL = await uploadFile(uploadedFile);
 			capsuleFormData.cover_art = mediaURL;
