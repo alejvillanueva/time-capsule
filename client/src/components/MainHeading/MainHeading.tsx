@@ -8,6 +8,8 @@ import {
 	useParams,
 } from "react-router-dom";
 import { deleteCapsule, deleteMemory } from "../../services/index";
+import { deleteFile } from "../../utils/media";
+import { Medium } from "../../interfaces/Memory";
 import Tooltip from "../Tooltip/Tooltip";
 
 interface MainHeadingProps {
@@ -21,6 +23,9 @@ interface MainHeadingProps {
 	currentSlide?: number;
 	buttonTitle?: string;
 	memoryId?: number;
+	medium?: Medium;
+	url?: string | null;
+	setIsLoading?: (value: boolean) => void;
 }
 
 function MainHeading({
@@ -34,15 +39,18 @@ function MainHeading({
 	currentSlide = 0,
 	buttonTitle,
 	memoryId,
+	medium,
+	url,
+	setIsLoading,
 }: MainHeadingProps) {
 	const {
 		setIsFormEditable,
 		setIsMemoryFormEditable,
+		memoryModalMode,
 		setMemoryModalMode,
 		isModalOpen,
 		setIsModalOpen,
 		setIsDeleteModalOpen,
-		memoryModalMode,
 		isMemoryDeleteModalOpen,
 		setIsMemoryDeleteModalOpen,
 	} = useAppContext();
@@ -61,6 +69,23 @@ function MainHeading({
 				if (deleteStatus === 204) {
 					setIsMemoryDeleteModalOpen(false);
 					setIsModalOpen(false);
+				}
+
+				if (medium && setIsLoading && medium !== "text") {
+					if (url) {
+						try {
+							setIsLoading(true);
+							const mediaDeleteStatus = await deleteFile(url, medium);
+
+							if (mediaDeleteStatus === "Success") {
+								url = "";
+							}
+						} catch (error) {
+							console.error("Error deleting memory media:", error);
+						} finally {
+							setIsLoading(false);
+						}
+					}
 				}
 			} else if (!isModalOpen) {
 				const deleteStatus = await deleteCapsule(Number(capsuleId));

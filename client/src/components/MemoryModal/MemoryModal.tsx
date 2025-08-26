@@ -3,6 +3,7 @@ import InputField from "../InputField/InputField";
 import MainHeading from "../MainHeading/MainHeading";
 import UploadField from "../UploadField/UploadField";
 import DeleteModal from "../DeleteModal/DeleteModal";
+import Loader from "../Loader/Loader";
 import ReactModal from "react-modal";
 import useAppContext from "../../context/useAppContext";
 import { useEffect, useState } from "react";
@@ -12,7 +13,7 @@ import { useParams } from "react-router-dom";
 import { Memory } from "../../interfaces/index";
 import { Medium } from "../../interfaces/Memory";
 import { createMemory, getMemory, updateMemory } from "../../services/index";
-import { uploadFile } from "../../utils/media";
+import { uploadFile, deleteFile } from "../../utils/media";
 
 interface MemoryWithoutMedium extends Omit<Memory, "medium"> {
 	medium: Medium | "";
@@ -46,6 +47,7 @@ function MemoryModal({
 		isMemoryFormEditable,
 		setIsMemoryFormEditable,
 	} = useAppContext();
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [memoryFormData, setMemoryFormData] = useState<MemoryWithoutMedium>({
 		author: "",
 		capsule_id: Number(capsuleId) ?? null,
@@ -169,8 +171,27 @@ function MemoryModal({
 
 		if (!validateMemoryForm()) return;
 
+		if (memoryFormData.medium !== "text" && memoryFormData.url) {
+			try {
+				setIsLoading(true);
+				const mediaDeleteStatus = await deleteFile(
+					memoryFormData.url,
+					memoryFormData.medium,
+				);
+
+				if (mediaDeleteStatus === "Success") {
+					memoryFormData.url = "";
+				}
+			} catch (error) {
+				console.error("Error removing memory media:", error);
+			} finally {
+				setIsLoading(false);
+			}
+		}
+
 		if (memoryFormData.medium !== "text" && uploadedFile) {
 			try {
+				setIsLoading(true);
 				const mediaURL = await uploadFile(uploadedFile);
 
 				if (!validateURL(mediaURL)) return;
@@ -179,6 +200,8 @@ function MemoryModal({
 				fetchMemory(Number(memoryId));
 			} catch (error) {
 				console.error("Error with file - no valid url");
+			} finally {
+				setIsLoading(false);
 			}
 		}
 
@@ -222,9 +245,6 @@ function MemoryModal({
 				alertMessage += "\nAuthor must contain min. 3 characters";
 				errorStates.author = true;
 			}
-
-			//TO DO: Fix logic so this checks if a file was upload since a url isn't created until after the submit
-			///                        - Check if file uploaded is there, then later check valid URL
 
 			// URL field
 			if (!uploadedFile && memoryFormData.medium === "image") {
@@ -275,6 +295,7 @@ function MemoryModal({
 					},
 				}}
 			>
+				{isLoading && <Loader />}
 				<svg
 					className="memory-modal__icon"
 					xmlns="http://www.w3.org/2000/svg"
@@ -501,6 +522,7 @@ function MemoryModal({
 				<DeleteModal
 					title={memoryFormData.author}
 					medium={memoryFormData.medium}
+					url={memoryFormData.url}
 					id={memoryFormData.id || undefined}
 					resourceType="memory"
 					handleDeleteModalClick={handleDeleteModalClick}
