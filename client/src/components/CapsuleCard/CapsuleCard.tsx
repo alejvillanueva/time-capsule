@@ -61,12 +61,24 @@ function CapsuleCard({ cardType, capsuleData }: CapsuleCardProps) {
 	const handleShareClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 		e.stopPropagation();
-		// TODO: uncomment below and edit share link, add notification that it has been successfully copied
-		// try {
-		// 	navigator.clipboard.writeText(`/capsule/${capsuleData?.id}/unlocked`);
-		// } catch (error) {
-		// 	console.error("Failed to copy share link:", error);
-		// }
+
+		const baseURL = window.location.origin;
+
+		try {
+			if (capsuleData?.open_date) {
+				new Date() < new Date(capsuleData.open_date)
+					? navigator.clipboard.writeText(
+							`${baseURL}/capsule/${capsuleData?.id}/locked`,
+						)
+					: navigator.clipboard.writeText(
+							`${baseURL}/capsule/${capsuleData?.id}/unlocked`,
+						);
+
+				alert("Copied link!");
+			}
+		} catch (error) {
+			console.error("Failed to copy share link:", error);
+		}
 	};
 
 	return (
