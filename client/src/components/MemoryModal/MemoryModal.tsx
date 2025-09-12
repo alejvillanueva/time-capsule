@@ -7,7 +7,6 @@ import ReactModal from "react-modal";
 import useAppContext from "../../context/useAppContext";
 import { useEffect, useState } from "react";
 import { FileWithPath } from "react-dropzone";
-
 import { useParams } from "react-router-dom";
 import { Memory } from "../../interfaces/index";
 import { Medium } from "../../interfaces/Memory";
@@ -166,7 +165,6 @@ function MemoryModal({
 
 	const handleMemorySubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-
 		if (!validateMemoryForm()) return;
 
 		if (memoryFormData.medium !== "text" && uploadedFile) {
@@ -222,9 +220,6 @@ function MemoryModal({
 				alertMessage += "\nAuthor must contain min. 3 characters";
 				errorStates.author = true;
 			}
-
-			//TO DO: Fix logic so this checks if a file was upload since a url isn't created until after the submit
-			///                        - Check if file uploaded is there, then later check valid URL
 
 			// URL field
 			if (!uploadedFile && memoryFormData.medium === "image") {
@@ -300,11 +295,11 @@ function MemoryModal({
 								inputId="memory_medium"
 								inputName="medium"
 								handleChange={handleMemoryChange}
-								validation={{ required: false }}
-								value={memoryFormData.medium}
+								validation={{ required: true, isInvalid: memoryErrors.medium }}
+								value={memoryFormData?.medium}
 							/>
-							{(memoryFormData.medium === "image" ||
-								memoryFormData.medium === "video") && (
+							{(memoryFormData?.medium === "image" ||
+								memoryFormData?.medium === "video") && (
 								<>
 									<InputField
 										inputLabel="Author"
@@ -334,7 +329,7 @@ function MemoryModal({
 									/>
 								</>
 							)}
-							{memoryFormData.medium === "text" && (
+							{memoryFormData?.medium === "text" && (
 								<InputField
 									inputLabel="Author"
 									inputType="text"
@@ -350,10 +345,10 @@ function MemoryModal({
 								/>
 							)}
 						</div>
-						{memoryFormData.medium === "" && (
+						{memoryFormData?.medium === "" && (
 							<div className="memory-modal__filler"></div>
 						)}
-						{memoryFormData.medium === "image" &&
+						{memoryFormData?.medium === "image" &&
 							(memoryModalMode === "add" || memoryModalMode === "edit") && (
 								<UploadField
 									uploadLabel="Image"
@@ -364,7 +359,7 @@ function MemoryModal({
 									uploadType="image"
 								/>
 							)}
-						{memoryFormData.medium === "image" &&
+						{memoryFormData?.medium === "image" &&
 							memoryModalMode === "read" && (
 								<div className="memory-modal__container">
 									{isMemoryFormEditable ? (
@@ -395,7 +390,7 @@ function MemoryModal({
 									)}
 								</div>
 							)}
-						{memoryFormData.medium === "video" &&
+						{memoryFormData?.medium === "video" &&
 							(memoryModalMode === "add" || memoryModalMode === "edit") && (
 								<UploadField
 									uploadLabel="Video"
@@ -412,7 +407,7 @@ function MemoryModal({
 									}}
 								/>
 							)}
-						{memoryFormData.medium === "video" &&
+						{memoryFormData?.medium === "video" &&
 							memoryModalMode === "read" && (
 								<div className="memory-modal__container">
 									{isMemoryFormEditable ? (
@@ -449,7 +444,7 @@ function MemoryModal({
 									)}
 								</div>
 							)}
-						{memoryFormData.medium === "text" && (
+						{memoryFormData?.medium === "text" && (
 							<div className="memory-modal__container">
 								<InputField
 									inputLabel="Message"
