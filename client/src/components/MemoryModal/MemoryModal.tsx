@@ -306,7 +306,7 @@ function MemoryModal({
 										inputType="text"
 										inputId="memory_author"
 										inputName="author"
-										placeholder="Type the Author(s) of the Memory"
+										placeholder="Type the author(s) of the memory"
 										handleChange={handleMemoryChange}
 										validation={{
 											required: true,
@@ -319,7 +319,7 @@ function MemoryModal({
 										inputType="textArea"
 										inputId="memory_message"
 										inputName="message"
-										placeholder="Type the Caption"
+										placeholder="Type the caption"
 										handleChange={handleMemoryChange}
 										validation={{
 											required: false,
@@ -335,7 +335,7 @@ function MemoryModal({
 									inputType="text"
 									inputId="memory_author"
 									inputName="author"
-									placeholder="Type the Author(s) of the Memory"
+									placeholder="Type the author(s) of the memory"
 									handleChange={handleMemoryChange}
 									validation={{
 										required: true,
@@ -451,7 +451,7 @@ function MemoryModal({
 									inputType="textArea"
 									inputId="memory_message"
 									inputName="message"
-									placeholder="Type the Message"
+									placeholder="Type the message"
 									handleChange={handleMemoryChange}
 									validation={{
 										required: false,

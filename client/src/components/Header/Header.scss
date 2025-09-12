@@ -3,8 +3,8 @@
 
 .header {
 	@include desktop {
-		max-width: 63rem;
-		padding: $spacing-xxl 0;
+		max-width: 63.25rem;
+		padding: $spacing-xxl 0.25rem;
 	}
 
 	& {
