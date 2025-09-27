@@ -38,7 +38,6 @@ function InputField({
 		setHasDateInput(e.target.value.length > 0);
 	};
 
-	// TODO: add form element attributes as needed (e.g. required, maxlength, spellcheck, pattern, etc.)
 	return (
 		<>
 			{inputType !== "select" && inputType !== "textArea" && (

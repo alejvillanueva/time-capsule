@@ -358,7 +358,6 @@ function AddEditCapsulePage() {
 							)}
 						</div>
 					)}
-					{/* TODO: add hidden input elements to capture date timestamps */}
 					<div className="add-edit-capsule__input-container">
 						<InputField
 							inputType="text"
@@ -484,7 +483,6 @@ function AddEditCapsulePage() {
 				</>
 			)}
 			<div className="add-edit-capsule__button-container">
-				{/* TODO: add conditional to show buttons below if memory card (with cardType="memory") map length is greater than 0 and editMatch is true */}
 				{editMatch && (
 					<>
 						<Button buttonText="Sort" />
