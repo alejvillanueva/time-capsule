@@ -2,21 +2,16 @@
 @use "../../styles/partials/mixins" as *;
 
 .header {
-	@include desktop {
-		max-width: 63.25rem;
-		padding: $spacing-xxl 0.25rem;
-	}
-
-	& {
-		position: fixed;
-		top: 0;
-		right: 0;
-		left: 0;
-		z-index: 3;
-		width: 100%;
-		margin: 0 auto;
-		background: $white;
-	}
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	z-index: 3;
+	width: 100%;
+	max-width: 63.25rem;
+	margin: 0 auto;
+	padding: $spacing-xxl 0.25rem;
+	background: $white;
 
 	&__link {
 		&--back {
@@ -28,17 +23,11 @@
 	}
 
 	&__text {
-		@include tablet {
-			font-size: $font-size-dt-lg;
-		}
-
-		& {
-			color: $black;
-			font-size: $font-size-xl;
-			font-weight: $font-weight-extra-bold;
-			text-align: center;
-			text-transform: uppercase;
-			letter-spacing: $spacing-xs;
-		}
+		color: $black;
+		font-size: $font-size-xl;
+		font-weight: $font-weight-extra-bold;
+		text-align: center;
+		text-transform: uppercase;
+		letter-spacing: $spacing-xs;
 	}
 }

@@ -49,10 +49,8 @@ a {
 }
 
 #root {
-	@include desktop {
-		max-width: 63rem;
-		margin: 0 auto;
-	}
+	max-width: 63rem;
+	margin: 0 auto;
 }
 
 // screen reader only, hidden
