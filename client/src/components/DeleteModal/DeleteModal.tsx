@@ -2,6 +2,7 @@ import "./DeleteModal.scss";
 import MainHeading from "../MainHeading/MainHeading";
 import ReactModal from "react-modal";
 import { Medium } from "../../interfaces/Memory";
+import { Memory } from "../../interfaces/index";
 import useAppContext from "../../context/useAppContext";
 
 interface DeleteModalProps {
@@ -10,6 +11,8 @@ interface DeleteModalProps {
 	medium?: Medium;
 	id?: number;
 	handleDeleteModalClick?: () => void;
+	coverUrl?: string;
+	memories?: Memory[];
 }
 
 function DeleteModal({
@@ -18,6 +21,8 @@ function DeleteModal({
 	medium,
 	id,
 	handleDeleteModalClick,
+	coverUrl,
+	memories,
 }: DeleteModalProps) {
 	const {
 		isDeleteModalOpen,
@@ -113,6 +118,8 @@ function DeleteModal({
 				buttonTitle="Delete"
 				memoryId={id}
 				handleModalClick={handleDeleteModalClick}
+				coverUrl={coverUrl}
+				memories={memories}
 			/>
 		</ReactModal>
 	);

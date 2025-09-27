@@ -493,7 +493,12 @@ function AddEditCapsulePage() {
 				)}
 			</div>
 			{!isModalOpen && !isMemoryDeleteModalOpen && (
-				<DeleteModal title={capsuleFormData.title} resourceType="capsule" />
+				<DeleteModal
+					title={capsuleFormData.title}
+					resourceType="capsule"
+					coverUrl={capsuleFormData.cover_art}
+					memories={capsuleFormData.memories}
+				/>
 			)}
 			<MemoryModal
 				fetchCapsule={fetchCapsule}

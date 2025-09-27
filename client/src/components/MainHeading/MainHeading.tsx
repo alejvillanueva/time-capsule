@@ -1,6 +1,7 @@
 import "./MainHeading.scss";
-import { SelectedSnapDisplay } from "../MemoryCarouselFunctions/MemoryCarouselFunctions";
+import Tooltip from "../Tooltip/Tooltip";
 import useAppContext from "../../context/useAppContext";
+import { SelectedSnapDisplay } from "../MemoryCarouselFunctions/MemoryCarouselFunctions";
 import {
 	matchPath,
 	useLocation,
@@ -8,7 +9,8 @@ import {
 	useParams,
 } from "react-router-dom";
 import { deleteCapsule, deleteMemory } from "../../services/index";
-import Tooltip from "../Tooltip/Tooltip";
+import { deleteFile } from "../../utils/media";
+import { Memory } from "../../interfaces/index";
 
 interface MainHeadingProps {
 	headingType: "default" | "custom" | "custom-editable" | "custom-carousel";
@@ -21,6 +23,8 @@ interface MainHeadingProps {
 	currentSlide?: number;
 	buttonTitle?: string;
 	memoryId?: number;
+	coverUrl?: string;
+	memories?: Memory[];
 }
 
 function MainHeading({
@@ -34,6 +38,8 @@ function MainHeading({
 	currentSlide = 0,
 	buttonTitle,
 	memoryId,
+	coverUrl,
+	memories,
 }: MainHeadingProps) {
 	const {
 		setIsFormEditable,
@@ -63,6 +69,45 @@ function MainHeading({
 					setIsModalOpen(false);
 				}
 			} else if (!isModalOpen) {
+				// Delete uploaded media for capsule memories first
+				if (memories && memories.length > 0) {
+					const capsuleMedia = memories.filter((memory) => memory.url !== "");
+
+					if (capsuleMedia.length > 0) {
+						try {
+							// TODO: uncomment once PRs are merged
+							// setIsLoading(true);
+
+							const deletePromises = capsuleMedia.map((memory) => {
+								if (memory.url) {
+									return deleteFile(memory.url, memory.medium);
+								}
+							});
+
+							const deleteMediaResults = await Promise.all(deletePromises);
+
+							capsuleMedia.forEach((memory, id) => {
+								if (deleteMediaResults[id] === "Success") {
+									memory.url = "";
+								}
+							});
+						} catch (error) {
+							console.error("Error deleting capsule media:", error);
+						} finally {
+							// TODO: uncomment once PRs are merged
+							// setIsLoading(false);
+						}
+					}
+				}
+
+				// Delete uploaded media for capsule cover art second
+				if (coverUrl) {
+					const deleteCover = await deleteFile(coverUrl, "image");
+
+					if (deleteCover === "Success") coverUrl = "";
+				}
+
+				// Delete capsule from database last
 				const deleteStatus = await deleteCapsule(Number(capsuleId));
 
 				if (deleteStatus === 204) {
