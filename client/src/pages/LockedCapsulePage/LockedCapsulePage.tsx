@@ -3,13 +3,12 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getCapsule } from "../../services/index";
 import { Capsule } from "../../interfaces/index";
-import useAppContext from "../../context/useAppContext";
 
 function LockedCapsulePage() {
 	const navigate = useNavigate();
 	const { capsuleId } = useParams();
-	const { openDate, setOpenDate, timeRemaining, setTimeRemaining } =
-		useAppContext();
+	const [openDate, setOpenDate] = useState<Date | null>(null);
+	const [timeRemaining, setTimeRemaining] = useState<number>(0);
 	const [capsule, setCapsule] = useState<Capsule>({
 		author: "",
 		cover_art: "",

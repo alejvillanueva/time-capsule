@@ -17,14 +17,8 @@ interface AppContextType {
 	setMemoryModal: (
 		value: "default" | "custom" | "custom-editable" | null,
 	) => void;
-	openDate: Date | null;
-	setOpenDate: (value: Date | null) => void;
-	timeRemaining: number;
-	setTimeRemaining: (value: number) => void;
 	uploadedFile: FileWithPath | null;
 	setUploadedFile: (value: FileWithPath | null) => void;
-	currentMemorySlide: number;
-	setCurrentMemorySlide: (value: number) => void;
 	memoryModalMode: "add" | "edit" | "read" | null;
 	setMemoryModalMode: (value: "add" | "edit" | "read" | null) => void;
 }
@@ -46,10 +40,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
 	const [memoryModal, setMemoryModal] = useState<
 		"default" | "custom" | "custom-editable" | null
 	>(null);
-	const [openDate, setOpenDate] = useState<Date | null>(null);
-	const [timeRemaining, setTimeRemaining] = useState<number>(0);
 	const [uploadedFile, setUploadedFile] = useState<FileWithPath | null>(null);
-	const [currentMemorySlide, setCurrentMemorySlide] = useState<number>(0);
 	const [memoryModalMode, setMemoryModalMode] = useState<
 		"add" | "edit" | "read" | null
 	>(null);
@@ -69,14 +60,8 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
 				setIsMemoryDeleteModalOpen,
 				memoryModal,
 				setMemoryModal,
-				openDate,
-				setOpenDate,
-				timeRemaining,
-				setTimeRemaining,
 				uploadedFile,
 				setUploadedFile,
-				currentMemorySlide,
-				setCurrentMemorySlide,
 				memoryModalMode,
 				setMemoryModalMode,
 			}}
