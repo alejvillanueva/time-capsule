@@ -1,17 +1,17 @@
 import "./MemoryModal.scss";
+import DeleteModal from "../DeleteModal/DeleteModal";
 import InputField from "../InputField/InputField";
 import MainHeading from "../MainHeading/MainHeading";
 import UploadField from "../UploadField/UploadField";
-import DeleteModal from "../DeleteModal/DeleteModal";
 import ReactModal from "react-modal";
 import useAppContext from "../../context/useAppContext";
-import { useEffect, useState } from "react";
+import { createMemory, getMemory, updateMemory } from "../../services/index";
 import { FileWithPath } from "react-dropzone";
-import { useParams } from "react-router-dom";
 import { Memory } from "../../interfaces/index";
 import { Medium } from "../../interfaces/Memory";
-import { createMemory, getMemory, updateMemory } from "../../services/index";
 import { uploadFile } from "../../utils/media";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 interface MemoryWithoutMedium extends Omit<Memory, "medium"> {
 	medium: Medium | "";

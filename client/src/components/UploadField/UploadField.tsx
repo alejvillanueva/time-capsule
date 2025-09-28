@@ -1,8 +1,8 @@
 import "./UploadField.scss";
-import { useDropzone, FileWithPath } from "react-dropzone";
-import { useState } from "react";
 import Button from "../Button/Button";
 import useAppContext from "../../context/useAppContext";
+import { useDropzone, FileWithPath } from "react-dropzone";
+import { useState } from "react";
 
 interface UploadFieldProps {
 	uploadLabel: string;

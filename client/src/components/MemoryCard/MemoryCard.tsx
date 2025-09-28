@@ -1,7 +1,7 @@
 import "./MemoryCard.scss";
+import useAppContext from "../../context/useAppContext";
 import { Dispatch, SetStateAction } from "react";
 import { Memory } from "../../interfaces/index";
-import useAppContext from "../../context/useAppContext";
 
 interface MemoryCardProps {
 	cardType: "add" | "memory";

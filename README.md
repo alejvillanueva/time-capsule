@@ -48,6 +48,8 @@ Backend:
    ```
    VITE_PRESET_NAME=<your-cloudinary-preset-name>
    VITE_CLOUD_NAME=<your-cloudinary-cloud-name>
+   VITE_CLOUDINARY_API_KEY=<your-cloudinary-api-key>
+   VITE_CLOUDINARY_API_SECRET=<your-cloudinary-api-secret>
    ```
 7. Start the server `npm run dev` and enjoy!
 

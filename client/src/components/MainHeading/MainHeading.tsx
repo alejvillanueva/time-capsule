@@ -1,7 +1,6 @@
 import "./MainHeading.scss";
 import Tooltip from "../Tooltip/Tooltip";
 import useAppContext from "../../context/useAppContext";
-import { SelectedSnapDisplay } from "../MemoryCarouselFunctions/MemoryCarouselFunctions";
 import {
 	matchPath,
 	useLocation,
@@ -11,6 +10,7 @@ import {
 import { deleteCapsule, deleteMemory } from "../../services/index";
 import { deleteFile } from "../../utils/media";
 import { Memory } from "../../interfaces/index";
+import { SelectedSnapDisplay } from "../MemoryCarouselFunctions/MemoryCarouselFunctions";
 
 interface MainHeadingProps {
 	headingType: "default" | "custom" | "custom-editable" | "custom-carousel";

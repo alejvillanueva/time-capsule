@@ -1,8 +1,8 @@
 import "./PasswordPage.scss";
-import MainHeading from "../../components/MainHeading/MainHeading";
 import InputField from "../../components/InputField/InputField";
-import React, { useEffect, useState } from "react";
+import MainHeading from "../../components/MainHeading/MainHeading";
 import useAppContext from "../../context/useAppContext";
+import React, { useEffect, useState } from "react";
 import { getCapsule } from "../../services/index";
 import { useNavigate, useParams } from "react-router-dom";
 

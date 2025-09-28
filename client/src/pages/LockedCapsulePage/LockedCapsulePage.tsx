@@ -1,8 +1,8 @@
 import "./LockedCapsulePage.scss";
+import { Capsule } from "../../interfaces/index";
+import { getCapsule } from "../../services/index";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCapsule } from "../../services/index";
-import { Capsule } from "../../interfaces/index";
 
 function LockedCapsulePage() {
 	const navigate = useNavigate();

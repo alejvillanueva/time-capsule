@@ -1,9 +1,9 @@
 import "./DeleteModal.scss";
 import MainHeading from "../MainHeading/MainHeading";
 import ReactModal from "react-modal";
+import useAppContext from "../../context/useAppContext";
 import { Medium } from "../../interfaces/Memory";
 import { Memory } from "../../interfaces/index";
-import useAppContext from "../../context/useAppContext";
 
 interface DeleteModalProps {
 	resourceType: "capsule" | "memory";

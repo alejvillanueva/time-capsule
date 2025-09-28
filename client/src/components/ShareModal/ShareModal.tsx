@@ -1,7 +1,7 @@
 import "./ShareModal.scss";
+import MainHeading from "../MainHeading/MainHeading";
 import ReactModal from "react-modal";
 import useAppContext from "../../context/useAppContext";
-import MainHeading from "../MainHeading/MainHeading";
 import { useParams } from "react-router-dom";
 
 function ShareModal() {

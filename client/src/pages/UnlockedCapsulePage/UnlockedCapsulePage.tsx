@@ -3,10 +3,10 @@ import MainHeading from "../../components/MainHeading/MainHeading";
 import MemoryCarousel from "../../components/MemoryCarousel/MemoryCarousel";
 import ShareModal from "../../components/ShareModal/ShareModal";
 import useAppContext from "../../context/useAppContext";
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import { getCapsule } from "../../services/index";
 import { Memory } from "../../interfaces/index";
+import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 function UnlockedCapsulePage() {
 	const { capsuleId } = useParams();

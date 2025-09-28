@@ -1,12 +1,16 @@
 import "./AddEditCapsulePage.scss";
 import Button from "../../components/Button/Button";
+import DeleteModal from "../../components/DeleteModal/DeleteModal";
 import InputField from "../../components/InputField/InputField";
 import MainHeading from "../../components/MainHeading/MainHeading";
 import MemoryCard from "../../components/MemoryCard/MemoryCard";
-import UploadField from "../../components/UploadField/UploadField";
 import MemoryModal from "../../components/MemoryModal/MemoryModal";
-import DeleteModal from "../../components/DeleteModal/DeleteModal";
+import UploadField from "../../components/UploadField/UploadField";
 import useAppContext from "../../context/useAppContext";
+import { Capsule, Memory } from "../../interfaces/index";
+import { createCapsule, getCapsule, updateCapsule } from "../../services/index";
+import { FileWithPath } from "react-dropzone";
+import { uploadFile } from "../../utils/media";
 import {
 	useLocation,
 	matchPath,
@@ -14,10 +18,6 @@ import {
 	useParams,
 } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { createCapsule, getCapsule, updateCapsule } from "../../services/index";
-import { Capsule, Memory } from "../../interfaces/index";
-import { uploadFile } from "../../utils/media";
-import { FileWithPath } from "react-dropzone";
 
 interface CapsuleWithMemories extends Omit<Capsule, "open_date" | "edit_by"> {
 	memories?: Memory[];

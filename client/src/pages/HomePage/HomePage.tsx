@@ -1,9 +1,9 @@
 import "./HomePage.scss";
-import CapsuleCard from "../../components/CapsuleCard/CapsuleCard";
 import Button from "../../components/Button/Button";
-import { useEffect, useState } from "react";
-import { getAllCapsules } from "../../services/index";
+import CapsuleCard from "../../components/CapsuleCard/CapsuleCard";
 import { Capsule } from "../../interfaces/index";
+import { getAllCapsules } from "../../services/index";
+import { useEffect, useState } from "react";
 
 function HomePage() {
 	const [capsules, setCapsules] = useState<Capsule[]>([]);
