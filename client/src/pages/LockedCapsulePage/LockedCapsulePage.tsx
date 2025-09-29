@@ -1,11 +1,12 @@
 import "./LockedCapsulePage.scss";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getCapsule } from "../../services/index";
 import { Capsule } from "../../interfaces/index";
 import useAppContext from "../../context/useAppContext";
 
 function LockedCapsulePage() {
+	const navigate = useNavigate();
 	const { capsuleId } = useParams();
 	const { openDate, setOpenDate, timeRemaining, setTimeRemaining } =
 		useAppContext();
@@ -48,8 +49,9 @@ function LockedCapsulePage() {
 					remainingTime = 0;
 					// stops repeating interval started by setInterval
 					clearInterval(countdownInterval);
-					// Temporary alert - remove once links are properly established
+
 					alert("Countdown complete");
+					navigate(`/capsule/${capsuleId}/unlocked`);
 				}
 
 				setTimeRemaining(remainingTime);

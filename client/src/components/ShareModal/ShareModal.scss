@@ -10,6 +10,13 @@
 	background: $white;
 	outline-color: $primary;
 
+	&__container {
+		@include flexbox(column, center, center);
+
+		gap: $spacing-md;
+		cursor: pointer;
+	}
+
 	&__icon {
 		position: absolute;
 		top: 1.5rem;
@@ -20,14 +27,13 @@
 
 	&__social-icon {
 		width: 2rem;
-		cursor: pointer;
 	}
 
-	&__social-container {
-		@include flexbox(row, center, center);
-
+	&__socials-container {
+		display: grid;
 		gap: $spacing-xl;
 		margin-bottom: $spacing-xl;
 		flex-wrap: wrap;
+		grid-template-columns: 1fr 1fr 1fr;
 	}
 }
