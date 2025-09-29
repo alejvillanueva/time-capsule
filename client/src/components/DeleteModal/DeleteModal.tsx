@@ -1,6 +1,8 @@
 import "./DeleteModal.scss";
 import MainHeading from "../MainHeading/MainHeading";
+import Loader from "../Loader/Loader";
 import ReactModal from "react-modal";
+import { useState } from "react";
 import { Medium } from "../../interfaces/Memory";
 import useAppContext from "../../context/useAppContext";
 
@@ -8,6 +10,7 @@ interface DeleteModalProps {
 	resourceType: "capsule" | "memory";
 	title: string;
 	medium?: Medium;
+	url?: string | null;
 	id?: number;
 	handleDeleteModalClick?: () => void;
 }
@@ -16,6 +19,7 @@ function DeleteModal({
 	resourceType,
 	title,
 	medium,
+	url,
 	id,
 	handleDeleteModalClick,
 }: DeleteModalProps) {
@@ -25,6 +29,7 @@ function DeleteModal({
 		isMemoryDeleteModalOpen,
 		setIsMemoryDeleteModalOpen,
 	} = useAppContext();
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const rootElement = document.getElementById("root");
 
@@ -60,6 +65,7 @@ function DeleteModal({
 				},
 			}}
 		>
+			{isLoading && <Loader />}
 			<svg
 				className="delete-modal__icon"
 				xmlns="http://www.w3.org/2000/svg"
@@ -113,6 +119,9 @@ function DeleteModal({
 				buttonTitle="Delete"
 				memoryId={id}
 				handleModalClick={handleDeleteModalClick}
+				medium={medium}
+				url={url}
+				setIsLoading={setIsLoading}
 			/>
 		</ReactModal>
 	);
