@@ -6,11 +6,12 @@ import MainHeading from "../../components/MainHeading/MainHeading";
 import MemoryCard from "../../components/MemoryCard/MemoryCard";
 import MemoryModal from "../../components/MemoryModal/MemoryModal";
 import UploadField from "../../components/UploadField/UploadField";
+import Loader from "../../components/Loader/Loader";
 import useAppContext from "../../context/useAppContext";
 import { Capsule, Memory } from "../../interfaces/index";
 import { createCapsule, getCapsule, updateCapsule } from "../../services/index";
 import { FileWithPath } from "react-dropzone";
-import { uploadFile } from "../../utils/media";
+import { uploadFile, deleteFile } from "../../utils/media";
 import {
 	useLocation,
 	matchPath,
@@ -55,6 +56,7 @@ function AddEditCapsulePage() {
 	} = useAppContext();
 
 	const [currentMemoryId, setCurrentMemoryId] = useState<number | null>(null);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [capsuleFormData, setCapsuleFormData] = useState<CapsuleWithMemories>({
 		author: "",
 		cover_art: "",
@@ -153,6 +155,8 @@ function AddEditCapsulePage() {
 		if (isModalOpen && memoryModalMode === "add") setIsMemoryFormEditable(true);
 	}, [isModalOpen]);
 
+	useEffect(() => {}, [isLoading]);
+
 	const handleDeleteModalClick = () => {
 		if (isModalOpen) {
 			setIsMemoryDeleteModalOpen(true);
@@ -179,11 +183,38 @@ function AddEditCapsulePage() {
 
 		if (!validateCapsuleForm()) return;
 
-		if (!uploadedFile) {
-			console.log("No file uploaded");
-		} else {
-			const mediaURL = await uploadFile(uploadedFile);
-			capsuleFormData.cover_art = mediaURL;
+		const removeFile = async () => {
+			if (capsuleFormData.cover_art) {
+				try {
+					setIsLoading(true);
+					const mediaDeleteStatus = await deleteFile(
+						capsuleFormData.cover_art,
+						"image",
+					);
+
+					if (mediaDeleteStatus === "Success") capsuleFormData.cover_art = "";
+				} catch (error) {
+					console.error("Error removing cover art:", error);
+				} finally {
+					setIsLoading(false);
+				}
+			}
+		};
+
+		await removeFile();
+
+		if (uploadedFile) {
+			try {
+				await removeFile();
+
+				setIsLoading(true);
+				const mediaURL = await uploadFile(uploadedFile);
+				capsuleFormData.cover_art = mediaURL;
+			} catch (error) {
+				console.error("Error uploading cover art:", error);
+			} finally {
+				setIsLoading(false);
+			}
 		}
 
 		// Transform the form data to match API expectations
@@ -310,8 +341,10 @@ function AddEditCapsulePage() {
 		const file = files[0];
 		setUploadedFile(file);
 	};
+
 	return (
 		<main className="add-edit-capsule">
+			{isLoading && <Loader />}
 			<form className="add-edit-capsule__form" onSubmit={handleCapsuleSubmit}>
 				<div className="add-edit-capsule__form-container">
 					{addMatch && (

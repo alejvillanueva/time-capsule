@@ -11,6 +11,7 @@ import { deleteCapsule, deleteMemory } from "../../services/index";
 import { deleteFile } from "../../utils/media";
 import { Memory } from "../../interfaces/index";
 import { SelectedSnapDisplay } from "../MemoryCarouselFunctions/MemoryCarouselFunctions";
+import { Medium } from "../../interfaces/Memory";
 
 interface MainHeadingProps {
 	headingType: "default" | "custom" | "custom-editable" | "custom-carousel";
@@ -25,6 +26,9 @@ interface MainHeadingProps {
 	memoryId?: number;
 	coverUrl?: string;
 	memories?: Memory[];
+	medium?: Medium;
+	url?: string | null;
+	setIsLoading?: (value: boolean) => void;
 }
 
 function MainHeading({
@@ -40,15 +44,18 @@ function MainHeading({
 	memoryId,
 	coverUrl,
 	memories,
+	medium,
+	url,
+	setIsLoading,
 }: MainHeadingProps) {
 	const {
 		setIsFormEditable,
 		setIsMemoryFormEditable,
+		memoryModalMode,
 		setMemoryModalMode,
 		isModalOpen,
 		setIsModalOpen,
 		setIsDeleteModalOpen,
-		memoryModalMode,
 		isMemoryDeleteModalOpen,
 		setIsMemoryDeleteModalOpen,
 	} = useAppContext();
@@ -68,15 +75,31 @@ function MainHeading({
 					setIsMemoryDeleteModalOpen(false);
 					setIsModalOpen(false);
 				}
+
+				if (medium && setIsLoading && medium !== "text") {
+					if (url) {
+						try {
+							setIsLoading(true);
+							const mediaDeleteStatus = await deleteFile(url, medium);
+
+							if (mediaDeleteStatus === "Success") {
+								url = "";
+							}
+						} catch (error) {
+							console.error("Error deleting memory media:", error);
+						} finally {
+							setIsLoading(false);
+						}
+					}
+				}
 			} else if (!isModalOpen) {
 				// Delete uploaded media for capsule memories first
 				if (memories && memories.length > 0) {
 					const capsuleMedia = memories.filter((memory) => memory.url !== "");
 
-					if (capsuleMedia.length > 0) {
+					if (capsuleMedia.length > 0 && setIsLoading) {
 						try {
-							// TODO: uncomment once PRs are merged
-							// setIsLoading(true);
+							setIsLoading(true);
 
 							const deletePromises = capsuleMedia.map((memory) => {
 								if (memory.url) {
@@ -94,8 +117,7 @@ function MainHeading({
 						} catch (error) {
 							console.error("Error deleting capsule media:", error);
 						} finally {
-							// TODO: uncomment once PRs are merged
-							// setIsLoading(false);
+							setIsLoading(false);
 						}
 					}
 				}
