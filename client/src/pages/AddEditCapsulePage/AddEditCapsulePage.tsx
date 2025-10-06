@@ -1,13 +1,17 @@
 import "./AddEditCapsulePage.scss";
 import Button from "../../components/Button/Button";
+import DeleteModal from "../../components/DeleteModal/DeleteModal";
 import InputField from "../../components/InputField/InputField";
 import MainHeading from "../../components/MainHeading/MainHeading";
 import MemoryCard from "../../components/MemoryCard/MemoryCard";
-import UploadField from "../../components/UploadField/UploadField";
 import MemoryModal from "../../components/MemoryModal/MemoryModal";
-import DeleteModal from "../../components/DeleteModal/DeleteModal";
+import UploadField from "../../components/UploadField/UploadField";
 import Loader from "../../components/Loader/Loader";
 import useAppContext from "../../context/useAppContext";
+import { Capsule, Memory } from "../../interfaces/index";
+import { createCapsule, getCapsule, updateCapsule } from "../../services/index";
+import { FileWithPath } from "react-dropzone";
+import { uploadFile, deleteFile } from "../../utils/media";
 import {
 	useLocation,
 	matchPath,
@@ -15,10 +19,6 @@ import {
 	useParams,
 } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { createCapsule, getCapsule, updateCapsule } from "../../services/index";
-import { Capsule, Memory } from "../../interfaces/index";
-import { uploadFile, deleteFile } from "../../utils/media";
-import { FileWithPath } from "react-dropzone";
 
 interface CapsuleWithMemories extends Omit<Capsule, "open_date" | "edit_by"> {
 	memories?: Memory[];
@@ -391,7 +391,6 @@ function AddEditCapsulePage() {
 							)}
 						</div>
 					)}
-					{/* TODO: add hidden input elements to capture date timestamps */}
 					<div className="add-edit-capsule__input-container">
 						<InputField
 							inputType="text"
@@ -517,7 +516,6 @@ function AddEditCapsulePage() {
 				</>
 			)}
 			<div className="add-edit-capsule__button-container">
-				{/* TODO: add conditional to show buttons below if memory card (with cardType="memory") map length is greater than 0 and editMatch is true */}
 				{editMatch && (
 					<>
 						<Button buttonText="Sort" />
@@ -526,7 +524,12 @@ function AddEditCapsulePage() {
 				)}
 			</div>
 			{!isModalOpen && !isMemoryDeleteModalOpen && (
-				<DeleteModal title={capsuleFormData.title} resourceType="capsule" />
+				<DeleteModal
+					title={capsuleFormData.title}
+					resourceType="capsule"
+					coverUrl={capsuleFormData.cover_art}
+					memories={capsuleFormData.memories}
+				/>
 			)}
 			<MemoryModal
 				fetchCapsule={fetchCapsule}

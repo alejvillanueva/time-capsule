@@ -1,15 +1,15 @@
 import "./MemoryCarousel.scss";
-import { EmblaOptionsType } from "embla-carousel";
 import Fade from "embla-carousel-fade";
 import useEmblaCarousel from "embla-carousel-react";
-import { useMemoryCarouselArrows } from "../../utils/carouselHooks";
+import { EmblaOptionsType } from "embla-carousel";
+import { EmblaCarouselType } from "embla-carousel";
+import { Memory } from "../../interfaces/index";
 import {
 	PrevButton,
 	NextButton,
 } from "../MemoryCarouselFunctions/MemoryCarouselFunctions";
-import { Memory } from "../../interfaces/index";
+import { useMemoryCarouselArrows } from "../../utils/carouselHooks";
 import { useState, useEffect, useRef, useCallback } from "react";
-import { EmblaCarouselType } from "embla-carousel";
 
 interface CarouselProps {
 	memories: Memory[];

@@ -1,5 +1,5 @@
 import "./MainHeading.scss";
-import { SelectedSnapDisplay } from "../MemoryCarouselFunctions/MemoryCarouselFunctions";
+import Tooltip from "../Tooltip/Tooltip";
 import useAppContext from "../../context/useAppContext";
 import {
 	matchPath,
@@ -9,8 +9,9 @@ import {
 } from "react-router-dom";
 import { deleteCapsule, deleteMemory } from "../../services/index";
 import { deleteFile } from "../../utils/media";
+import { Memory } from "../../interfaces/index";
+import { SelectedSnapDisplay } from "../MemoryCarouselFunctions/MemoryCarouselFunctions";
 import { Medium } from "../../interfaces/Memory";
-import Tooltip from "../Tooltip/Tooltip";
 
 interface MainHeadingProps {
 	headingType: "default" | "custom" | "custom-editable" | "custom-carousel";
@@ -23,6 +24,8 @@ interface MainHeadingProps {
 	currentSlide?: number;
 	buttonTitle?: string;
 	memoryId?: number;
+	coverUrl?: string;
+	memories?: Memory[];
 	medium?: Medium;
 	url?: string | null;
 	setIsLoading?: (value: boolean) => void;
@@ -39,6 +42,8 @@ function MainHeading({
 	currentSlide = 0,
 	buttonTitle,
 	memoryId,
+	coverUrl,
+	memories,
 	medium,
 	url,
 	setIsLoading,
@@ -88,6 +93,43 @@ function MainHeading({
 					}
 				}
 			} else if (!isModalOpen) {
+				// Delete uploaded media for capsule memories first
+				if (memories && memories.length > 0) {
+					const capsuleMedia = memories.filter((memory) => memory.url !== "");
+
+					if (capsuleMedia.length > 0 && setIsLoading) {
+						try {
+							setIsLoading(true);
+
+							const deletePromises = capsuleMedia.map((memory) => {
+								if (memory.url) {
+									return deleteFile(memory.url, memory.medium);
+								}
+							});
+
+							const deleteMediaResults = await Promise.all(deletePromises);
+
+							capsuleMedia.forEach((memory, id) => {
+								if (deleteMediaResults[id] === "Success") {
+									memory.url = "";
+								}
+							});
+						} catch (error) {
+							console.error("Error deleting capsule media:", error);
+						} finally {
+							setIsLoading(false);
+						}
+					}
+				}
+
+				// Delete uploaded media for capsule cover art second
+				if (coverUrl) {
+					const deleteCover = await deleteFile(coverUrl, "image");
+
+					if (deleteCover === "Success") coverUrl = "";
+				}
+
+				// Delete capsule from database last
 				const deleteStatus = await deleteCapsule(Number(capsuleId));
 
 				if (deleteStatus === 204) {

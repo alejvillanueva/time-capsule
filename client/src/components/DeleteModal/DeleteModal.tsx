@@ -2,9 +2,10 @@ import "./DeleteModal.scss";
 import MainHeading from "../MainHeading/MainHeading";
 import Loader from "../Loader/Loader";
 import ReactModal from "react-modal";
+import useAppContext from "../../context/useAppContext";
 import { useState } from "react";
 import { Medium } from "../../interfaces/Memory";
-import useAppContext from "../../context/useAppContext";
+import { Memory } from "../../interfaces/index";
 
 interface DeleteModalProps {
 	resourceType: "capsule" | "memory";
@@ -13,6 +14,8 @@ interface DeleteModalProps {
 	url?: string | null;
 	id?: number;
 	handleDeleteModalClick?: () => void;
+	coverUrl?: string;
+	memories?: Memory[];
 }
 
 function DeleteModal({
@@ -22,6 +25,8 @@ function DeleteModal({
 	url,
 	id,
 	handleDeleteModalClick,
+	coverUrl,
+	memories,
 }: DeleteModalProps) {
 	const {
 		isDeleteModalOpen,
@@ -119,6 +124,8 @@ function DeleteModal({
 				buttonTitle="Delete"
 				memoryId={id}
 				handleModalClick={handleDeleteModalClick}
+				coverUrl={coverUrl}
+				memories={memories}
 				medium={medium}
 				url={url}
 				setIsLoading={setIsLoading}

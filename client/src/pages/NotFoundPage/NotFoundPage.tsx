@@ -1,8 +1,8 @@
 import "./NotFoundPage.scss";
-import animationData from "../../assets/animations/perspectiveAnimation.json";
-import { Link } from "react-router-dom";
-import Lottie from "lottie-react";
 import MainHeading from "../../components/MainHeading/MainHeading";
+import animationData from "../../assets/animations/perspectiveAnimation.json";
+import Lottie from "lottie-react";
+import { Link } from "react-router-dom";
 
 function NotFoundPage() {
 	return (

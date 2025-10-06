@@ -1,19 +1,18 @@
 import "./MemoryModal.scss";
+import DeleteModal from "../DeleteModal/DeleteModal";
 import InputField from "../InputField/InputField";
 import MainHeading from "../MainHeading/MainHeading";
 import UploadField from "../UploadField/UploadField";
-import DeleteModal from "../DeleteModal/DeleteModal";
 import Loader from "../Loader/Loader";
 import ReactModal from "react-modal";
 import useAppContext from "../../context/useAppContext";
-import { useEffect, useState } from "react";
+import { createMemory, getMemory, updateMemory } from "../../services/index";
 import { FileWithPath } from "react-dropzone";
-
-import { useParams } from "react-router-dom";
 import { Memory } from "../../interfaces/index";
 import { Medium } from "../../interfaces/Memory";
-import { createMemory, getMemory, updateMemory } from "../../services/index";
 import { uploadFile, deleteFile } from "../../utils/media";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 interface MemoryWithoutMedium extends Omit<Memory, "medium"> {
 	medium: Medium | "";
@@ -168,7 +167,6 @@ function MemoryModal({
 
 	const handleMemorySubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-
 		if (!validateMemoryForm()) return;
 
 		if (memoryFormData.medium !== "text" && memoryFormData.url) {
@@ -321,18 +319,18 @@ function MemoryModal({
 								inputId="memory_medium"
 								inputName="medium"
 								handleChange={handleMemoryChange}
-								validation={{ required: false }}
-								value={memoryFormData.medium}
+								validation={{ required: true, isInvalid: memoryErrors.medium }}
+								value={memoryFormData?.medium}
 							/>
-							{(memoryFormData.medium === "image" ||
-								memoryFormData.medium === "video") && (
+							{(memoryFormData?.medium === "image" ||
+								memoryFormData?.medium === "video") && (
 								<>
 									<InputField
 										inputLabel="Author"
 										inputType="text"
 										inputId="memory_author"
 										inputName="author"
-										placeholder="Type the Author(s) of the Memory"
+										placeholder="Type the author(s) of the memory"
 										handleChange={handleMemoryChange}
 										validation={{
 											required: true,
@@ -345,7 +343,7 @@ function MemoryModal({
 										inputType="textArea"
 										inputId="memory_message"
 										inputName="message"
-										placeholder="Type the Caption"
+										placeholder="Type the caption"
 										handleChange={handleMemoryChange}
 										validation={{
 											required: false,
@@ -355,13 +353,13 @@ function MemoryModal({
 									/>
 								</>
 							)}
-							{memoryFormData.medium === "text" && (
+							{memoryFormData?.medium === "text" && (
 								<InputField
 									inputLabel="Author"
 									inputType="text"
 									inputId="memory_author"
 									inputName="author"
-									placeholder="Type the Author(s) of the Memory"
+									placeholder="Type the author(s) of the memory"
 									handleChange={handleMemoryChange}
 									validation={{
 										required: true,
@@ -371,10 +369,10 @@ function MemoryModal({
 								/>
 							)}
 						</div>
-						{memoryFormData.medium === "" && (
+						{memoryFormData?.medium === "" && (
 							<div className="memory-modal__filler"></div>
 						)}
-						{memoryFormData.medium === "image" &&
+						{memoryFormData?.medium === "image" &&
 							(memoryModalMode === "add" || memoryModalMode === "edit") && (
 								<UploadField
 									uploadLabel="Image"
@@ -385,7 +383,7 @@ function MemoryModal({
 									uploadType="image"
 								/>
 							)}
-						{memoryFormData.medium === "image" &&
+						{memoryFormData?.medium === "image" &&
 							memoryModalMode === "read" && (
 								<div className="memory-modal__container">
 									{isMemoryFormEditable ? (
@@ -416,7 +414,7 @@ function MemoryModal({
 									)}
 								</div>
 							)}
-						{memoryFormData.medium === "video" &&
+						{memoryFormData?.medium === "video" &&
 							(memoryModalMode === "add" || memoryModalMode === "edit") && (
 								<UploadField
 									uploadLabel="Video"
@@ -433,7 +431,7 @@ function MemoryModal({
 									}}
 								/>
 							)}
-						{memoryFormData.medium === "video" &&
+						{memoryFormData?.medium === "video" &&
 							memoryModalMode === "read" && (
 								<div className="memory-modal__container">
 									{isMemoryFormEditable ? (
@@ -470,14 +468,14 @@ function MemoryModal({
 									)}
 								</div>
 							)}
-						{memoryFormData.medium === "text" && (
+						{memoryFormData?.medium === "text" && (
 							<div className="memory-modal__container">
 								<InputField
 									inputLabel="Message"
 									inputType="textArea"
 									inputId="memory_message"
 									inputName="message"
-									placeholder="Type the Message"
+									placeholder="Type the message"
 									handleChange={handleMemoryChange}
 									validation={{
 										required: false,

@@ -1,12 +1,12 @@
 import "./App.scss";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AddEditCapsulePage from "./pages/AddEditCapsulePage/AddEditCapsulePage";
 import Header from "./components/Header/Header";
 import HomePage from "./pages/HomePage/HomePage";
 import LockedCapsulePage from "./pages/LockedCapsulePage/LockedCapsulePage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
-import UnlockedCapsulePage from "./pages/UnlockedCapsulePage/UnlockedCapsulePage";
 import PasswordPage from "./pages/PasswordPage/PasswordPage";
+import UnlockedCapsulePage from "./pages/UnlockedCapsulePage/UnlockedCapsulePage";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
 	return (

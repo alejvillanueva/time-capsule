@@ -41,6 +41,6 @@ export const deleteCapsule = async (id: number) => {
 		const data = await client.delete(`${endpoint}/${id}`);
 		return data.status; // 204 for success
 	} catch (error) {
-		console.log("Error deleting capsule: ", error);
+		console.error("Error deleting capsule: ", error);
 	}
 };
