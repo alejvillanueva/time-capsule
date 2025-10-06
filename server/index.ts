@@ -21,12 +21,12 @@ app.use(express.urlencoded({ extended: true }));
 //Static files
 app.use(express.static(join(__dirname, "..", "client", "dist")));
 
-app.get("/", (req: Request, res: Response) => {
-	res.sendFile(join(__dirname, "..", "client", "index.html"));
-});
-
 //Router
 app.use("/api", router);
+
+app.get("*", (req: Request, res: Response) => {
+	res.sendFile(join(__dirname, "..", "client", "dist", "index.html"));
+});
 
 //Server
 app.listen(PORT, () => {
