@@ -2,7 +2,7 @@ import pg from "pg";
 
 const { Pool } = pg;
 
-let pool;
+let pool: InstanceType<typeof Pool>;
 
 // Production
 if (process.env.DATABASE_URL) {
