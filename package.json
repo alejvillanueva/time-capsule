@@ -9,7 +9,11 @@
 		"start": "node ./dist/index.js",
 		"start-dev": "node --env-file=.env ./dist/index.js",
 		"type-check": "tsc --noEmit",
+<<<<<<< Updated upstream
 		"build": "concurrently \"tsc\" \"cd ./client && npm run build\"",
+=======
+		"build": "npm install && concurrently \"tsc\" \"cd ./client && npm run build\"",
+>>>>>>> Stashed changes
 		"lint:check": "eslint .",
 		"lint": "eslint --fix .",
 		"format": "prettier --write .",
