@@ -1,0 +1,42 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.delete-modal {
+	@include flexbox(column, unset, unset);
+
+	position: relative;
+	gap: $spacing-lg;
+	width: auto;
+	max-width: 35rem;
+	height: auto;
+	padding: 6rem;
+	background: $white;
+	outline-color: $primary;
+
+	&__container {
+		@include flexbox(row, unset, flex-start);
+
+		gap: $spacing-md;
+	}
+
+	&__icon {
+		position: absolute;
+		top: 1.5rem;
+		right: 1.5rem;
+		width: 1.5rem;
+		cursor: pointer;
+	}
+
+	&__warning-icon {
+		width: 1.5rem;
+		min-width: 1.5rem;
+	}
+
+	&__text {
+		text-transform: uppercase;
+
+		&--bold {
+			font-weight: $font-weight-bold;
+		}
+	}
+}

@@ -1,0 +1,114 @@
+@use "./typography";
+@use "./mixins" as *;
+@use "./variables" as *;
+
+// RESETS
+
+* {
+	box-sizing: border-box;
+}
+
+a,
+body,
+button,
+div,
+figure,
+footer,
+form,
+h1,
+h2,
+h3,
+h4,
+header,
+html,
+img,
+input,
+li,
+p,
+section,
+span,
+textarea,
+ul {
+	margin: 0;
+	padding: 0;
+}
+
+// GLOBAL GENERAL
+
+html {
+	background: $white;
+}
+
+body {
+	color: $black;
+	font-family: Nohemi, Arial, sans-serif;
+}
+
+a {
+	text-decoration: none;
+}
+
+#root {
+	max-width: 63rem;
+	margin: 0 auto;
+}
+
+// screen reader only, hidden
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	border: 0;
+	white-space: nowrap;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+}
+
+// FORM INPUTS
+
+::placeholder {
+	color: $grey-dark;
+	font-weight: $font-weight-light;
+	font-family: Nohemi, Arial, sans-serif;
+	size: $font-size-dt-md;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+	display: none;
+	appearance: none;
+}
+
+// FONT STYLING
+
+.text-heading {
+	@include font-heading;
+}
+
+.text-heading-bold {
+	@include font-heading($black, $font-weight-extra-bold, 15%);
+}
+
+.text-heading-orange-bold {
+	@include font-heading($primary, $font-weight-extra-bold, 15%);
+}
+
+.text-subheading {
+	@include font-subheading;
+}
+
+.text-body {
+	@include font-body;
+}
+
+.text-label {
+	@include font-label;
+}
+
+.text-link {
+	@include font-body($grey-dark);
+
+	& {
+		text-transform: uppercase;
+	}
+}

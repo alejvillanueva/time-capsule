@@ -1,0 +1,39 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.share-modal {
+	position: relative;
+	width: auto;
+	max-width: 35rem;
+	height: auto;
+	padding: 6rem;
+	background: $white;
+	outline-color: $primary;
+
+	&__container {
+		@include flexbox(column, center, center);
+
+		gap: $spacing-md;
+		cursor: pointer;
+	}
+
+	&__icon {
+		position: absolute;
+		top: 1.5rem;
+		right: 1.5rem;
+		width: 1.5rem;
+		cursor: pointer;
+	}
+
+	&__social-icon {
+		width: $spacing-lg;
+	}
+
+	&__socials-container {
+		display: grid;
+		gap: $spacing-xl;
+		margin-bottom: $spacing-xl;
+		flex-wrap: wrap;
+		grid-template-columns: 1fr 1fr 1fr;
+	}
+}

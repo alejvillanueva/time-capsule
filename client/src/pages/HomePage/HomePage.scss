@@ -1,0 +1,25 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.home {
+	margin: 7.2813rem 0 4.875rem;
+	padding: $spacing-xs 0;
+
+	&__button-container {
+		@include flexbox(row, center, center);
+
+		position: fixed;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		gap: $spacing-xxl;
+		padding: $spacing-xl 0;
+		background: $white;
+	}
+
+	&__list {
+		display: grid;
+		gap: $spacing-xxl;
+		grid-template-columns: 13.5rem 13.5rem 13.5rem 13.5rem;
+	}
+}

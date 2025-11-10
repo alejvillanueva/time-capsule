@@ -1,0 +1,13 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.button {
+	border: none;
+	background: none;
+	cursor: pointer;
+	font-family: Nohemi, Arial, sans-serif;
+
+	&:hover {
+		color: $primary;
+	}
+}

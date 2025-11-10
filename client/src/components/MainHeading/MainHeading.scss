@@ -1,0 +1,29 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.main-heading {
+	@include flexbox(row, space-between, center);
+
+	width: 100%;
+	padding-bottom: $spacing-sm;
+	border-bottom: 1px solid $black;
+
+	&__button {
+		margin-left: $spacing-lg;
+		border: none;
+		background: none;
+		cursor: pointer;
+		appearance: none;
+	}
+
+	&__button-container {
+		@include flexbox(row, unset, center);
+	}
+
+	&__icon {
+		height: 1.5rem;
+	}
+
+	// &__title {
+	// }
+}

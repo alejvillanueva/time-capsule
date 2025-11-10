@@ -1,0 +1,98 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.input-field {
+	&__error-container {
+		@include flexbox(row, unset, center);
+
+		margin-bottom: $spacing-sm;
+
+		& + .input-field__input {
+			border-bottom: 2px solid $error;
+		}
+	}
+
+	&__error-text {
+		color: $error;
+		font-size: $font-size-dt-sm;
+	}
+
+	&__icon {
+		height: 1rem;
+	}
+
+	&__input {
+		margin-bottom: $spacing-xl;
+		padding-bottom: $spacing-sm;
+		border: none;
+		font-weight: $font-weight-regular;
+		font-family: Nohemi, Arial, sans-serif;
+		outline: none;
+
+		&::-webkit-datetime-edit {
+			color: $grey-dark;
+			font-weight: $font-weight-light;
+		}
+
+		&:focus {
+			border-bottom: 1px solid $primary;
+		}
+
+		&:disabled {
+			background-color: initial;
+			color: $black;
+		}
+
+		// Apply medium weight only for non-date inputs on focus
+		&:focus:not([type="date"]) {
+			font-weight: $font-weight-medium;
+		}
+
+		// Apply medium weight only for date inputs that have the --date-added class
+		&:focus.input-field__input--date-added {
+			font-weight: $font-weight-medium;
+
+			&::-webkit-datetime-edit {
+				color: $black;
+				font-weight: $font-weight-medium;
+			}
+		}
+
+		&--date-added {
+			color: $black;
+			font-weight: $font-weight-regular;
+
+			&::-webkit-datetime-edit {
+				color: $black;
+				font-weight: $font-weight-regular;
+			}
+		}
+
+		&--select {
+			border-bottom: 1px solid $black;
+		}
+
+		&--textarea {
+			height: 100%;
+			margin-bottom: 0;
+			line-height: 1.125rem;
+			resize: none;
+		}
+	}
+
+	&__label {
+		margin-bottom: $spacing-sm;
+	}
+}
+
+textarea::-webkit-scrollbar {
+	width: 0.25rem;
+}
+
+textarea::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 6px $grey-med;
+}
+
+textarea::-webkit-scrollbar-thumb {
+	background-color: $grey-dark;
+}

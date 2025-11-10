@@ -1,0 +1,79 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.memory-card {
+	width: 13.5rem;
+	max-height: 11.2188rem;
+	overflow: hidden;
+
+	&:hover {
+		transform: scale(1.02);
+	}
+
+	&--add {
+		border-bottom-color: $primary;
+	}
+
+	&__author {
+		margin: 0.4375rem 0 0.25rem;
+		font-weight: $font-weight-medium;
+	}
+
+	&__card-container {
+		@include flexbox(column, unset, unset);
+	}
+
+	&__container {
+		height: 100%;
+		cursor: pointer;
+
+		&--add {
+			@include flexbox(column, unset, unset);
+		}
+	}
+
+	&__icon {
+		width: 1.75rem;
+		height: 1.75rem;
+	}
+
+	&__icon-container {
+		@include flexbox(row, center, center);
+
+		height: 9.1875rem;
+		border-bottom: 1px solid $primary;
+	}
+
+	&__image {
+		height: 9.1875rem;
+		object-fit: cover;
+	}
+
+	&__medium {
+		font-size: 0.625rem;
+		font-weight: $font-weight-light;
+		text-transform: uppercase;
+	}
+
+	&__message {
+		height: 9.1875rem;
+		max-height: 9.1875rem;
+		padding: $spacing-xs;
+		font-weight: $font-weight-medium;
+		border-bottom: 1px solid $grey-dark;
+	}
+
+	&__title {
+		margin: 0.4375rem 0;
+		color: $primary;
+		font-size: $font-size-dt-lg;
+		font-weight: $font-weight-medium;
+		text-transform: uppercase;
+	}
+
+	&__video {
+		width: 100%;
+		height: 9.1875rem;
+		object-fit: cover;
+	}
+}

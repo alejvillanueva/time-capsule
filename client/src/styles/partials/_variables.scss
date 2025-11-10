@@ -1,0 +1,60 @@
+// IMPORT BUILT-IN FUNCTIONS
+// per deprecation warnings
+@use "sass:map";
+
+// BREAKPOINTS
+$breakpoint-min-tablet: 768px;
+$breakpoint-min-desktop: 1280px;
+
+// SPACING
+$spacing-unit: 1rem;
+
+// mapped spacing values
+$spacings: (
+	"xs": $spacing-unit * 0.25,
+	"sm": $spacing-unit * 0.5,
+	"md": $spacing-unit,
+	"lg": $spacing-unit * 1.5,
+	"xl": $spacing-unit * 2,
+	"xxl": $spacing-unit * 3,
+);
+
+$spacing-xs: map.get($spacings, "xs");
+$spacing-sm: map.get($spacings, "sm");
+$spacing-md: map.get($spacings, "md");
+$spacing-lg: map.get($spacings, "lg");
+$spacing-xl: map.get($spacings, "xl");
+$spacing-xxl: map.get($spacings, "xxl");
+
+// COLORS
+$primary: #d14200;
+$error: #d10000;
+
+$white: #ffffff;
+$grey-light: #f5f5f5;
+$grey-med: #e6e6e6;
+$grey-dark: #757575;
+$black: #1b2021;
+
+// FONT SIZE - MOBILE
+$font-size-xxl: 1.875rem;
+$font-size-xl: 1.25rem;
+$font-size-lg: 1rem;
+$font-size-md: 0.8125rem;
+$font-size-sm: 0.6875rem;
+$font-size-xs: 0.625rem;
+
+// FONT SIZE - DESKTOP + TABLET
+$font-size-dt-xxl: 2.5rem;
+$font-size-dt-xl: 1.5rem;
+$font-size-dt-lg: 1.25rem;
+$font-size-dt-md: 1rem;
+$font-size-dt-sm: 0.75rem;
+$font-size-dt-xs: 0.625rem;
+
+// FONT WEIGHT
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 700;
+$font-weight-extra-bold: 800;
